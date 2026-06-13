@@ -2754,3 +2754,91 @@ html, body {
     width: 100% !important;
   }
 }
+
+/* ============================================================
+   FOOTER REBUILD (v5) — overrides all prior footer rules.
+   Fixes mobile overflow/clipping and gives a clean B2B layout.
+   Markup unchanged; works on all pages.
+   ============================================================ */
+.footer{
+  background:#0B1840;
+  color:#fff;
+  padding:0 !important;
+  border-top:3px solid #3B1F6B;
+  overflow:hidden;
+}
+.footer-grid{
+  max-width:1180px;
+  margin:0 auto !important;
+  padding:clamp(44px,6vw,64px) clamp(22px,5vw,64px) 34px !important;
+  display:grid !important;
+  grid-template-columns:1.7fr 1fr 1fr 1.2fr !important;
+  gap:clamp(26px,4vw,56px) !important;
+  align-items:start;
+  height:auto !important;
+}
+.footer-grid > div{ min-width:0; }
+.footer-logo{
+  width:210px;
+  max-width:72%;
+  height:auto;
+  margin:0 0 18px !important;
+  filter:none;
+}
+.footer-grid > div:first-child p{
+  font-size:15px !important;
+  line-height:1.65 !important;
+  color:#C9CDDC !important;
+  margin:0 !important;
+  max-width:330px;
+  overflow-wrap:break-word;
+}
+.footer h4{
+  font-size:13px !important;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  font-weight:800;
+  color:#fff;
+  margin:0 0 16px !important;
+}
+.footer a{
+  display:block;
+  color:#C9CDDC !important;
+  text-decoration:none;
+  font-size:14px !important;
+  line-height:1.5;
+  margin:0 0 11px !important;
+  overflow-wrap:break-word;
+  transition:color .15s ease;
+}
+.footer a:hover{ color:#fff !important; }
+.socials{ display:flex; gap:12px; margin-top:18px !important; }
+.socials span{
+  width:40px; height:40px;
+  border:1px solid rgba(255,255,255,.28);
+  border-radius:8px;
+  display:flex; align-items:center; justify-content:center;
+  font-weight:800; font-size:14px; color:#fff; cursor:pointer;
+  transition:border-color .15s ease, background .15s ease;
+}
+.socials span:hover{ border-color:#fff; background:rgba(255,255,255,.08); }
+.copyright{
+  max-width:1180px;
+  margin:0 auto !important;
+  padding:20px clamp(22px,5vw,64px) !important;
+  border-top:1px solid rgba(255,255,255,.14);
+  text-align:center;
+  font-size:13px !important;
+  color:#9aa1b8 !important;
+}
+@media (max-width:880px){
+  .footer-grid{
+    grid-template-columns:1fr 1fr !important;
+    gap:32px 28px !important;
+  }
+  .footer-grid > div:first-child{ grid-column:1 / -1; }
+  .footer-logo{ width:190px; }
+}
+@media (max-width:520px){
+  .footer-grid{ grid-template-columns:1fr !important; }
+}
