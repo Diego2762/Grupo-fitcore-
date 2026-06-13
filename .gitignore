@@ -1,0 +1,21 @@
+# === Solo el website va a GitHub. Lo demas se queda local. ===
+
+# Archivos internos de operacion / estrategia (NO publicar)
+CLAUDE.md
+brand.md
+principles.md
+campaign-map.md
+TASTE.md
+references/
+
+# Documentos y binarios pesados
+*.pdf
+
+# Config interna de Vercel CLI y de sistema
+.vercel
+.vercelignore
+.DS_Store
+**/.DS_Store
+
+# Dependencias
+node_modules/
