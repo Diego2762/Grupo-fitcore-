@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><title data-en="Forfit · Sports Accessories | Grupo Fitcore" data-es="Forfit · Accesorios Deportivos | Grupo Fitcore">Forfit · Accesorios Deportivos | Grupo Fitcore</title><link href="assets/style.css" rel="stylesheet"/>
+<style>
+/* ===== Página de marca Forfit (scoped gf-ff) ===== */
+.gf-ff{--navy:#0B1840;--purple:#3B1F6B;--acc:#3B1F6B;--ink:#11182f;--muted:#65708a;--line:#e6e9f0;--soft:#f6f7fa;--gut:clamp(20px,5vw,64px);font-family:'Inter',-apple-system,sans-serif;color:var(--ink);background:#fff;}
+.gf-ff *{box-sizing:border-box;}
+.gf-ff__wrap{width:100%;max-width:1280px;margin:0 auto;padding-left:var(--gut);padding-right:var(--gut);}
+/* Hero */
+.gf-ff-hero{position:relative;overflow:hidden;background:var(--navy);color:#fff;}
+.gf-ff-hero::before{content:"";position:absolute;top:-30%;right:-10%;width:60%;height:140%;background:radial-gradient(circle,rgba(124,77,219,.55),transparent 68%);pointer-events:none;}
+.gf-ff-hero::after{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.05) 1px,transparent 1px);background-size:22px 22px;opacity:.5;pointer-events:none;}
+.gf-ff-hero__inner{position:relative;display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(28px,5vw,64px);align-items:center;max-width:1280px;margin:0 auto;padding:clamp(56px,8vw,110px) var(--gut) clamp(52px,7vw,96px);}
+.gf-ff-hero__eyebrow{display:inline-flex;align-items:center;gap:9px;font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#c4a6ff;margin:0 0 22px;}
+.gf-ff-hero__eyebrow::before{content:"";width:26px;height:2px;background:var(--purple);}
+.gf-ff-hero__logo{height:54px;width:auto;display:block;margin:0 0 22px;}
+.gf-ff-hero h1{font-size:clamp(34px,6vw,62px);font-weight:900;line-height:1.05;letter-spacing:-.02em;margin:0 0 18px;}
+.gf-ff-hero h1 em{font-style:normal;color:#b789ff;}
+.gf-ff-hero__sub{font-size:clamp(16px,1.5vw,18px);line-height:1.6;color:#c7cde0;margin:0 0 28px;max-width:52ch;}
+.gf-ff-hero__btns{display:flex;flex-wrap:wrap;gap:12px;}
+.gf-ff-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-size:15px;font-weight:700;text-decoration:none;border-radius:12px;padding:14px 26px;transition:transform .15s,box-shadow .15s,background .15s;}
+.gf-ff-btn--primary{background:#fff;color:var(--navy);}
+.gf-ff-btn--primary:hover{transform:translateY(-2px);box-shadow:0 14px 32px rgba(0,0,0,.28);}
+.gf-ff-btn--ghost{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.25);}
+.gf-ff-btn--ghost:hover{background:rgba(255,255,255,.18);}
+.gf-ff-hero__media{position:relative;border-radius:24px;overflow:hidden;aspect-ratio:4/5;border:1px solid rgba(255,255,255,.14);box-shadow:0 30px 80px rgba(0,0,0,.4);}
+.gf-ff-hero__media img{width:100%;height:100%;object-fit:cover;display:block;}
+/* Intro */
+.gf-ff-sec{padding:clamp(56px,8vw,104px) 0;}
+.gf-ff-head{max-width:720px;margin:0 0 clamp(36px,5vw,56px);}
+.gf-ff-head--center{margin-left:auto;margin-right:auto;text-align:center;}
+.gf-ff-kicker{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--acc);margin:0 0 16px;}
+.gf-ff-kicker::before{content:"";width:22px;height:2px;background:var(--acc);}
+.gf-ff-head--center .gf-ff-kicker::before{display:none;}
+.gf-ff-h2{font-size:clamp(28px,4vw,44px);font-weight:900;line-height:1.1;letter-spacing:-.015em;color:var(--navy);margin:0 0 18px;}
+.gf-ff-lead{font-size:clamp(16px,1.4vw,18px);line-height:1.7;color:#3a4258;margin:0;}
+/* Pilares */
+.gf-ff-pillars{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
+.gf-ff-pill{background:var(--soft);border:1px solid var(--line);border-radius:18px;padding:26px 22px;transition:transform .2s,box-shadow .2s,border-color .2s;}
+.gf-ff-pill:hover{transform:translateY(-5px);box-shadow:0 20px 46px rgba(11,24,64,.12);border-color:#d7d2ee;}
+.gf-ff-pill__ico{width:46px;height:46px;border-radius:13px;background:rgba(59,31,107,.1);display:flex;align-items:center;justify-content:center;font-size:22px;margin:0 0 16px;}
+.gf-ff-pill h3{font-size:17px;font-weight:800;color:var(--navy);margin:0 0 8px;}
+.gf-ff-pill p{font-size:14px;line-height:1.55;color:var(--muted);margin:0;}
+/* Productos */
+.gf-ff-prods{background:var(--soft);}
+.gf-ff-prodgrid{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
+.gf-ff-prod{display:flex;flex-direction:column;background:#fff;border:1px solid var(--line);border-radius:22px;overflow:hidden;text-decoration:none;color:inherit;transition:transform .22s,box-shadow .22s,border-color .22s;}
+.gf-ff-prod:hover{transform:translateY(-6px);box-shadow:0 26px 60px rgba(11,24,64,.14);border-color:#d7d2ee;}
+.gf-ff-prod__img{aspect-ratio:16/11;background:#fff;display:flex;align-items:center;justify-content:center;padding:5%;border-bottom:1px solid var(--line);}
+.gf-ff-prod__img img{max-width:100%;max-height:100%;object-fit:contain;}
+.gf-ff-prod__body{padding:24px 26px 28px;}
+.gf-ff-prod__sku{font-size:11px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin:0 0 8px;}
+.gf-ff-prod h3{font-size:21px;font-weight:900;color:var(--navy);margin:0 0 8px;letter-spacing:-.01em;}
+.gf-ff-prod p{font-size:14.5px;line-height:1.55;color:#3a4258;margin:0 0 16px;}
+.gf-ff-prod__link{display:inline-flex;align-items:center;gap:7px;font-size:14px;font-weight:700;color:var(--acc);}
+.gf-ff-prod:hover .gf-ff-prod__link svg{transform:translateX(4px);}
+.gf-ff-prod__link svg{transition:transform .2s;}
+/* Galería lifestyle */
+.gf-ff-gallery{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+.gf-ff-gallery img{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:16px;display:block;}
+/* CTA band */
+.gf-ff-cta{position:relative;overflow:hidden;background:linear-gradient(150deg,#0B1840,#241354);color:#fff;border-radius:26px;padding:clamp(40px,6vw,72px) clamp(28px,5vw,72px);text-align:center;}
+.gf-ff-cta::after{content:"";position:absolute;top:-60px;right:-40px;width:240px;height:240px;background:radial-gradient(circle,rgba(124,77,219,.5),transparent 70%);}
+.gf-ff-cta h2{position:relative;font-size:clamp(26px,3.6vw,40px);font-weight:900;letter-spacing:-.015em;margin:0 0 14px;}
+.gf-ff-cta p{position:relative;font-size:16px;line-height:1.6;color:#c7cde0;margin:0 auto 28px;max-width:54ch;}
+.gf-ff-cta__btns{position:relative;display:flex;flex-wrap:wrap;gap:12px;justify-content:center;}
+@media(max-width:920px){
+  .gf-ff-hero__inner{grid-template-columns:1fr;}
+  .gf-ff-hero__media{max-width:440px;}
+  .gf-ff-pillars{grid-template-columns:repeat(2,1fr);}
+}
+@media(max-width:680px){
+  .gf-ff-prodgrid{grid-template-columns:1fr;}
+  .gf-ff-gallery{grid-template-columns:repeat(2,1fr);}
+}
+@media(max-width:460px){
+  .gf-ff-pillars{grid-template-columns:1fr;}
+}
+</style>
+</head><body><main class="site">
+<header class="header"><a href="index.html"><img alt="Grupo Fitcore" class="brand-logo" src="assets/img/logo-principal.png"/></a><nav class="nav"><a class="" data-en="Home" data-es="Inicio" href="index.html">Inicio</a><a class="" data-en="About" data-es="Nosotros" href="nosotros.html">Nosotros</a><a class="" data-en="Catalog" data-es="Cat&amp;aacute;logo" href="catalogo.html">Catálogo</a><a class="" data-en="Services" data-es="Servicios" href="servicios.html">Servicios</a><a class="active" data-en="Brands" data-es="Marcas" href="marcas.html">Marcas</a><a class="" data-en="Contact" data-es="Contacto" href="contacto.html">Contacto</a><button id="lang-toggle" onclick="toggleLang()" type="button">EN</button></nav><a class="cta" data-en="Request Catalog" data-es="Solicitar cat&amp;aacute;logo" href="contacto.html">Solicitar catálogo</a></header>
+
+<section class="gf-ff">
+  <!-- HERO -->
+  <div class="gf-ff-hero">
+    <div class="gf-ff-hero__inner">
+      <div>
+        <p class="gf-ff-hero__eyebrow" data-en="Distributed by Grupo Fitcore" data-es="Distribuida por Grupo Fitcore">Distribuida por Grupo Fitcore</p>
+        <img class="gf-ff-hero__logo" src="assets/img/forfit-logo-white.png" alt="Forfit"/>
+        <h1 data-en="Sports accessories that &lt;em&gt;move with you.&lt;/em&gt;" data-es="Accesorios deportivos que se &lt;em&gt;mueven contigo.&lt;/em&gt;">Accesorios deportivos que se <em>mueven contigo.</em></h1>
+        <p class="gf-ff-hero__sub" data-en="Forfit designs functional training accessories with a premium finish, built to perform and easy to sell. A modern brand for gyms, studios, and stores that want something more than supplements on the shelf." data-es="Forfit diseña accesorios de entrenamiento funcionales con acabado premium, hechos para rendir y fáciles de vender. Una marca moderna para gimnasios, estudios y tiendas que quieren algo más que suplementos en el anaquel.">Forfit diseña accesorios de entrenamiento funcionales con acabado premium, hechos para rendir y fáciles de vender. Una marca moderna para gimnasios, estudios y tiendas que quieren algo más que suplementos en el anaquel.</p>
+        <div class="gf-ff-hero__btns">
+          <a class="gf-ff-btn gf-ff-btn--primary" href="#productos" data-en="View products" data-es="Ver productos">Ver productos</a>
+          <a class="gf-ff-btn gf-ff-btn--ghost" href="https://wa.me/584246218863" target="_blank" rel="noopener" data-en="Talk to an advisor" data-es="Hablar con un asesor">Hablar con un asesor</a>
+        </div>
+      </div>
+      <div class="gf-ff-hero__media">
+        <img src="assets/img/Forfit/life-pink-1.jpg" alt="Modelo entrenando con accesorios Forfit"/>
+      </div>
+    </div>
+  </div>
+
+  <!-- INTRO -->
+  <div class="gf-ff-sec">
+    <div class="gf-ff__wrap">
+      <div class="gf-ff-head">
+        <p class="gf-ff-kicker" data-en="The brand" data-es="La marca">La marca</p>
+        <h2 class="gf-ff-h2" data-en="Accessories built for real training" data-es="Accesorios pensados para entrenar de verdad">Accesorios pensados para entrenar de verdad</h2>
+        <p class="gf-ff-lead" data-en="Forfit focuses on accessories that solve real needs: low-impact strength, mobility, rehab, and at-home routines. Skin-friendly materials, complete kits, and a clean design that looks good on any shelf and turns over fast." data-es="Forfit se enfoca en accesorios que resuelven necesidades reales: fuerza de bajo impacto, movilidad, rehabilitación y rutinas en casa. Materiales suaves con la piel, kits completos y un diseño limpio que luce bien en cualquier anaquel y rota rápido.">Forfit se enfoca en accesorios que resuelven necesidades reales: fuerza de bajo impacto, movilidad, rehabilitación y rutinas en casa. Materiales suaves con la piel, kits completos y un diseño limpio que luce bien en cualquier anaquel y rota rápido.</p>
+      </div>
+      <div class="gf-ff-pillars">
+        <div class="gf-ff-pill"><div class="gf-ff-pill__ico">◆</div><h3 data-en="Premium silicone" data-es="Silicona premium">Silicona premium</h3><p data-en="Skin-friendly, sweat-resistant material with a firm, comfortable grip." data-es="Material suave con la piel, resistente al sudor y con agarre firme y cómodo.">Material suave con la piel, resistente al sudor y con agarre firme y cómodo.</p></div>
+        <div class="gf-ff-pill"><div class="gf-ff-pill__ico">▣</div><h3 data-en="Complete kits" data-es="Kits completos">Kits completos</h3><p data-en="Weights, resistance band, and carry bag in one box. Higher perceived value." data-es="Pesas, banda de resistencia y bolso en una sola caja. Mayor valor percibido.">Pesas, banda de resistencia y bolso en una sola caja. Mayor valor percibido.</p></div>
+        <div class="gf-ff-pill"><div class="gf-ff-pill__ico">∞</div><h3 data-en="Versatile use" data-es="Uso versátil">Uso versátil</h3><p data-en="Strength, pilates, yoga, rehab, and home workouts. One product, many buyers." data-es="Fuerza, pilates, yoga, rehabilitación y entreno en casa. Un producto, muchos compradores.">Fuerza, pilates, yoga, rehabilitación y entreno en casa. Un producto, muchos compradores.</p></div>
+        <div class="gf-ff-pill"><div class="gf-ff-pill__ico">★</div><h3 data-en="Proven seller" data-es="Ventas comprobadas">Ventas comprobadas</h3><p data-en="A best-seller on Amazon, TikTok Shop, and Walmart in the United States." data-es="Producto best-seller en Amazon, TikTok Shop y Walmart en Estados Unidos.">Producto best-seller en Amazon, TikTok Shop y Walmart en Estados Unidos.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRODUCTOS -->
+  <div class="gf-ff-sec gf-ff-prods" id="productos">
+    <div class="gf-ff__wrap">
+      <div class="gf-ff-head gf-ff-head--center">
+        <p class="gf-ff-kicker" data-en="Catalog" data-es="Catálogo">Catálogo</p>
+        <h2 class="gf-ff-h2" data-en="Forfit products" data-es="Productos Forfit">Productos Forfit</h2>
+        <p class="gf-ff-lead" data-en="Two shapes of the same best-seller, each available in black and pink." data-es="Dos formas del mismo best-seller, cada una disponible en negro y rosado.">Dos formas del mismo best-seller, cada una disponible en negro y rosado.</p>
+      </div>
+      <div class="gf-ff-prodgrid">
+        <a class="gf-ff-prod" href="producto-forfit-triangular.html">
+          <div class="gf-ff-prod__img"><img src="assets/img/Forfit/tri-black-kit.jpg" alt="Forfit pesas triangulares, kit completo"/></div>
+          <div class="gf-ff-prod__body">
+            <p class="gf-ff-prod__sku">SKU FF-PMT-001</p>
+            <h3 data-en="Wrist &amp; Ankle Weights · Triangular" data-es="Pesas para Muñeca y Tobillo · Triangulares">Pesas para Muñeca y Tobillo · Triangulares</h3>
+            <p data-en="1 lb silicone pair with a triangular wrap design. Includes 35 lb band and carry bag." data-es="Par de silicona de 1 lb con diseño triangular envolvente. Incluye banda de 35 lb y bolso.">Par de silicona de 1 lb con diseño triangular envolvente. Incluye banda de 35 lb y bolso.</p>
+            <span class="gf-ff-prod__link" data-en="View listing" data-es="Ver listing">Ver listing <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+          </div>
+        </a>
+        <a class="gf-ff-prod" href="producto-forfit-rectangular.html">
+          <div class="gf-ff-prod__img"><img src="assets/img/Forfit/rect-black-kit.jpg" alt="Forfit pesas rectangulares, kit completo"/></div>
+          <div class="gf-ff-prod__body">
+            <p class="gf-ff-prod__sku">SKU FF-PMT-002</p>
+            <h3 data-en="Wrist &amp; Ankle Weights · Rectangular" data-es="Pesas para Muñeca y Tobillo · Rectangulares">Pesas para Muñeca y Tobillo · Rectangulares</h3>
+            <p data-en="1 lb silicone pair with a flat segmented design. Includes 35 lb band and carry bag." data-es="Par de silicona de 1 lb con diseño plano segmentado. Incluye banda de 35 lb y bolso.">Par de silicona de 1 lb con diseño plano segmentado. Incluye banda de 35 lb y bolso.</p>
+            <span class="gf-ff-prod__link" data-en="View listing" data-es="Ver listing">Ver listing <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- GALERÍA -->
+  <div class="gf-ff-sec">
+    <div class="gf-ff__wrap">
+      <div class="gf-ff-head gf-ff-head--center">
+        <p class="gf-ff-kicker" data-en="In action" data-es="En acción">En acción</p>
+        <h2 class="gf-ff-h2" data-en="Made to be used" data-es="Hechos para usarse">Hechos para usarse</h2>
+      </div>
+      <div class="gf-ff-gallery">
+        <img src="assets/img/Forfit/life-black-1.jpg" alt="Entrenamiento con pesas Forfit negras" loading="lazy"/>
+        <img src="assets/img/Forfit/life-pink-1.jpg" alt="Entrenamiento con pesas Forfit rosadas" loading="lazy"/>
+        <img src="assets/img/Forfit/life-black-2.jpg" alt="Pesas Forfit negras en tobillo" loading="lazy"/>
+        <img src="assets/img/Forfit/life-pink-2.jpg" alt="Pesas Forfit rosadas en uso" loading="lazy"/>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="gf-ff-sec" style="padding-top:0">
+    <div class="gf-ff__wrap">
+      <div class="gf-ff-cta">
+        <h2 data-en="Bring Forfit to your business" data-es="Lleva Forfit a tu negocio">Lleva Forfit a tu negocio</h2>
+        <p data-en="Wholesale prices, availability, and payment terms for registered businesses. Opening an account is free with no commitment, and an advisor replies in under 24 hours." data-es="Precios mayoristas, disponibilidad y condiciones de pago para negocios registrados. Abrir cuenta es gratis y sin compromiso, y un asesor te responde en menos de 24 horas.">Precios mayoristas, disponibilidad y condiciones de pago para negocios registrados. Abrir cuenta es gratis y sin compromiso, y un asesor te responde en menos de 24 horas.</p>
+        <div class="gf-ff-cta__btns">
+          <a class="gf-ff-btn gf-ff-btn--primary" href="contacto.html" data-en="Request wholesale price" data-es="Solicitar precio mayorista">Solicitar precio mayorista</a>
+          <a class="gf-ff-btn gf-ff-btn--ghost" href="https://wa.me/584246218863" target="_blank" rel="noopener" data-en="WhatsApp" data-es="WhatsApp">WhatsApp</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer"><div class="footer-grid"><div><img alt="Grupo Fitcore" class="footer-logo" src="assets/img/logo-negativo.png"/><p data-en="Committed to your success, delivering quality, innovation, and results." data-es="Comprometidos con tu &amp;eacute;xito, entregando calidad, innovaci&amp;oacute;n y resultados.">Comprometidos con tu éxito, entregando calidad, innovación y resultados.</p></div><div><h4 data-en="Links" data-es="Enlaces">Enlaces</h4><a data-en="Home" data-es="Inicio" href="index.html">Inicio</a><a data-en="About" data-es="Nosotros" href="nosotros.html">Nosotros</a><a data-en="Catalog" data-es="Cat&amp;aacute;logo" href="catalogo.html">Catálogo</a><a data-en="Services" data-es="Servicios" href="servicios.html">Servicios</a><a data-en="Brands" data-es="Marcas" href="marcas.html">Marcas</a><a data-en="Contact" data-es="Contacto" href="contacto.html">Contacto</a></div><div><h4 data-en="Categories" data-es="Categor&amp;iacute;as">Categorías</h4><a data-en="Proteins" data-es="Prote&amp;iacute;nas">Proteínas</a><a data-en="Amino Acids" data-es="Amino&amp;aacute;cidos">Aminoácidos</a><a data-en="Pre-workouts" data-es="Pre-entrenos">Pre-entrenos</a><a data-en="Vitamins" data-es="Vitaminas">Vitaminas</a><a data-en="Health &amp; Wellness" data-es="Salud y Bienestar">Salud y Bienestar</a><a data-en="Accessories" data-es="Accesorios">Accesorios</a></div><div><h4 data-en="Contact Us" data-es="Cont&amp;aacute;ctanos">Contáctanos</h4><a>+58 (424) 621-8863</a><a>contacto@grupofitcore.com</a><a>grupofitcore.com</a><div class="socials"><span>f</span><span>◎</span><span>in</span></div></div></div><div class="copyright" data-en="© 2026 Grupo Fitcore. All rights reserved." data-es="&amp;copy; 2026 Grupo Fitcore. Todos los derechos reservados.">© 2026 Grupo Fitcore. Todos los derechos reservados.</div></footer>
+</main>
+<script>
+(function () {
+  function applyLang(lang) {
+    document.querySelectorAll("[data-es][data-en]").forEach(el => {
+      const value = el.getAttribute(lang === "en" ? "data-en" : "data-es");
+      if (value !== null) el.innerHTML = value;
+    });
+    document.documentElement.setAttribute("lang", lang === "en" ? "en" : "es");
+    const btn = document.getElementById("lang-toggle");
+    if (btn) btn.textContent = lang === "en" ? "ES" : "EN";
+  }
+  window.toggleLang = function () {
+    const current = localStorage.getItem("grupoFitcoreLang") || "es";
+    const next = current === "es" ? "en" : "es";
+    localStorage.setItem("grupoFitcoreLang", next);
+    applyLang(next);
+  };
+  document.addEventListener("DOMContentLoaded", function () {
+    applyLang(localStorage.getItem("grupoFitcoreLang") || "es");
+  });
+})();
+</script>
+</body></html>
