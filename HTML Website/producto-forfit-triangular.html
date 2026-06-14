@@ -15,7 +15,7 @@
 .gf-gal__stage img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;display:block;}
 .gf-gal__zoom{position:absolute;bottom:14px;right:14px;width:34px;height:34px;border-radius:50%;background:rgba(11,24,64,.82);color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;pointer-events:none;}
 .gf-gal__badge{position:absolute;top:16px;left:16px;background:#fff;border:1px solid var(--gf-line);border-radius:999px;padding:7px 14px;font-size:12px;font-weight:800;letter-spacing:.04em;color:var(--gf-navy);box-shadow:0 6px 18px rgba(11,24,64,.08);}
-.gf-gal__thumbs{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:14px;}
+.gf-gal__thumbs{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:14px;}
 .gf-gal__thumb{background:var(--gf-soft);border:1.5px solid var(--gf-line);border-radius:13px;aspect-ratio:1/1;cursor:pointer;overflow:hidden;padding:0;transition:border-color .15s,transform .15s;}
 .gf-gal__thumb img{width:100%;height:100%;object-fit:cover;}
 .gf-gal__thumb:hover{transform:translateY(-2px);}
@@ -67,6 +67,20 @@
 .gf-kit__d{font-size:13px;color:var(--gf-muted);margin:0;line-height:1.45;}
 .gf-pdp__back{display:inline-flex;align-items:center;gap:8px;margin-top:36px;font-size:14px;font-weight:700;color:var(--gf-acc);text-decoration:none;}
 .gf-pdp__back:hover{gap:12px;}
+/* Video demo */
+.gf-video{border-top:1px solid var(--gf-line);padding:clamp(36px,5vw,56px) 0;}
+.gf-video__head{text-align:center;margin:0 0 24px;}
+.gf-video__cap{font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--gf-acc);margin:0 0 8px;}
+.gf-video h2{font-size:clamp(20px,2.6vw,26px);font-weight:900;color:var(--gf-navy);margin:0;letter-spacing:-.01em;}
+.gf-video__frame{max-width:720px;margin:0 auto;border-radius:20px;overflow:hidden;border:1px solid var(--gf-line);box-shadow:0 18px 50px rgba(11,24,64,.12);background:#0B1840;}
+.gf-video__frame video{width:100%;height:auto;display:block;}
+/* A+ descripción */
+.gf-aplus{border-top:1px solid var(--gf-line);padding:clamp(36px,5vw,56px) 0 clamp(48px,7vw,80px);}
+.gf-aplus__head{text-align:center;margin:0 0 28px;}
+.gf-aplus__cap{font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--gf-acc);margin:0 0 8px;}
+.gf-aplus h2{font-size:clamp(20px,2.6vw,26px);font-weight:900;color:var(--gf-navy);margin:0;letter-spacing:-.01em;}
+.gf-aplus__stack{max-width:880px;margin:0 auto;display:grid;gap:14px;}
+.gf-aplus__stack img{width:100%;border-radius:16px;display:block;border:1px solid var(--gf-line);}
 /* Visor / lightbox */
 .gf-lb{position:fixed;inset:0;z-index:9999;background:rgba(7,12,28,.92);display:none;align-items:center;justify-content:center;padding:24px;cursor:zoom-out;-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);}
 .gf-lb.is-open{display:flex;}
@@ -98,7 +112,8 @@
           <button class="gf-gal__thumb is-active" data-img="assets/img/Forfit/tri-black-kit.jpg" type="button"><img src="assets/img/Forfit/tri-black-kit.jpg" alt="Kit completo negro"/></button>
           <button class="gf-gal__thumb" data-img="assets/img/Forfit/tri-pink-kit.jpg" type="button"><img src="assets/img/Forfit/tri-pink-kit.jpg" alt="Kit completo rosado"/></button>
           <button class="gf-gal__thumb" data-img="assets/img/Forfit/tri-black-single.jpg" type="button"><img src="assets/img/Forfit/tri-black-single.jpg" alt="Pesa triangular negra"/></button>
-          <button class="gf-gal__thumb" data-img="assets/img/Forfit/tri-pink-life.jpg" type="button"><img src="assets/img/Forfit/tri-pink-life.jpg" alt="Pesa triangular rosada en uso"/></button>
+          <button class="gf-gal__thumb" data-img="assets/img/Forfit/life-black-1.jpg" type="button"><img src="assets/img/Forfit/life-black-1.jpg" alt="Modelo entrenando con pesas negras"/></button>
+          <button class="gf-gal__thumb" data-img="assets/img/Forfit/life-pink-1.jpg" type="button"><img src="assets/img/Forfit/life-pink-1.jpg" alt="Modelo entrenando con pesas rosadas"/></button>
         </div>
       </div>
 
@@ -160,6 +175,40 @@
             <li class="gf-kit__item"><span class="gf-kit__ico">▢</span><div><p class="gf-kit__t" data-en="Carry bag" data-es="Bolso de transporte">Bolso de transporte</p><p class="gf-kit__d" data-en="Minimalist bag to store and carry the set." data-es="Bolso minimalista para guardar y transportar el set.">Bolso minimalista para guardar y transportar el set.</p></div></li>
           </ul>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Video demostración -->
+  <div class="gf-pdp__wrap">
+    <div class="gf-video">
+      <div class="gf-video__head">
+        <p class="gf-video__cap" data-en="In action" data-es="En acción">En acción</p>
+        <h2 data-en="See the weights in motion" data-es="Mira las pesas en movimiento">Mira las pesas en movimiento</h2>
+      </div>
+      <div class="gf-video__frame">
+        <video controls preload="none" playsinline poster="assets/img/Forfit/life-black-1.jpg">
+          <source src="assets/img/Forfit/forfit-demo.mp4" type="video/mp4"/>
+        </video>
+      </div>
+    </div>
+  </div>
+
+  <!-- Descripción A+ -->
+  <div class="gf-pdp__wrap">
+    <div class="gf-aplus">
+      <div class="gf-aplus__head">
+        <p class="gf-aplus__cap" data-en="Product detail" data-es="Detalle del producto">Detalle del producto</p>
+        <h2 data-en="Everything in the kit, up close" data-es="Todo el kit, en detalle">Todo el kit, en detalle</h2>
+      </div>
+      <div class="gf-aplus__stack">
+        <img src="assets/img/Forfit/aplus-01.jpg" alt="Forfit detalle 1" loading="lazy"/>
+        <img src="assets/img/Forfit/aplus-02.jpg" alt="Forfit detalle 2" loading="lazy"/>
+        <img src="assets/img/Forfit/aplus-03.jpg" alt="Forfit detalle 3" loading="lazy"/>
+        <img src="assets/img/Forfit/aplus-04.jpg" alt="Forfit detalle 4" loading="lazy"/>
+        <img src="assets/img/Forfit/aplus-05.jpg" alt="Forfit detalle 5" loading="lazy"/>
+        <img src="assets/img/Forfit/aplus-06.jpg" alt="Forfit detalle 6" loading="lazy"/>
+        <img src="assets/img/Forfit/aplus-07.jpg" alt="Forfit detalle 7" loading="lazy"/>
       </div>
       <a class="gf-pdp__back" href="catalogo.html" data-en="← Back to catalog" data-es="← Volver al catálogo">← Volver al catálogo</a>
     </div>
