@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Panel SEO · Grupo Fitcore</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --navy:#0B1840; --navy2:#15173f; --purple:#3B1F6B; --accent:#7c4ddb;
+  --accent-l:#b789ff; --ink:#11182f; --muted:#65708a; --line:#e6e9f0;
+  --soft:#f6f7fa; --soft2:#f4f1fb; --green:#1ea672; --amber:#d98a17; --red:#d6455a;
+  --shadow:0 18px 50px rgba(11,24,64,.10);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Archivo',sans-serif;color:var(--ink);background:#eef0f5;line-height:1.5;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:'Bricolage Grotesque',sans-serif;letter-spacing:-.02em;line-height:1.05}
+a{color:var(--accent);text-decoration:none}
+.wrap{max-width:1180px;margin:0 auto;padding:0 clamp(18px,4vw,40px)}
+
+/* HEADER */
+.top{position:relative;overflow:hidden;background:linear-gradient(120deg,var(--navy) 0%,var(--navy2) 55%,#2a1456 100%);color:#fff}
+.top::before{content:"";position:absolute;top:-40%;right:-5%;width:46%;height:200%;background:radial-gradient(circle,rgba(123,74,201,.45),transparent 62%);pointer-events:none}
+.top__inner{position:relative;z-index:2;padding:clamp(38px,6vw,68px) 0 clamp(34px,5vw,56px)}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:12px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--accent-l);margin-bottom:16px}
+.eyebrow::before{content:"";width:34px;height:2px;background:var(--accent-l)}
+.top h1{font-size:clamp(34px,5.6vw,60px);font-weight:800;margin-bottom:14px}
+.top p{max-width:660px;color:#c9d0e4;font-size:clamp(15px,1.6vw,18px)}
+.meta-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+.chip{font-size:12.5px;font-weight:600;padding:7px 14px;border-radius:999px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.16);color:#e7ecf7}
+
+/* NAV */
+.nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav__inner{display:flex;gap:6px;overflow-x:auto;padding:0 clamp(18px,4vw,40px)}
+.nav a{white-space:nowrap;font-size:14px;font-weight:600;color:var(--muted);padding:16px 14px;border-bottom:2px solid transparent;transition:.18s}
+.nav a:hover{color:var(--ink)}
+.nav a.active{color:var(--accent);border-bottom-color:var(--accent)}
+
+section{padding:clamp(40px,5vw,64px) 0;border-bottom:1px solid var(--line)}
+.sec-eyebrow{font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+.sec-title{font-size:clamp(24px,3.2vw,38px);font-weight:800;color:var(--navy);margin-bottom:8px}
+.sec-sub{color:var(--muted);max-width:720px;margin-bottom:30px;font-size:16px}
+
+/* SCORECARDS */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:18px}
+.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:24px;box-shadow:var(--shadow)}
+.card .k{font-family:'Bricolage Grotesque';font-weight:800;font-size:40px;color:var(--navy);letter-spacing:-.03em;line-height:1}
+.card .l{margin-top:8px;color:var(--muted);font-size:14px}
+.card .t{font-size:11.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+
+/* GRID PANELS */
+.panel{background:#fff;border:1px solid var(--line);border-radius:18px;padding:clamp(22px,2.6vw,32px);box-shadow:var(--shadow)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:820px){.two{grid-template-columns:1fr}}
+
+/* TABLE */
+table{width:100%;border-collapse:collapse;font-size:14.5px}
+th,td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:'Archivo';font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);background:var(--soft)}
+tr:last-child td{border-bottom:none}
+td .kw{font-weight:600;color:var(--ink)}
+.tag{display:inline-block;font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;letter-spacing:.02em}
+.t-hi{background:#fdeaed;color:var(--red)}
+.t-md{background:#fdf3e3;color:var(--amber)}
+.t-lo{background:#e6f6ef;color:var(--green)}
+.t-niche{background:#efe7fb;color:var(--accent)}
+.scroll{overflow-x:auto;border-radius:14px;border:1px solid var(--line)}
+
+/* AUDIT */
+.audit{display:grid;gap:16px}
+.arow{display:grid;grid-template-columns:1.4fr repeat(4,1fr);gap:0;align-items:center;background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.arow > div{padding:14px 16px;border-left:1px solid var(--line);font-size:14px}
+.arow > div:first-child{border-left:none;font-weight:600}
+.arow.head{background:var(--navy);color:#fff;border:none}
+.arow.head > div{border-left-color:rgba(255,255,255,.12);font-family:'Archivo';font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.yes{color:var(--green);font-weight:700}
+.no{color:var(--red);font-weight:700}
+@media(max-width:820px){.arow{grid-template-columns:1fr 1fr}.arow > div:first-child{grid-column:1/-1;background:var(--soft)}}
+
+/* CHANGES */
+.chg{display:grid;gap:12px}
+.chg-item{display:flex;gap:14px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+.chk{flex:0 0 24px;width:24px;height:24px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;margin-top:1px}
+.chg-item h4{font-size:16px;color:var(--navy);margin-bottom:3px}
+.chg-item p{font-size:14px;color:var(--muted)}
+
+/* ROADMAP */
+.road{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media(max-width:900px){.road{grid-template-columns:1fr}}
+.phase{background:#fff;border:1px solid var(--line);border-radius:18px;padding:26px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.phase::before{content:"";position:absolute;top:0;left:0;right:0;height:5px}
+.phase.p1::before{background:linear-gradient(90deg,var(--green),#4fd1a0)}
+.phase.p2::before{background:linear-gradient(90deg,var(--amber),#f0b24b)}
+.phase.p3::before{background:linear-gradient(90deg,var(--accent),var(--accent-l))}
+.phase .when{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.phase h3{font-size:21px;color:var(--navy);margin:6px 0 16px}
+.phase ul{list-style:none}
+.phase li{position:relative;padding-left:22px;margin-bottom:11px;font-size:14.5px;color:var(--ink)}
+.phase li::before{content:"";position:absolute;left:0;top:7px;width:8px;height:8px;border-radius:50%;background:var(--accent)}
+.phase li small{display:block;color:var(--muted);font-size:12.5px;margin-top:1px}
+
+.note{background:var(--soft2);border:1px solid #e7e2f4;border-left:4px solid var(--accent);border-radius:12px;padding:16px 18px;font-size:14.5px;color:#42365e;margin-top:18px}
+.note b{color:var(--purple)}
+
+.cta-bar{background:linear-gradient(120deg,var(--navy),#2a1456);border-radius:18px;padding:clamp(26px,3vw,38px);color:#fff;display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap;margin-top:8px}
+.cta-bar h3{font-size:24px;margin-bottom:6px}
+.cta-bar p{color:#c9d0e4;font-size:15px;max-width:520px}
+.btn{display:inline-flex;align-items:center;gap:8px;background:var(--accent-l);color:#1a0c33;font-family:'Archivo';font-weight:700;font-size:15px;padding:14px 24px;border-radius:12px;transition:.18s}
+.btn:hover{transform:translateY(-2px);background:#fff}
+
+footer{padding:32px 0;color:var(--muted);font-size:13px;text-align:center}
+.legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:16px;font-size:12.5px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.dot{width:10px;height:10px;border-radius:50%}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap top__inner">
+    <div class="eyebrow">Panel de Inteligencia SEO</div>
+    <h1>SEO Grupo Fitcore</h1>
+    <p>Auditoria de competencia, estudio de palabras clave, cambios implementados en Fase 1 y la hoja de ruta para posicionar a Fitcore como el distribuidor mayorista B2B lider de suplementos en Venezuela.</p>
+    <div class="meta-row">
+      <span class="chip">Mercado: Venezuela</span>
+      <span class="chip">Modelo: B2B mayorista</span>
+      <span class="chip">Idioma principal: Espanol</span>
+      <span class="chip">Actualizado: Fase 1</span>
+    </div>
+  </div>
+</header>
+
+<nav class="nav">
+  <div class="nav__inner">
+    <a href="#resumen" class="active">Resumen</a>
+    <a href="#competencia">Competencia</a>
+    <a href="#keywords">Keywords</a>
+    <a href="#fase1">Cambios Fase 1</a>
+    <a href="#roadmap">Roadmap</a>
+    <a href="#ads">Publicidad</a>
+  </div>
+</nav>
+
+<!-- RESUMEN -->
+<section id="resumen"><div class="wrap">
+  <div class="sec-eyebrow">01 · Resumen ejecutivo</div>
+  <h2 class="sec-title">Donde estamos parados</h2>
+  <p class="sec-sub">La oportunidad central: <b>ningun competidor en Venezuela esta peleando el terreno B2B / mayorista, y ninguno tiene SEO tecnico serio</b>. Fitcore puede tomar ese espacio con contenido estructurado y la palabra clave correcta.</p>
+  <div class="cards">
+    <div class="card"><div class="t">Paginas optimizadas</div><div class="k">6</div><div class="l">Inicio, Catalogo, Marcas, Servicios, Nosotros, Contacto</div></div>
+    <div class="card"><div class="t">Competidores con schema</div><div class="k" style="color:var(--green)">0/3</div><div class="l">Hueco tecnico que ya tomamos nosotros</div></div>
+    <div class="card"><div class="t">Cluster B2B disponible</div><div class="k">7+</div><div class="l">Keywords de alta intencion sin dueno</div></div>
+    <div class="card"><div class="t">Oportunidad en Ads</div><div class="k" style="color:var(--accent)">Alta</div><div class="l">CPC en Venezuela muy por debajo de EE.UU.</div></div>
+  </div>
+  <div class="note"><b>Diferenciador.</b> Los competidores le hablan al consumidor final (atleta). Fitcore le habla al dueno de negocio (gimnasio, tienda, farmacia, nutricionista). Esa segmentacion B2B casi no tiene competencia en buscadores.</div>
+</div></section>
+
+<!-- COMPETENCIA -->
+<section id="competencia"><div class="wrap">
+  <div class="sec-eyebrow">02 · Espionaje de competencia</div>
+  <h2 class="sec-title">Auditoria de los 3 mas relevantes</h2>
+  <p class="sec-sub">Auditamos los sitios mas relevantes en SEO del mercado venezolano. El patron es claro y consistente: todos enfocados en retail B2C, sin datos estructurados ni optimizacion para compartir.</p>
+  <div class="audit">
+    <div class="arow head">
+      <div>Competidor</div><div>Enfoque</div><div>Schema JSON-LD</div><div>Open Graph</div><div>Cluster B2B</div>
+    </div>
+    <div class="arow"><div>Suplementos Venezuela<br><small style="color:var(--muted)">Caracas · +58 414-012-4810</small></div><div>B2C retail</div><div class="no">No</div><div class="no">No</div><div class="no">No lo trabaja</div></div>
+    <div class="arow"><div>SuplemFit<br><small style="color:var(--muted)">RIF J-50543192-7</small></div><div>B2C retail</div><div class="no">No</div><div class="no">No</div><div class="no">No lo trabaja</div></div>
+    <div class="arow"><div>Fusfit<br><small style="color:var(--muted)">+58 424-250-6743</small></div><div>B2C retail</div><div class="no">No</div><div class="no">No</div><div class="no">No lo trabaja</div></div>
+    <div class="arow" style="background:var(--soft2);border-color:#d9cdf2"><div><b>Grupo Fitcore</b><br><small style="color:var(--muted)">Tras Fase 1</small></div><div style="font-weight:700;color:var(--purple)">B2B mayorista</div><div class="yes">Si</div><div class="yes">Si</div><div class="yes">Lo lideramos</div></div>
+  </div>
+  <div class="two" style="margin-top:22px">
+    <div class="panel">
+      <h4 style="color:var(--navy);margin-bottom:10px">Que hacen bien (y debemos igualar)</h4>
+      <p style="font-size:14.5px;color:var(--muted)">Catalogo amplio visible, fichas de producto con marca + presentacion, presencia en redes y reseñas. Captan trafico de marca/producto (ej. "proteina muscletech", "creatina").</p>
+    </div>
+    <div class="panel">
+      <h4 style="color:var(--navy);margin-bottom:10px">Que dejan abierto (lo explotamos)</h4>
+      <p style="font-size:14.5px;color:var(--muted)">Cero datos estructurados, cero Open Graph (links feos en WhatsApp), nadie reclama "distribuidor / mayorista / proveedor de suplementos", sin contenido que responda dudas de compradores (formato FAQ / GEO).</p>
+    </div>
+  </div>
+</div></section>
+
+<!-- KEYWORDS -->
+<section id="keywords"><div class="wrap">
+  <div class="sec-eyebrow">03 · Estudio de palabras clave</div>
+  <h2 class="sec-title">Donde esta la demanda</h2>
+  <p class="sec-sub">Tres bloques de keywords. Volumenes referenciales del estudio en Google Keyword Planner (Venezuela). La estrategia combina volumen (marca/producto) con intencion (cluster B2B).</p>
+
+  <h4 style="color:var(--navy);margin:6px 0 12px">A · Cluster B2B mayorista <span class="tag t-niche">Nuestro nicho</span></h4>
+  <p style="font-size:14px;color:var(--muted);margin-bottom:14px">Volumen bajo (~50/mes) pero <b>altisima intencion comercial</b> y casi sin competencia organica. Aqui es donde Fitcore debe ganar primero.</p>
+  <div class="scroll"><table>
+    <thead><tr><th>Palabra clave</th><th>Vol. aprox.</th><th>Competencia</th><th>Pagina destino</th></tr></thead>
+    <tbody>
+      <tr><td class="kw">proveedores de suplementos deportivos</td><td>50</td><td><span class="tag t-hi">Alta</span></td><td>Inicio / Servicios</td></tr>
+      <tr><td class="kw">suplementos deportivos por mayor</td><td>50</td><td><span class="tag t-hi">Alta</span></td><td>Catalogo / Servicios</td></tr>
+      <tr><td class="kw">distribuidor de suplementos deportivos</td><td>50</td><td><span class="tag t-md">Media</span></td><td>Inicio / Nosotros</td></tr>
+      <tr><td class="kw">mayorista de suplementos deportivos</td><td>50</td><td><span class="tag t-md">Media</span></td><td>Servicios</td></tr>
+      <tr><td class="kw">distribuidores de suplementos al por mayor</td><td>50</td><td><span class="tag t-md">Media</span></td><td>Marcas / Catalogo</td></tr>
+      <tr><td class="kw">proteina al por mayor</td><td>50</td><td><span class="tag t-md">Media</span></td><td>Catalogo</td></tr>
+      <tr><td class="kw">suplementos mayoreo</td><td>50</td><td><span class="tag t-lo">Baja</span></td><td>Catalogo</td></tr>
+    </tbody>
+  </table></div>
+
+  <h4 style="color:var(--navy);margin:26px 0 12px">B · Marca + producto <span class="tag t-md">Volumen medio</span></h4>
+  <p style="font-size:14px;color:var(--muted);margin-bottom:14px">El comprador ya conoce la marca. Tomar estas keywords valida que somos la fuente mayorista de esos productos.</p>
+  <div class="scroll"><table>
+    <thead><tr><th>Palabra clave</th><th>Vol. aprox.</th><th>Pagina destino</th></tr></thead>
+    <tbody>
+      <tr><td class="kw">creatina muscletech / muscletech creatina</td><td>5.000</td><td>Catalogo / Marcas</td></tr>
+      <tr><td class="kw">creatina monohidratada / monohidrato</td><td>5.000</td><td>Catalogo</td></tr>
+      <tr><td class="kw">immunocal</td><td>5.000</td><td>Catalogo</td></tr>
+      <tr><td class="kw">proteina iso 100</td><td>500</td><td>Catalogo</td></tr>
+      <tr><td class="kw">proteina dymatize / muscletech</td><td>500</td><td>Catalogo / Marcas</td></tr>
+      <tr><td class="kw">nitrotech</td><td>500</td><td>Catalogo</td></tr>
+      <tr><td class="kw">lipo 6 black</td><td>500</td><td>Catalogo</td></tr>
+      <tr><td class="kw">proteina whey</td><td>500</td><td>Catalogo</td></tr>
+      <tr><td class="kw">proteina / colageno sascha fitness</td><td>500</td><td>Marcas</td></tr>
+      <tr><td class="kw">aminoacidos suplementos</td><td>500</td><td>Catalogo</td></tr>
+    </tbody>
+  </table></div>
+
+  <h4 style="color:var(--navy);margin:26px 0 12px">C · Alto volumen / categoria <span class="tag t-lo">Trafico amplio</span></h4>
+  <p style="font-size:14px;color:var(--muted);margin-bottom:14px">Mucho volumen pero intencion mixta (consumidor final). Util para autoridad de categoria y contenido educativo a futuro, no como prioridad de conversion B2B.</p>
+  <div class="scroll"><table>
+    <thead><tr><th>Palabra clave</th><th>Vol. aprox.</th><th>Uso recomendado</th></tr></thead>
+    <tbody>
+      <tr><td class="kw">vitamina d / vitamina c</td><td>50.000</td><td>Contenido educativo (blog futuro)</td></tr>
+      <tr><td class="kw">biotina para que sirve</td><td>5.000</td><td>Contenido educativo (blog futuro)</td></tr>
+      <tr><td class="kw">suplementos deportivos</td><td>500</td><td>Categoria general (Catalogo)</td></tr>
+      <tr><td class="kw">creatina precio</td><td>500</td><td>Senal de intencion de compra</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note"><b>Lectura estrategica.</b> Ganamos primero el cluster B2B (poca pelea, mucha intencion), reforzamos con marca+producto, y reservamos el alto volumen para una futura seccion de contenido/blog que alimente GEO (que ChatGPT, Perplexity y Google AI nos citen).</div>
+</div></section>
+
+<!-- FASE 1 -->
+<section id="fase1"><div class="wrap">
+  <div class="sec-eyebrow">04 · Lo que ya hicimos</div>
+  <h2 class="sec-title">Cambios implementados en Fase 1</h2>
+  <p class="sec-sub">Optimizacion tecnica y on-page en las 6 paginas. Nada de esto altera el diseno visible: son las senales que leen Google, las redes sociales y los buscadores de IA.</p>
+  <div class="chg">
+    <div class="chg-item"><div class="chk">&#10003;</div><div><h4>Titles unicos por pagina, cargados de keyword</h4><p>Cada pagina lidera con su palabra clave principal (ej. "Distribuidor Mayorista de Suplementos en Venezuela"). Antes eran genericos ("Inicio | Grupo Fitcore").</p></div></div>
+    <div class="chg-item"><div class="chk">&#10003;</div><div><h4>Meta descripciones persuasivas + keyword</h4><p>Reescritas para enganchar al dueno de negocio (es lo que se ve en Google), no solo para meter keywords. Todas bajo 160 caracteres para no cortarse.</p></div></div>
+    <div class="chg-item"><div class="chk">&#10003;</div><div><h4>Open Graph + Twitter Cards</h4><p>Los links a grupofitcore.com ahora se ven con titulo, descripcion e imagen al compartirse en WhatsApp, Instagram y redes. Ningun competidor lo tiene.</p></div></div>
+    <div class="chg-item"><div class="chk">&#10003;</div><div><h4>Datos estructurados JSON-LD (Organization + WebSite)</h4><p>Google entiende que Fitcore es un distribuidor, que marcas maneja, su zona (Venezuela) y su contacto. Base para aparecer en resultados enriquecidos y en IA.</p></div></div>
+    <div class="chg-item"><div class="chk">&#10003;</div><div><h4>Canonical en cada pagina</h4><p>Evita contenido duplicado por el cambio de idioma (mismo URL sirve ES/EN via JS).</p></div></div>
+    <div class="chg-item"><div class="chk">&#10003;</div><div><h4>sitemap.xml + robots.txt</h4><p>Mapa del sitio con las 6 URLs y prioridades. robots.txt habilita explicitamente a los crawlers de IA (GPTBot, PerplexityBot, Google-Extended, ClaudeBot) para GEO.</p></div></div>
+    <div class="chg-item"><div class="chk">&#10003;</div><div><h4>Favicon + theme-color</h4><p>Icono de marca en la pestaña y color de barra en movil. Detalle de confianza y profesionalismo.</p></div></div>
+    <div class="chg-item"><div class="chk">&#10003;</div><div><h4>Jerarquia de encabezados corregida</h4><p>El Inicio tenia DOS H1 (error SEO). Ahora un solo H1 por pagina y H2/H3 en orden logico. Google entiende mejor la estructura.</p></div></div>
+  </div>
+  <div class="note"><b>Pendiente a proposito (no en Fase 1):</b> NAP + Google Business Profile y schema <i>LocalBusiness</i> con direccion (esperando datos concretos), seccion FAQ visible con FAQPage schema, y completar el catalogo con listings reales (sin inventar precios). Todo esto entra en el Roadmap.</div>
+</div></section>
+
+<!-- ROADMAP -->
+<section id="roadmap"><div class="wrap">
+  <div class="sec-eyebrow">05 · Hacia adelante</div>
+  <h2 class="sec-title">Hoja de ruta de posicionamiento</h2>
+  <p class="sec-sub">De lo tecnico ya hecho a la autoridad sostenida. Regla permanente: <b>todo cambio futuro del sitio se piensa con SEO desde el primer momento</b> (URL, encabezados, alt, schema, enlaces internos).</p>
+  <div class="road">
+    <div class="phase p1">
+      <div class="when">Corto plazo · 0-1 mes</div>
+      <h3>Fundamentos y señales locales</h3>
+      <ul>
+        <li>Reclamar Google Business Profile<small>Categoria "distribuidor mayorista", zona Valera/Trujillo + Venezuela</small></li>
+        <li>Definir NAP unico y agregar schema LocalBusiness<small>Mismo nombre/telefono/direccion en sitio, GBP y redes</small></li>
+        <li>Alta en Google Search Console + enviar sitemap<small>Medir indexacion y consultas reales</small></li>
+        <li>Instalar GA4 + eventos de WhatsApp/formulario<small>Saber que pagina convierte</small></li>
+        <li>Completar catalogo con listings reales<small>Par de productos por marca, datos verificados</small></li>
+      </ul>
+    </div>
+    <div class="phase p2">
+      <div class="when">Mediano plazo · 1-3 meses</div>
+      <h3>Contenido y captura de intencion</h3>
+      <ul>
+        <li>Seccion FAQ visible + FAQPage schema<small>"Como abrir cuenta mayorista", "pedido minimo", "cobertura" → alimenta GEO</small></li>
+        <li>Paginas por marca y por categoria<small>Captura "proteina muscletech", "creatina monohidratada", etc.</small></li>
+        <li>Blog B2B: guias para duenos de gimnasio/tienda<small>"Como surtir tu gimnasio", margenes, tendencias</small></li>
+        <li>Enlazado interno estrategico<small>Cada pagina apunta a Catalogo y Contacto</small></li>
+        <li>Optimizar peso de imagenes + Core Web Vitals<small>Velocidad = ranking + conversion</small></li>
+      </ul>
+    </div>
+    <div class="phase p3">
+      <div class="when">Largo plazo · 3-12 meses</div>
+      <h3>Autoridad y dominio del nicho</h3>
+      <ul>
+        <li>Backlinks de directorios B2B y gremios fitness<small>Autoridad de dominio en el sector</small></li>
+        <li>Casos de exito / testimonios de negocios<small>Prueba social real (sin inventar)</small></li>
+        <li>Contenido que las IA citen (GEO)<small>Ser la fuente sobre "suplementos mayoristas en Venezuela"</small></li>
+        <li>Expansion de keywords a Latinoamerica<small>Acompaña la expansion del negocio</small></li>
+        <li>Revision trimestral de posiciones y competencia<small>Ajustar segun datos de Search Console</small></li>
+      </ul>
+    </div>
+  </div>
+</div></section>
+
+<!-- ADS -->
+<section id="ads" style="border-bottom:none"><div class="wrap">
+  <div class="sec-eyebrow">06 · Oportunidad paralela</div>
+  <h2 class="sec-title">Publicidad de pago (PPC)</h2>
+  <p class="sec-sub">El SEO construye terreno propio a mediano plazo. Los Ads compran visibilidad <b>hoy</b>, y en Venezuela el costo por clic es una fraccion del de EE.UU. El plan completo esta en su propio documento.</p>
+  <div class="cta-bar">
+    <div>
+      <h3>Plan de Publicidad Grupo Fitcore</h3>
+      <p>Estructura de campañas, keywords, presupuesto por fases, textos de anuncio listos y como medir el retorno. Aprovechando el CPC bajo del mercado venezolano.</p>
+    </div>
+    <a class="btn" href="plan-ads.html">Abrir plan de Ads &rarr;</a>
+  </div>
+</div></section>
+
+<footer>
+  <div class="wrap">
+    Panel interno · Grupo Fitcore · "Distribuimos confianza. Entregamos resultados." · Documento de estrategia, no se publica en el sitio.
+    <div class="legend" style="justify-content:center">
+      <span><span class="dot" style="background:var(--green)"></span> Competencia baja / hecho</span>
+      <span><span class="dot" style="background:var(--amber)"></span> Competencia media / en proceso</span>
+      <span><span class="dot" style="background:var(--red)"></span> Competencia alta</span>
+      <span><span class="dot" style="background:var(--accent)"></span> Nicho Fitcore</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+const links=[...document.querySelectorAll('.nav a')];
+const secs=links.map(a=>document.querySelector(a.getAttribute('href')));
+const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){const id='#'+e.target.id;links.forEach(l=>l.classList.toggle('active',l.getAttribute('href')===id));}});},{rootMargin:'-45% 0px -50% 0px'});
+secs.forEach(s=>s&&obs.observe(s));
+</script>
+</body>
+</html>
