@@ -57,6 +57,11 @@
 .gf-flavors__lbl{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--gf-muted);margin:0 0 10px;}
 .gf-flavors__row{display:flex;flex-wrap:wrap;gap:9px;}
 .gf-chip{font-size:13.5px;font-weight:600;color:var(--gf-navy);background:var(--gf-soft);border:1px solid var(--gf-line);border-radius:999px;padding:8px 16px;}
+.gf-opt{font:inherit;font-size:13.5px;font-weight:600;color:var(--gf-navy);background:var(--gf-soft);border:1.5px solid var(--gf-line);border-radius:999px;padding:9px 17px;cursor:pointer;transition:border-color .15s,background .15s,transform .15s,box-shadow .15s;}
+.gf-opt:hover{transform:translateY(-1px);border-color:#c9b6f0;}
+.gf-opt.is-active{border-color:var(--gf-acc);background:#fff;color:var(--gf-acc);box-shadow:0 0 0 3px rgba(124,77,219,.15);}
+.gf-sel{font-size:13px;color:var(--gf-muted);margin:16px 0 0;line-height:1.5;}
+.gf-sel b{color:var(--gf-navy);font-weight:700;}
 /* Caja B2B */
 .gf-b2b{background:var(--gf-navy);border-radius:20px;padding:clamp(20px,3vw,28px);color:#fff;position:relative;overflow:hidden;}
 .gf-b2b::after{content:"";position:absolute;top:-40px;right:-40px;width:160px;height:160px;background:radial-gradient(circle,rgba(124,77,219,.55),transparent 70%);}
@@ -138,7 +143,7 @@
       </div>
 
       <!-- Info -->
-      <div class="gf-pdp__info">
+      <div class="gf-pdp__info" id="gfConfig" data-product="Platinum 100% Creatine Monohydrate">
         <p class="gf-pdp__eyebrow" data-en="Proteins &amp; Performance" data-es="Creatina · Rendimiento">Creatina · Rendimiento</p>
         <h1>Platinum 100% Creatine Monohydrate</h1>
         <p class="gf-pdp__cat" data-en="Brand: &lt;b&gt;MuscleTech&lt;/b&gt; · Category: Creatine" data-es="Marca: &lt;b&gt;MuscleTech&lt;/b&gt; · Categoría: Creatina">Marca: <b>MuscleTech</b> · Categoría: Creatina</p>
@@ -151,13 +156,14 @@
           <div class="gf-spec__cell"><p class="gf-spec__k" data-en="Origin" data-es="Origen">Origen</p><p class="gf-spec__v" data-en="Imported from USA" data-es="Importado de EE.UU.">Importado de EE.UU.</p></div>
         </div>
 
-        <div class="gf-flavors">
-          <p class="gf-flavors__lbl" data-en="Available flavors" data-es="Sabores disponibles">Sabores disponibles</p>
+        <div class="gf-flavors" data-var-group="flavor">
+          <p class="gf-flavors__lbl" data-en="Flavor" data-es="Sabor">Sabor</p>
           <div class="gf-flavors__row">
-            <span class="gf-chip" data-en="Unflavored" data-es="Sin sabor">Sin sabor</span>
-            <span class="gf-chip">Grape Freeze</span>
-            <span class="gf-chip">Red Berry</span>
+            <button class="gf-opt is-active" type="button" data-img="assets/img/catalogo/creatine-front.jpg" data-label-en="Unflavored" data-label-es="Sin sabor" data-en="Unflavored" data-es="Sin sabor">Sin sabor</button>
+            <button class="gf-opt" type="button" data-img="assets/img/catalogo/creatine-grape.jpg" data-label-en="Grape Freeze" data-label-es="Grape Freeze">Grape Freeze</button>
+            <button class="gf-opt" type="button" data-img="assets/img/catalogo/creatine-redberry.jpg" data-label-en="Red Berry" data-label-es="Red Berry">Red Berry</button>
           </div>
+          <p class="gf-sel" data-en="Your selection: <b class='gf-sel__v'></b>" data-es="Tu selección: <b class='gf-sel__v'></b>">Tu selección: <b class="gf-sel__v"></b></p>
         </div>
 
         <div class="gf-b2b">
@@ -166,7 +172,7 @@
           <p class="gf-b2b__note" data-en="Prices, availability, and payment terms are confirmed by an advisor in under 24 hours. Opening an account is free with no commitment." data-es="Precios, disponibilidad y condiciones de pago las confirma un asesor en menos de 24 horas. Abrir cuenta es gratis y sin compromiso.">Precios, disponibilidad y condiciones de pago las confirma un asesor en menos de 24 horas. Abrir cuenta es gratis y sin compromiso.</p>
           <div class="gf-b2b__btns">
             <a class="gf-btn gf-btn--primary" href="contacto.html" data-en="Request wholesale price" data-es="Solicitar precio mayorista">Solicitar precio mayorista</a>
-            <a class="gf-btn gf-btn--wa" href="https://wa.me/584246218863" target="_blank" rel="noopener" data-en="WhatsApp" data-es="WhatsApp">WhatsApp</a>
+            <a class="gf-btn gf-btn--wa" id="gfWa" href="https://wa.me/584246218863" target="_blank" rel="noopener" data-en="WhatsApp" data-es="WhatsApp">WhatsApp</a>
           </div>
         </div>
       </div>
@@ -229,6 +235,53 @@ document.addEventListener('DOMContentLoaded',function(){
       t.classList.add('is-active');
     });
   });
+
+  /* ====== Motor de variantes (presentación + sabor) ====== */
+  var cfg=document.getElementById('gfConfig');
+  var waBtn=document.getElementById('gfWa');
+  var WA_BASE='https://wa.me/584246218863';
+  function setStageImg(src){
+    if(src&&stage)stage.src=src;
+    document.querySelectorAll('.gf-gal__thumb').forEach(function(x){
+      x.classList.toggle('is-active',x.getAttribute('data-img')===src);
+    });
+  }
+  function currentSelection(lang){
+    var parts=[];
+    document.querySelectorAll('[data-var-group]').forEach(function(g){
+      var a=g.querySelector('.gf-opt.is-active');
+      if(a){var l=a.getAttribute(lang==='en'?'data-label-en':'data-label-es')||a.textContent.trim();parts.push(l);}
+    });
+    return parts.join(', ');
+  }
+  function refreshSelection(){
+    var lang=(localStorage.getItem('grupoFitcoreLang')||'es');
+    var sel=currentSelection(lang);
+    document.querySelectorAll('.gf-sel__v').forEach(function(b){b.textContent=sel;});
+    if(waBtn&&cfg){
+      var prod=cfg.getAttribute('data-product')||'';
+      var msg=lang==='en'
+        ? 'Hi, I am interested in '+prod+(sel?' ('+sel+')':'')+'. Could you send me the wholesale price and availability?'
+        : 'Hola, me interesa '+prod+(sel?' ('+sel+')':'')+'. ¿Me pasan el precio mayorista y la disponibilidad?';
+      waBtn.href=WA_BASE+'?text='+encodeURIComponent(msg);
+    }
+  }
+  document.querySelectorAll('[data-var-group] .gf-opt').forEach(function(opt){
+    opt.addEventListener('click',function(){
+      var group=opt.closest('[data-var-group]');
+      group.querySelectorAll('.gf-opt').forEach(function(x){x.classList.remove('is-active');});
+      opt.classList.add('is-active');
+      var img=opt.getAttribute('data-img');
+      if(img)setStageImg(img);
+      var srv=opt.getAttribute('data-servings');
+      if(srv){var c=document.querySelector('[data-spec="servings"]');if(c)c.textContent=srv;}
+      var sz=opt.getAttribute('data-size');
+      if(sz){var c2=document.querySelector('[data-spec="size"]');if(c2)c2.textContent=sz;}
+      refreshSelection();
+    });
+  });
+  refreshSelection();
+  window.addEventListener('gf-langchange',refreshSelection);
   function openLb(){if(!lb)return;lbImg.src=stage.src;lb.classList.add('is-open');lb.setAttribute('aria-hidden','false');}
   function closeLb(){if(!lb)return;lb.classList.remove('is-open');lb.setAttribute('aria-hidden','true');}
   if(box)box.addEventListener('click',openLb);
