@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title data-es="Tu Kit de IA está listo | Grupo Fitcore" data-en="Your AI Toolkit is Ready | Grupo Fitcore">Tu Kit de IA está listo | Grupo Fitcore</title>
+<meta name="description" content="Kit de IA para calcular calorías y macros: prompt y skill de Claude Code."/>
+<link rel="canonical" href="https://grupofitcore.com/recursos"/>
+<meta name="robots" content="noindex,nofollow"/>
+<meta name="theme-color" content="#0B1840"/>
+<link rel="icon" type="image/png" href="assets/img/favicon.png"/>
+<link rel="apple-touch-icon" href="assets/img/favicon.png"/>
+<link href="assets/style.css" rel="stylesheet"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+/* RECURSOS PAGE — gf-lm-res-* */
+*{box-sizing:border-box;}
+
+/* SUCCESS HERO BAND */
+.gf-lm-res-hero{
+  position:relative;overflow:hidden;
+  background:linear-gradient(120deg,#0B1840 0%,#15173f 52%,#2a1456 100%);
+  padding:clamp(56px,7vw,96px) 0;text-align:center;
+}
+.gf-lm-res-hero:before{
+  content:"";position:absolute;top:-30%;left:50%;transform:translateX(-50%);
+  width:80%;height:200%;
+  background:radial-gradient(circle,rgba(123,74,201,.4),transparent 60%);
+  pointer-events:none;
+}
+.gf-lm-res-hero__inner{
+  position:relative;z-index:2;
+  max-width:720px;margin:0 auto;
+  padding:0 clamp(22px,5vw,64px);
+}
+.gf-lm-res-hero__badge{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'Archivo',sans-serif;font-size:13px;font-weight:700;
+  letter-spacing:.18em;text-transform:uppercase;
+  color:#b789ff;margin:0 0 16px;
+}
+.gf-lm-res-hero__h{
+  font-family:'Bricolage Grotesque',sans-serif;font-weight:800;
+  font-size:clamp(32px,4.8vw,58px);line-height:1.02;
+  letter-spacing:-.02em;color:#fff;margin:0 0 16px;
+}
+.gf-lm-res-hero__sub{
+  font-family:'Archivo',sans-serif;
+  font-size:clamp(16px,1.8vw,19px);line-height:1.55;
+  color:#d0d8f0;margin:0;
+}
+
+/* BODY */
+.gf-lm-res-body{
+  max-width:860px;margin:0 auto;
+  padding:clamp(48px,6vw,80px) clamp(22px,5vw,48px);
+  display:flex;flex-direction:column;gap:28px;
+}
+
+/* RESOURCE CARDS */
+.gf-lm-res-card{
+  position:relative;
+  background:linear-gradient(180deg,#fbfaff 0%,#f4f1fb 100%);
+  border:1px solid #e7e2f4;border-radius:24px;
+  padding:clamp(28px,4vw,44px);
+  box-shadow:0 18px 50px rgba(11,24,64,.09);
+  overflow:hidden;
+}
+.gf-lm-res-card:before{
+  content:"";position:absolute;top:0;left:0;right:0;
+  height:5px;background:linear-gradient(90deg,#3B1F6B,#b789ff);
+}
+.gf-lm-res-card__kicker{
+  font-family:'Archivo',sans-serif;font-size:11px;font-weight:700;
+  letter-spacing:.2em;text-transform:uppercase;
+  color:#3B1F6B;margin:0 0 10px;
+}
+.gf-lm-res-card__h{
+  font-family:'Bricolage Grotesque',sans-serif;font-weight:700;
+  font-size:clamp(20px,2.8vw,26px);letter-spacing:-.01em;
+  color:#0B1840;margin:0 0 8px;
+}
+.gf-lm-res-card__body{
+  font-family:'Archivo',sans-serif;font-size:15px;
+  line-height:1.6;color:#65708a;margin:0 0 22px;
+}
+
+/* CODE BLOCK */
+.gf-lm-code-wrap{position:relative;}
+.gf-lm-copy-btn{
+  position:absolute;top:12px;right:12px;z-index:2;
+  font-family:'Archivo',sans-serif;font-size:12px;font-weight:700;
+  letter-spacing:.06em;text-transform:uppercase;
+  background:rgba(59,31,107,.14);color:#3B1F6B;
+  border:1px solid rgba(59,31,107,.22);border-radius:8px;
+  padding:7px 14px;cursor:pointer;
+  transition:background .18s,transform .18s;white-space:nowrap;
+}
+.gf-lm-copy-btn:hover{background:rgba(59,31,107,.22);transform:translateY(-1px);}
+.gf-lm-copy-btn.copied{background:#10bf7a;color:#fff;border-color:#10bf7a;}
+pre.gf-lm-code{
+  background:#1e1e2e;color:#cdd6f4;
+  font-family:'Courier New',Courier,monospace;
+  font-size:13.5px;line-height:1.72;
+  border-radius:14px;padding:clamp(18px,3vw,28px);
+  overflow-x:auto;white-space:pre-wrap;word-break:break-word;
+  margin:0;max-height:400px;overflow-y:auto;
+}
+
+/* GUIDE STEPS */
+.gf-lm-res-steps{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:22px;}
+.gf-lm-res-step{display:flex;align-items:flex-start;gap:18px;}
+.gf-lm-res-step__num{
+  flex-shrink:0;width:44px;height:44px;border-radius:12px;
+  background:#3B1F6B;color:#fff;
+  font-family:'Bricolage Grotesque',sans-serif;font-weight:800;
+  font-size:16px;letter-spacing:.04em;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 8px 20px rgba(59,31,107,.28);
+}
+.gf-lm-res-step__content{padding-top:8px;}
+.gf-lm-res-step__content strong{
+  display:block;
+  font-family:'Bricolage Grotesque',sans-serif;font-weight:700;
+  font-size:17px;color:#0B1840;margin-bottom:4px;
+}
+.gf-lm-res-step__content p{
+  font-family:'Archivo',sans-serif;font-size:15px;
+  line-height:1.6;color:#65708a;margin:0;
+}
+
+/* GUIDE CARD — no accent bar */
+.gf-lm-res-card--plain:before{display:none;}
+.gf-lm-res-card--plain{background:#fff;border-color:#e6e9f0;}
+
+/* BOTTOM CTA */
+.gf-lm-res-cta{
+  background:linear-gradient(120deg,#0B1840 0%,#2a1456 100%);
+  border-radius:24px;padding:clamp(32px,4vw,48px);
+  text-align:center;
+}
+.gf-lm-res-cta p{
+  font-family:'Bricolage Grotesque',sans-serif;font-weight:700;
+  font-size:clamp(20px,2.8vw,26px);color:#fff;
+  letter-spacing:-.01em;margin:0 0 20px;
+}
+.gf-lm-res-cta__btn{
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:'Archivo',sans-serif;font-weight:700;font-size:15px;
+  background:#fff;color:#0B1840;padding:16px 28px;
+  border-radius:12px;
+  transition:transform .18s ease,box-shadow .18s ease;
+  box-shadow:0 14px 32px rgba(0,0,0,.22);
+}
+.gf-lm-res-cta__btn:hover{transform:translateY(-2px);box-shadow:0 20px 42px rgba(0,0,0,.32);}
+
+@media(max-width:560px){
+  pre.gf-lm-code{font-size:12px;max-height:320px;}
+  .gf-lm-res-step__num{width:38px;height:38px;font-size:14px;}
+}
+</style>
+</head>
+<body>
+<main class="site">
+<header class="header">
+  <a href="index.html"><img alt="Grupo Fitcore" class="brand-logo" src="assets/img/logo-principal.png"/></a>
+  <nav class="nav">
+    <a class="" data-en="Home" data-es="Inicio" href="index.html">Inicio</a>
+    <a class="" data-en="About" data-es="Nosotros" href="nosotros.html">Nosotros</a>
+    <a class="" data-en="Catalog" data-es="Catálogo" href="catalogo.html">Catálogo</a>
+    <a class="" data-en="Services" data-es="Servicios" href="servicios.html">Servicios</a>
+    <a class="" data-en="Brands" data-es="Marcas" href="marcas.html">Marcas</a>
+    <a class="" data-en="Contact" data-es="Contacto" href="contacto.html">Contacto</a>
+    <button id="lang-toggle" onclick="toggleLang()" type="button">EN</button>
+  </nav>
+  <a class="cta" data-en="Request Catalog" data-es="Solicitar catálogo" href="contacto.html">Solicitar catálogo</a>
+</header>
+
+<!-- SUCCESS HERO -->
+<section class="gf-lm-res-hero">
+  <div class="gf-lm-res-hero__inner">
+    <p class="gf-lm-res-hero__badge" data-es="¡Tu kit está aquí!" data-en="Your toolkit is here!">¡Tu kit está aquí!</p>
+    <h1 class="gf-lm-res-hero__h" data-es="Bienvenido. Aquí está todo." data-en="Welcome. Here's everything.">Bienvenido. Aquí está todo.</h1>
+    <p class="gf-lm-res-hero__sub" data-es="Debajo encontrarás el prompt para cualquier IA, la skill de Claude Code y la guía de 3 pasos para empezar hoy." data-en="Below you'll find the prompt for any AI, the Claude Code skill, and the 3-step guide to start today.">Debajo encontrarás el prompt para cualquier IA, la skill de Claude Code y la guía de 3 pasos para empezar hoy.</p>
+  </div>
+</section>
+
+<!-- RESOURCE CARDS -->
+<div class="gf-lm-res-body">
+
+  <!-- CARD 1: PROMPT FOR ANY AI -->
+  <article class="gf-lm-res-card">
+    <p class="gf-lm-res-card__kicker" data-es="Recurso 1 · Para cualquier IA" data-en="Resource 1 · For any AI">Recurso 1 · Para cualquier IA</p>
+    <h2 class="gf-lm-res-card__h" data-es="Prompt: Calculadora de calorías y macros" data-en="Prompt: Calorie and macro calculator">Prompt: Calculadora de calorías y macros</h2>
+    <p class="gf-lm-res-card__body" data-es="Copia este prompt y pégalo en ChatGPT, Claude, Gemini o cualquier IA. Rellena los corchetes con tu información y en segundos tendrás tu plan calórico personalizado." data-en="Copy this prompt and paste it into ChatGPT, Claude, Gemini, or any AI. Fill in the brackets with your information and in seconds you'll have your personalized calorie plan.">Copia este prompt y pégalo en ChatGPT, Claude, Gemini o cualquier IA. Rellena los corchetes con tu información y en segundos tendrás tu plan calórico personalizado.</p>
+    <div class="gf-lm-code-wrap">
+      <button class="gf-lm-copy-btn" onclick="copyBlock('prompt-text', this)" data-es="Copiar prompt" data-en="Copy prompt">Copiar prompt</button>
+      <pre class="gf-lm-code" id="prompt-text">Actúa como un nutricionista deportivo certificado. Voy a darte mis datos y quiero que calcules mis calorías diarias y macros según mi objetivo.
+
+Mis datos:
+- Sexo biológico: [hombre / mujer]
+- Edad: [edad en años]
+- Peso: [peso en kg]
+- Altura: [altura en cm]
+- Nivel de actividad: [elige uno → sedentario (escritorio, sin ejercicio) / levemente activo (ejercicio 1-3 días/semana) / moderadamente activo (3-5 días/semana) / muy activo (6-7 días/semana) / extremadamente activo (trabajo físico + ejercicio intenso)]
+- Mi objetivo: [elige uno → perder grasa en déficit calórico / hacer dieta keto / ganar músculo y masa]
+
+Con esos datos, calcula usando la fórmula Mifflin-St Jeor:
+1. Mi TMB (Tasa Metabólica Basal)
+2. Mi TDEE (Gasto energético total diario)
+3. Las calorías que debo consumir según mi objetivo
+4. La distribución de macronutrientes en gramos (proteínas, carbohidratos, grasas)
+5. 3 ejemplos de alimentos recomendados para cada macro
+6. Una advertencia o consejo importante para mi objetivo específico
+
+Al final, muéstrame cómo distribuir esas calorías en 3 comidas principales y un snack.
+
+Responde en español, de forma clara y estructurada con una tabla de macros.</pre>
+    </div>
+  </article>
+
+  <!-- CARD 2: CLAUDE CODE SKILL -->
+  <article class="gf-lm-res-card">
+    <p class="gf-lm-res-card__kicker" data-es="Recurso 2 · Solo para Claude Code" data-en="Resource 2 · Claude Code only">Recurso 2 · Solo para Claude Code</p>
+    <h2 class="gf-lm-res-card__h" data-es="Skill: /calculo-calorico (versión avanzada)" data-en="Skill: /calculo-calorico (advanced version)">/calculo-calorico (versión avanzada)</h2>
+    <p class="gf-lm-res-card__body" data-es="Esta skill hace lo mismo que el prompt, pero de forma interactiva: te hace preguntas una por una, calcula tus macros y puede diseñarte un menú completo. Instálala en Claude Code siguiendo la guía de abajo." data-en="This skill does the same as the prompt but interactively: asks questions one by one, calculates your macros, and can design a full day menu. Install it in Claude Code following the guide below.">Esta skill hace lo mismo que el prompt, pero de forma interactiva: te hace preguntas una por una, calcula tus macros y puede diseñarte un menú completo. Instálala en Claude Code siguiendo la guía de abajo.</p>
+    <div class="gf-lm-code-wrap">
+      <button class="gf-lm-copy-btn" onclick="copyBlock('skill-text', this)" data-es="Copiar skill" data-en="Copy skill">Copiar skill</button>
+      <pre class="gf-lm-code" id="skill-text"># /calculo-calorico — Calculadora de Calorías y Macros
+
+Eres un nutricionista deportivo. Calcula el gasto calórico y macros del usuario de forma interactiva, paso a paso.
+
+## Proceso
+
+Haz estas preguntas **una por una**, en orden, esperando respuesta antes de continuar:
+
+1. "¿Cuál es tu sexo biológico? (hombre / mujer)"
+2. "¿Cuántos años tienes?"
+3. "¿Cuánto pesas actualmente? (en kg)"
+4. "¿Cuánto mides? (en cm)"
+5. "¿Cuál es tu nivel de actividad diaria?
+   - **Sedentario** — trabajo de escritorio, casi sin ejercicio
+   - **Levemente activo** — ejercicio ligero 1-3 días/semana
+   - **Moderadamente activo** — ejercicio moderado 3-5 días/semana
+   - **Muy activo** — ejercicio intenso 6-7 días/semana
+   - **Extremadamente activo** — trabajo físico intenso + ejercicio"
+6. "¿Cuál es tu objetivo principal?
+   - **Déficit calórico** — perder grasa de forma sostenible
+   - **Keto** — dieta cetogénica, muy bajo en carbohidratos
+   - **Volumen** — ganar músculo y masa"
+
+## Fórmulas
+
+### TMB (Tasa Metabólica Basal) — Mifflin-St Jeor
+- Hombre: TMB = (10 × kg) + (6.25 × cm) − (5 × edad) + 5
+- Mujer:  TMB = (10 × kg) + (6.25 × cm) − (5 × edad) − 161
+
+### TDEE = TMB × factor de actividad
+| Nivel                    | Factor |
+|--------------------------|--------|
+| Sedentario               | 1.2    |
+| Levemente activo         | 1.375  |
+| Moderadamente activo     | 1.55   |
+| Muy activo               | 1.725  |
+| Extremadamente activo    | 1.9    |
+
+### Calorías objetivo
+- Déficit: TDEE − 20%
+- Keto: TDEE − 10%
+- Volumen: TDEE + 15%
+
+### Macros por objetivo
+
+**Déficit:** proteína 2.2g×kg / grasa 25% kcal÷9 / carbs: resto÷4
+**Keto:** carbos máx 50g/día / proteína 1.8g×kg / grasa: resto÷9
+**Volumen:** proteína 2.2g×kg / carbs 45% kcal÷4 / grasa: resto÷9
+
+## Respuesta final
+
+Cuando tengas todos los datos, presenta:
+
+---
+**Perfil:** [datos del usuario]
+**TMB:** X kcal/día | **TDEE:** X kcal/día | **Objetivo:** X kcal/día
+
+| Macro          | Gramos | Calorías |
+|----------------|--------|---------|
+| 🥩 Proteínas   | Xg     | X kcal  |
+| 🍚 Carbohidratos | Xg   | X kcal  |
+| 🥑 Grasas      | Xg     | X kcal  |
+
+**Alimentos recomendados:**
+- Proteínas: [3 fuentes]
+- Carbohidratos: [3 fuentes o "mínimos" en keto]
+- Grasas: [3 fuentes]
+
+**⚠️ Importante:** [advertencia clave para el objetivo]
+
+**Distribución sugerida:**
+- Desayuno (~25%): ~X kcal
+- Almuerzo (~40%): ~X kcal
+- Cena (~30%): ~X kcal
+- Snack (~5%): ~X kcal
+---
+
+Al terminar, pregunta: **"¿Quieres que diseñe un ejemplo de menú para un día completo?"**</pre>
+    </div>
+  </article>
+
+  <!-- CARD 3: 3-STEP GUIDE -->
+  <article class="gf-lm-res-card gf-lm-res-card--plain">
+    <p class="gf-lm-res-card__kicker" data-es="Guía rápida · 3 pasos" data-en="Quick guide · 3 steps">Guía rápida · 3 pasos</p>
+    <h2 class="gf-lm-res-card__h" data-es="Cómo usar tu kit hoy" data-en="How to use your toolkit today">Cómo usar tu kit hoy</h2>
+    <ol class="gf-lm-res-steps">
+      <li class="gf-lm-res-step">
+        <span class="gf-lm-res-step__num">01</span>
+        <div class="gf-lm-res-step__content">
+          <strong data-es="Usa el prompt en tu IA favorita" data-en="Use the prompt in your favorite AI">Usa el prompt en tu IA favorita</strong>
+          <p data-es="Copia el Recurso 1, abre ChatGPT, Claude o Gemini y pégalo. Rellena los corchetes con tu sexo, edad, peso, altura, actividad y objetivo. Presiona Enter y tendrás tu plan calórico en menos de 60 segundos." data-en="Copy Resource 1, open ChatGPT, Claude, or Gemini and paste it. Fill in the brackets with your sex, age, weight, height, activity, and goal. Press Enter and you'll have your calorie plan in under 60 seconds.">Copia el Recurso 1, abre ChatGPT, Claude o Gemini y pégalo. Rellena los corchetes con tu sexo, edad, peso, altura, actividad y objetivo. Presiona Enter y tendrás tu plan calórico en menos de 60 segundos.</p>
+        </div>
+      </li>
+      <li class="gf-lm-res-step">
+        <span class="gf-lm-res-step__num">02</span>
+        <div class="gf-lm-res-step__content">
+          <strong data-es="Instala la skill en Claude Code" data-en="Install the skill in Claude Code">Instala la skill en Claude Code</strong>
+          <p data-es="En tu proyecto, crea la carpeta .claude/commands/ si no existe. Dentro, crea un archivo llamado calculo-calorico.md y pega el contenido del Recurso 2. En Claude Code escribe /calculo-calorico para activarla y empieza la sesión interactiva." data-en="In your project, create the .claude/commands/ folder if it doesn't exist. Inside, create a file called calculo-calorico.md and paste the content of Resource 2. In Claude Code type /calculo-calorico to activate it and start the interactive session.">En tu proyecto, crea la carpeta <code>.claude/commands/</code> si no existe. Dentro, crea un archivo llamado <code>calculo-calorico.md</code> y pega el contenido del Recurso 2. En Claude Code escribe <code>/calculo-calorico</code> para activarla y empieza la sesión interactiva.</p>
+        </div>
+      </li>
+      <li class="gf-lm-res-step">
+        <span class="gf-lm-res-step__num">03</span>
+        <div class="gf-lm-res-step__content">
+          <strong data-es="Personaliza según tus metas" data-en="Customize for your goals">Personaliza según tus metas</strong>
+          <p data-es="Puedes ajustar el prompt o la skill para agregar restricciones alimentarias (ej. sin gluten, vegetariano), idioma, o pedir que los alimentos sean específicos de tu país. Cuanto más detallado seas, mejores serán los resultados de la IA." data-en="You can adjust the prompt or skill to add dietary restrictions (e.g., gluten-free, vegetarian), language, or request locally available foods. The more specific you are, the better the AI results.">Puedes ajustar el prompt o la skill para agregar restricciones alimentarias (ej. sin gluten, vegetariano), idioma, o pedir que los alimentos sean específicos de tu país. Cuanto más detallado seas, mejores serán los resultados de la IA.</p>
+        </div>
+      </li>
+    </ol>
+  </article>
+
+  <!-- BOTTOM CTA -->
+  <div class="gf-lm-res-cta">
+    <p data-es="¿Listo para abastecer tu negocio con suplementos premium?" data-en="Ready to stock your business with premium supplements?">¿Listo para abastecer tu negocio con suplementos premium?</p>
+    <a class="gf-lm-res-cta__btn" href="catalogo.html" data-es="Ver catálogo mayorista →" data-en="View wholesale catalog →">Ver catálogo mayorista →</a>
+  </div>
+
+</div>
+
+<footer class="footer"><div class="footer-grid"><div><img alt="Grupo Fitcore" class="footer-logo" src="assets/img/logo-negativo.png"/><p data-en="Committed to your success, delivering quality, innovation, and results." data-es="Comprometidos con tu éxito, entregando calidad, innovación y resultados.">Comprometidos con tu éxito, entregando calidad, innovación y resultados.</p></div><div><h4 data-en="Links" data-es="Enlaces">Enlaces</h4><a data-en="Home" data-es="Inicio" href="index.html">Inicio</a><a data-en="About" data-es="Nosotros" href="nosotros.html">Nosotros</a><a data-en="Catalog" data-es="Catálogo" href="catalogo.html">Catálogo</a><a data-en="Services" data-es="Servicios" href="servicios.html">Servicios</a><a data-en="Brands" data-es="Marcas" href="marcas.html">Marcas</a><a data-en="Contact" data-es="Contacto" href="contacto.html">Contacto</a></div><div><h4 data-en="Categories" data-es="Categorías">Categorías</h4><a data-en="Proteins" data-es="Proteínas">Proteínas</a><a data-en="Amino Acids" data-es="Aminoácidos">Aminoácidos</a><a data-en="Pre-workouts" data-es="Pre-entrenos">Pre-entrenos</a><a data-en="Vitamins" data-es="Vitaminas">Vitaminas</a><a data-en="Health &amp; Wellness" data-es="Salud y Bienestar">Salud y Bienestar</a><a data-en="Accessories" data-es="Accesorios">Accesorios</a></div><div><h4 data-en="Contact Us" data-es="Contáctanos">Contáctanos</h4><a>+58 (424) 621-8863</a><a>contacto@grupofitcore.com</a><a>grupofitcore.com</a><div class="socials"><span>f</span><span>◎</span><span>in</span></div></div></div><div class="copyright" data-en="© 2026 Grupo Fitcore. All rights reserved." data-es="© 2026 Grupo Fitcore. Todos los derechos reservados.">© 2026 Grupo Fitcore. Todos los derechos reservados.</div></footer>
+</main>
+
+<script>
+function copyBlock(id, btn) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  navigator.clipboard.writeText(el.textContent).then(function() {
+    var original = btn.textContent;
+    btn.textContent = '¡Copiado!';
+    btn.classList.add('copied');
+    setTimeout(function() {
+      btn.textContent = original;
+      btn.classList.remove('copied');
+    }, 2000);
+  }).catch(function() {
+    var range = document.createRange();
+    range.selectNode(el);
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(range);
+    document.execCommand('copy');
+    window.getSelection().removeAllRanges();
+    var original = btn.textContent;
+    btn.textContent = '¡Copiado!';
+    btn.classList.add('copied');
+    setTimeout(function() {
+      btn.textContent = original;
+      btn.classList.remove('copied');
+    }, 2000);
+  });
+}
+
+(function () {
+  function applyLang(lang) {
+    document.querySelectorAll("[data-es][data-en]").forEach(function(el) {
+      var value = el.getAttribute(lang === "en" ? "data-en" : "data-es");
+      if (value !== null) el.innerHTML = value;
+    });
+    document.documentElement.setAttribute("lang", lang === "en" ? "en" : "es");
+    var btn = document.getElementById("lang-toggle");
+    if (btn) btn.textContent = lang === "en" ? "ES" : "EN";
+  }
+  window.toggleLang = function () {
+    var current = localStorage.getItem("grupoFitcoreLang") || "es";
+    var next = current === "es" ? "en" : "es";
+    localStorage.setItem("grupoFitcoreLang", next);
+    applyLang(next);
+  };
+  document.addEventListener("DOMContentLoaded", function () {
+    applyLang(localStorage.getItem("grupoFitcoreLang") || "es");
+  });
+})();
+</script>
+</body></html>
