@@ -1,14 +1,10 @@
-# === Solo el website va a GitHub. Lo demas se queda local. ===
+# === Repositorio PRIVADO. Sube todo el contexto operativo. ===
+# Los docs internos (CLAUDE.md, brand.md, TASTE.md, references/, SEO/) ahora SI
+# van a GitHub para que una sesion de Claude Code lea el contexto completo.
+# Vercel solo publica "HTML Website/" (ver vercel.json outputDirectory), asi
+# que estos docs nunca aparecen en el sitio publico.
 
-# Archivos internos de operacion / estrategia (NO publicar)
-CLAUDE.md
-brand.md
-principles.md
-campaign-map.md
-TASTE.md
-references/
-
-# Documentos y binarios pesados
+# Binarios pesados (no aportan contexto, abultan el repo)
 *.pdf
 
 # Config interna de Vercel CLI y de sistema
@@ -16,6 +12,9 @@ references/
 .vercelignore
 .DS_Store
 **/.DS_Store
+
+# Config local de Claude Code (no es contexto del proyecto)
+.claude/
 
 # Dependencias
 node_modules/
