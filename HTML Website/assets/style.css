@@ -2493,7 +2493,8 @@ html, body {
   }
 
   .venezuela-map-box img,
-  img[src*="venezuela-map"] {
+  .gf-con-cov__map img,
+  img[src*="cobertura"] {
     width: 100% !important;
     max-width: 330px !important;
     height: auto !important;
