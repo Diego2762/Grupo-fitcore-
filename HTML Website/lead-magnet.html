@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title data-es="Kit de IA: Calcula tus Calorías Gratis | Grupo Fitcore" data-en="AI Toolkit: Calculate Your Calories Free | Grupo Fitcore">Kit de IA: Calcula tus Calorías Gratis | Grupo Fitcore</title>
+<meta name="description" data-es="Obtén gratis el prompt y la skill de Claude Code para calcular tu gasto calórico y macros según tu objetivo: déficit, keto o volumen." data-en="Get the free AI prompt and Claude Code skill to calculate your caloric needs and macros by goal: deficit, keto, or muscle gain." content="Obtén gratis el prompt y la skill de Claude Code para calcular tu gasto calórico y macros según tu objetivo: déficit, keto o volumen."/>
+<link rel="canonical" href="https://grupofitcore.com/lead-magnet"/>
+<meta name="robots" content="index,follow"/>
+<meta name="theme-color" content="#0B1840"/>
+<link rel="icon" type="image/png" href="assets/img/favicon.png"/>
+<link rel="apple-touch-icon" href="assets/img/favicon.png"/>
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="Grupo Fitcore"/>
+<meta property="og:url" content="https://grupofitcore.com/lead-magnet"/>
+<meta property="og:title" content="Kit de IA: Calcula tus Calorías Gratis | Grupo Fitcore"/>
+<meta property="og:description" content="Prompt + Skill de Claude Code para calcular calorías y macros según tu objetivo. 100% gratis."/>
+<meta property="og:image" content="https://grupofitcore.com/assets/img/almacen-fitcore.png"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<link href="assets/style.css" rel="stylesheet"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+/* LEAD MAGNET LANDING PAGE — gf-lm-* */
+*{box-sizing:border-box;}
+
+/* Hero — full dark section */
+.gf-lm-hero{
+  position:relative;overflow:hidden;
+  background:linear-gradient(120deg,#0B1840 0%,#15173f 52%,#2a1456 100%);
+  padding:clamp(64px,8vw,112px) 0;
+}
+.gf-lm-hero:before{
+  content:"";position:absolute;top:-30%;right:-6%;
+  width:50%;height:180%;
+  background:radial-gradient(circle,rgba(123,74,201,.5),transparent 62%);
+  pointer-events:none;
+}
+.gf-lm-hero__inner{
+  position:relative;z-index:2;
+  max-width:1180px;margin:0 auto;
+  padding:0 clamp(22px,5vw,64px);
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:clamp(36px,5vw,72px);align-items:center;
+}
+
+/* Left column — text */
+.gf-lm-hero__content{display:flex;flex-direction:column;gap:0;}
+.gf-lm-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'Archivo',sans-serif;font-size:12px;font-weight:700;
+  letter-spacing:.2em;text-transform:uppercase;
+  color:#b789ff;margin:0 0 20px;
+}
+.gf-lm-hero__h{
+  font-family:'Bricolage Grotesque',sans-serif;font-weight:800;
+  font-size:clamp(32px,4.6vw,58px);line-height:1.02;
+  letter-spacing:-.02em;color:#fff;margin:0 0 18px;
+}
+.gf-lm-hero__sub{
+  font-family:'Archivo',sans-serif;
+  font-size:clamp(16px,1.8vw,19px);line-height:1.55;
+  color:#d0d8f0;margin:0 0 32px;max-width:480px;
+}
+.gf-lm-hero__bullets{
+  list-style:none;padding:0;margin:0;
+  display:flex;flex-direction:column;gap:12px;
+}
+.gf-lm-hero__bullets li{
+  display:flex;align-items:flex-start;gap:12px;
+  font-family:'Archivo',sans-serif;font-size:15.5px;
+  line-height:1.45;color:#bcc4e0;
+}
+.gf-lm-hero__bullets li:before{
+  content:"✓";flex-shrink:0;margin-top:1px;
+  width:22px;height:22px;border-radius:50%;
+  background:rgba(183,137,255,.18);border:1px solid rgba(183,137,255,.35);
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;color:#b789ff;
+  line-height:22px;text-align:center;
+}
+
+/* Right column — form card */
+.gf-lm-form-wrap{
+  position:relative;
+  background:linear-gradient(180deg,#fbfaff 0%,#f4f1fb 100%);
+  border:1px solid #e7e2f4;border-radius:24px;
+  padding:clamp(32px,4vw,48px);
+  box-shadow:0 30px 70px rgba(11,24,64,.35);
+  overflow:hidden;
+}
+.gf-lm-form-wrap:before{
+  content:"";position:absolute;top:0;left:0;right:0;
+  height:5px;background:linear-gradient(90deg,#3B1F6B,#b789ff);
+}
+.gf-lm-form-wrap__tag{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'Archivo',sans-serif;font-size:12px;font-weight:700;
+  letter-spacing:.16em;text-transform:uppercase;
+  color:#3B1F6B;background:rgba(59,31,107,.07);
+  padding:5px 12px;border-radius:999px;margin:0 0 18px;
+}
+.gf-lm-form-wrap__h{
+  font-family:'Bricolage Grotesque',sans-serif;font-weight:700;
+  font-size:clamp(22px,2.8vw,30px);letter-spacing:-.01em;
+  color:#0B1840;margin:0 0 8px;
+}
+.gf-lm-form-wrap__sub{
+  font-family:'Archivo',sans-serif;font-size:15px;
+  line-height:1.55;color:#65708a;margin:0 0 26px;
+}
+
+/* Kit form overrides */
+.gf-lm-kit-embed .formkit-fields{display:flex;flex-direction:column;gap:12px;margin:0;}
+.gf-lm-kit-embed .formkit-field{margin:0;flex:none;}
+.gf-lm-kit-embed .formkit-input{
+  width:100%;font-family:'Archivo',sans-serif;font-size:15px;
+  color:#11182f;padding:14px 16px;
+  border:1.5px solid #e3ddf2;border-radius:12px;
+  background:#fff;transition:border-color .16s ease,box-shadow .16s ease;
+  box-shadow:0 1px 2px rgba(11,24,64,.04);
+  margin:0;
+}
+.gf-lm-kit-embed .formkit-input::placeholder{color:#9aa3bd;}
+.gf-lm-kit-embed .formkit-input:focus{
+  outline:none;border-color:#3B1F6B;
+  box-shadow:0 0 0 4px rgba(59,31,107,.12);
+}
+.gf-lm-kit-embed .formkit-submit{
+  position:relative;
+  width:100%;border:0;cursor:pointer;
+  background:#3B1F6B;color:#fff;
+  font-family:'Archivo',sans-serif;font-weight:700;
+  font-size:15px;padding:17px;border-radius:12px;
+  transition:transform .18s ease,box-shadow .18s ease,background .18s ease;
+  box-shadow:0 14px 32px rgba(59,31,107,.28);
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  margin:0;overflow:hidden;
+}
+.gf-lm-kit-embed .formkit-submit:hover{
+  transform:translateY(-2px);background:#4a2785;
+  box-shadow:0 20px 42px rgba(59,31,107,.4);
+}
+.gf-lm-kit-embed .formkit-submit span{display:block;}
+.gf-lm-kit-embed .formkit-spinner{
+  display:flex;position:absolute;
+  height:0;width:0;margin:0 auto;
+  top:0;left:0;right:0;overflow:hidden;
+  text-align:center;transition:all 300ms ease-in-out;
+}
+.gf-lm-kit-embed .formkit-spinner > div{
+  margin:auto;width:12px;height:12px;
+  background:#fff;opacity:0.3;border-radius:100%;
+  display:inline-block;
+  animation:gflm-bounce 1.4s infinite ease-in-out both;
+}
+.gf-lm-kit-embed .formkit-spinner > div:nth-child(1){animation-delay:-.32s;}
+.gf-lm-kit-embed .formkit-spinner > div:nth-child(2){animation-delay:-.16s;}
+.gf-lm-kit-embed .formkit-submit[data-active] .formkit-spinner{opacity:1;height:100%;width:50px;}
+.gf-lm-kit-embed .formkit-submit[data-active] .formkit-spinner ~ span{opacity:0;}
+.gf-lm-kit-embed .formkit-alert{
+  background:#fde8e2;border:1px solid #f2643b;color:#ea4110;
+  border-radius:8px;padding:10px 14px;margin-bottom:12px;
+  list-style:none;font-size:14px;
+}
+.gf-lm-kit-embed .formkit-alert:empty{display:none;}
+.gf-lm-kit-embed .formkit-powered-by-convertkit-container{display:none;}
+@keyframes gflm-bounce{0%,80%,100%{transform:scale(0);}40%{transform:scale(1);}}
+
+/* Trust bar */
+.gf-lm-trust{
+  display:flex;align-items:center;justify-content:center;
+  gap:10px;flex-wrap:wrap;margin-top:16px;
+  font-family:'Archivo',sans-serif;font-size:12.5px;
+  color:#9aa3bd;
+}
+.gf-lm-trust__dot{color:#ccc;}
+
+/* Responsive */
+@media(max-width:860px){
+  .gf-lm-hero__inner{grid-template-columns:1fr;}
+  .gf-lm-hero__content{order:2;}
+  .gf-lm-form-wrap{order:1;max-width:520px;width:100%;}
+  .gf-lm-hero{padding:clamp(48px,7vw,80px) 0;}
+}
+@media(max-width:560px){
+  .gf-lm-hero__h{font-size:clamp(28px,8vw,42px);}
+}
+</style>
+</head>
+<body>
+<main class="site">
+<header class="header">
+  <a href="index.html"><img alt="Grupo Fitcore" class="brand-logo" src="assets/img/logo-principal.png"/></a>
+  <nav class="nav">
+    <a class="" data-en="Home" data-es="Inicio" href="index.html">Inicio</a>
+    <a class="" data-en="About" data-es="Nosotros" href="nosotros.html">Nosotros</a>
+    <a class="" data-en="Catalog" data-es="Catálogo" href="catalogo.html">Catálogo</a>
+    <a class="" data-en="Services" data-es="Servicios" href="servicios.html">Servicios</a>
+    <a class="" data-en="Brands" data-es="Marcas" href="marcas.html">Marcas</a>
+    <a class="" data-en="Contact" data-es="Contacto" href="contacto.html">Contacto</a>
+    <button id="lang-toggle" onclick="toggleLang()" type="button">EN</button>
+  </nav>
+  <a class="cta" data-en="Request Catalog" data-es="Solicitar catálogo" href="contacto.html">Solicitar catálogo</a>
+</header>
+
+<section class="gf-lm-hero">
+  <div class="gf-lm-hero__inner">
+
+    <!-- LEFT: copy -->
+    <div class="gf-lm-hero__content">
+      <p class="gf-lm-eyebrow" data-es="Kit gratuito de IA para fitness" data-en="Free AI fitness toolkit">Kit gratuito de IA para fitness</p>
+      <h1 class="gf-lm-hero__h" data-es="Calcula tus calorías y macros con inteligencia artificial" data-en="Calculate your calories and macros with artificial intelligence">Calcula tus calorías y macros con inteligencia artificial</h1>
+      <p class="gf-lm-hero__sub" data-es="Recibe el prompt y la skill de Claude Code para saber exactamente cuánto comer según tu objetivo: déficit, keto o volumen muscular." data-en="Get the prompt and Claude Code skill to know exactly how much to eat for your goal: deficit, keto, or muscle gain.">Recibe el prompt y la skill de Claude Code para saber exactamente cuánto comer según tu objetivo: déficit, keto o volumen muscular.</p>
+      <ul class="gf-lm-hero__bullets">
+        <li data-es="Prompt listo para ChatGPT, Claude, Gemini y cualquier IA" data-en="Ready-to-use prompt for ChatGPT, Claude, Gemini, and any AI">Prompt listo para ChatGPT, Claude, Gemini y cualquier IA</li>
+        <li data-es="Skill de Claude Code con cálculo avanzado de macros (proteínas, carbos, grasas)" data-en="Claude Code skill with advanced macro calculation (protein, carbs, fat)">Skill de Claude Code con cálculo avanzado de macros (proteínas, carbos, grasas)</li>
+        <li data-es="Recomendaciones personalizadas para déficit calórico, keto o volumen" data-en="Personalized recommendations for caloric deficit, keto, or muscle gain">Recomendaciones personalizadas para déficit calórico, keto o volumen</li>
+        <li data-es="Guía de 3 pasos para empezar hoy mismo" data-en="3-step guide to get started today">Guía de 3 pasos para empezar hoy mismo</li>
+      </ul>
+    </div>
+
+    <!-- RIGHT: form card -->
+    <div class="gf-lm-form-wrap">
+      <p class="gf-lm-form-wrap__tag" data-es="100% gratis · Sin tarjeta de crédito" data-en="100% free · No credit card">100% gratis · Sin tarjeta de crédito</p>
+      <h2 class="gf-lm-form-wrap__h" data-es="Recibe tu kit gratis ahora" data-en="Get your free toolkit now">Recibe tu kit gratis ahora</h2>
+      <p class="gf-lm-form-wrap__sub" data-es="Déjanos tu email y accede al instante al prompt + la skill + la guía." data-en="Leave your email and instantly access the prompt + skill + guide.">Déjanos tu email y accede al instante al prompt + la skill + la guía.</p>
+
+      <div class="gf-lm-kit-embed">
+        <form action="https://app.kit.com/forms/9576032/subscriptions"
+              class="seva-form formkit-form"
+              method="post"
+              data-sv-form="9576032"
+              data-uid="83d646edb1"
+              data-format="inline"
+              data-version="5"
+              data-options='{"settings":{"after_subscribe":{"action":"redirect","success_message":"","redirect_url":"/recursos"},"analytics":{"google":null,"fathom":null,"facebook":null,"segment":null,"pinterest":null,"sparkloop":null,"googletagmanager":null},"modal":{"trigger":"timer","scroll_percentage":null,"timer":5,"devices":"all","show_once_every":15},"powered_by":{"show":false,"url":""},"recaptcha":{"enabled":false},"return_visitor":{"action":"show","custom_content":""},"slide_in":{"display_in":"bottom_right","trigger":"timer","scroll_percentage":null,"timer":5,"devices":"all","show_once_every":15},"sticky_bar":{"display_in":"top","trigger":"timer","scroll_percentage":null,"timer":5,"devices":"all","show_once_every":15}},"version":"5"}'>
+          <div data-style="clean">
+            <ul class="formkit-alert formkit-alert-error" data-element="errors" data-group="alert"></ul>
+            <div data-element="fields" data-stacked="true" class="seva-fields formkit-fields">
+              <div class="formkit-field">
+                <input class="formkit-input"
+                       name="email_address"
+                       aria-label="Email"
+                       placeholder="tu@email.com"
+                       required
+                       type="email"
+                       data-placeholder-es="tu@email.com"
+                       data-placeholder-en="your@email.com"/>
+              </div>
+              <button data-element="submit" class="formkit-submit formkit-submit">
+                <div class="formkit-spinner"><div></div><div></div><div></div></div>
+                <span data-es="Quiero mi kit gratis →" data-en="Get my free toolkit →">Quiero mi kit gratis →</span>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="gf-lm-trust">
+        <span data-es="Sin spam" data-en="No spam">Sin spam</span>
+        <span class="gf-lm-trust__dot">·</span>
+        <span data-es="Cancela cuando quieras" data-en="Unsubscribe anytime">Cancela cuando quieras</span>
+        <span class="gf-lm-trust__dot">·</span>
+        <span data-es="Fitcore te respalda" data-en="Backed by Fitcore">Fitcore te respalda</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer class="footer"><div class="footer-grid"><div><img alt="Grupo Fitcore" class="footer-logo" src="assets/img/logo-negativo.png"/><p data-en="Committed to your success, delivering quality, innovation, and results." data-es="Comprometidos con tu éxito, entregando calidad, innovación y resultados.">Comprometidos con tu éxito, entregando calidad, innovación y resultados.</p></div><div><h4 data-en="Links" data-es="Enlaces">Enlaces</h4><a data-en="Home" data-es="Inicio" href="index.html">Inicio</a><a data-en="About" data-es="Nosotros" href="nosotros.html">Nosotros</a><a data-en="Catalog" data-es="Catálogo" href="catalogo.html">Catálogo</a><a data-en="Services" data-es="Servicios" href="servicios.html">Servicios</a><a data-en="Brands" data-es="Marcas" href="marcas.html">Marcas</a><a data-en="Contact" data-es="Contacto" href="contacto.html">Contacto</a></div><div><h4 data-en="Categories" data-es="Categorías">Categorías</h4><a data-en="Proteins" data-es="Proteínas">Proteínas</a><a data-en="Amino Acids" data-es="Aminoácidos">Aminoácidos</a><a data-en="Pre-workouts" data-es="Pre-entrenos">Pre-entrenos</a><a data-en="Vitamins" data-es="Vitaminas">Vitaminas</a><a data-en="Health &amp; Wellness" data-es="Salud y Bienestar">Salud y Bienestar</a><a data-en="Accessories" data-es="Accesorios">Accesorios</a></div><div><h4 data-en="Contact Us" data-es="Contáctanos">Contáctanos</h4><a>+58 (424) 621-8863</a><a>contacto@grupofitcore.com</a><a>grupofitcore.com</a><div class="socials"><span>f</span><span>◎</span><span>in</span></div></div></div><div class="copyright" data-en="© 2026 Grupo Fitcore. All rights reserved." data-es="© 2026 Grupo Fitcore. Todos los derechos reservados.">© 2026 Grupo Fitcore. Todos los derechos reservados.</div></footer>
+</main>
+
+<script src="https://f.convertkit.com/ckjs/ck.5.js"></script>
+<script>
+(function () {
+  function applyLang(lang) {
+    document.querySelectorAll("[data-es][data-en]").forEach(function(el) {
+      var value = el.getAttribute(lang === "en" ? "data-en" : "data-es");
+      if (value !== null) el.innerHTML = value;
+    });
+    document.querySelectorAll("[data-placeholder-es][data-placeholder-en]").forEach(function(el) {
+      var value = el.getAttribute(lang === "en" ? "data-placeholder-en" : "data-placeholder-es");
+      if (value !== null) el.setAttribute("placeholder", value);
+    });
+    document.documentElement.setAttribute("lang", lang === "en" ? "en" : "es");
+    var btn = document.getElementById("lang-toggle");
+    if (btn) btn.textContent = lang === "en" ? "ES" : "EN";
+  }
+  window.toggleLang = function () {
+    var current = localStorage.getItem("grupoFitcoreLang") || "es";
+    var next = current === "es" ? "en" : "es";
+    localStorage.setItem("grupoFitcoreLang", next);
+    applyLang(next);
+  };
+  document.addEventListener("DOMContentLoaded", function () {
+    applyLang(localStorage.getItem("grupoFitcoreLang") || "es");
+  });
+})();
+</script>
+</body></html>
