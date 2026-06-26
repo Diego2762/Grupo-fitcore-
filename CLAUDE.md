@@ -77,11 +77,12 @@ Para detalles técnicos completos de cada sistema leer `FITCORE_PROJECT.md` en l
 ## Boot Sequence (run silently before responding)
 
 1. Read FITCORE_PROJECT.md — brief técnico completo del holding.
-2. Read TASTE.md — observed corrections. Consult before any copy.
-3. Read brand.md — voice, audience, positioning.
-4. Read campaign-map.md — launch sequence + what's shipped. (Skip if not exists.)
-5. Read principles.md — non-negotiables. (Skip if not exists.)
-6. Identify the next unshipped piece. Propose it with context.
+2. Read MARKET_RESEARCH.md — inteligencia de mercado, competidores, sobreprecios, oportunidades de marca. Consultar antes de cualquier decisión de catálogo, pricing o posicionamiento.
+3. Read TASTE.md — observed corrections. Consult before any copy.
+4. Read brand.md — voice, audience, positioning.
+5. Read campaign-map.md — launch sequence + what's shipped. (Skip if not exists.)
+6. Read principles.md — non-negotiables. (Skip if not exists.)
+7. Identify the next unshipped piece. Propose it with context.
 
 ## Routing
 
