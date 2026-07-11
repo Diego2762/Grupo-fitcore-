@@ -318,14 +318,14 @@
   }
 
   window.toggleLang = function () {
-    const current = localStorage.getItem("grupoFitcoreLang") || "es";
+    const current = localStorage.getItem("grupoFitcoreLang") || ((navigator.language||"").toLowerCase().startsWith("en")?"en":"es");
     const next = current === "es" ? "en" : "es";
     localStorage.setItem("grupoFitcoreLang", next);
     applyLang(next);
   };
 
   document.addEventListener("DOMContentLoaded", function () {
-    const savedLang = localStorage.getItem("grupoFitcoreLang") || "es";
+    const savedLang = localStorage.getItem("grupoFitcoreLang") || ((navigator.language||"").toLowerCase().startsWith("en")?"en":"es");
     applyLang(savedLang);
     animateCounters();
   });

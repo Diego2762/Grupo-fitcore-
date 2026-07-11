@@ -253,7 +253,7 @@ document.addEventListener('DOMContentLoaded',function(){
     return parts.join(', ');
   }
   function refreshSelection(){
-    var lang=(localStorage.getItem('grupoFitcoreLang')||'es');
+    var lang=(localStorage.getItem('grupoFitcoreLang')||((navigator.language||'').toLowerCase().startsWith('en')?'en':'es'));
     var sel=currentSelection(lang);
     document.querySelectorAll('.gf-sel__v').forEach(function(b){b.textContent=sel;});
     if(waBtn&&cfg){
@@ -320,7 +320,7 @@ document.addEventListener('DOMContentLoaded',function(){
   function renderFit(el){
     var m={cal:el.dataset.cal,protein:el.dataset.protein,carbs:el.dataset.carbs,sugar:el.dataset.sugar,fat:el.dataset.fat};
     var sc=scoreProduct(m);
-    var lang=(localStorage.getItem('grupoFitcoreLang')||'es');
+    var lang=(localStorage.getItem('grupoFitcoreLang')||((navigator.language||'').toLowerCase().startsWith('en')?'en':'es'));
     var grid=el.querySelector('.gf-fit__grid');
     grid.innerHTML='';
     var best=[];
@@ -355,14 +355,14 @@ document.addEventListener('DOMContentLoaded',function(){
     if (btn) btn.textContent = lang === "en" ? "ES" : "EN";
   }
   window.toggleLang = function () {
-    const current = localStorage.getItem("grupoFitcoreLang") || "es";
+    const current = localStorage.getItem("grupoFitcoreLang") || ((navigator.language||"").toLowerCase().startsWith("en")?"en":"es");
     const next = current === "es" ? "en" : "es";
     localStorage.setItem("grupoFitcoreLang", next);
     applyLang(next);
     window.dispatchEvent(new Event("gf-langchange"));
   };
   document.addEventListener("DOMContentLoaded", function () {
-    applyLang(localStorage.getItem("grupoFitcoreLang") || "es");
+    applyLang(localStorage.getItem("grupoFitcoreLang") || ((navigator.language||"").toLowerCase().startsWith("en")?"en":"es"));
     window.dispatchEvent(new Event("gf-langchange"));
   });
 })();

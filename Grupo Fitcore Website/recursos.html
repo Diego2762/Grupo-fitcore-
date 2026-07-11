@@ -386,13 +386,13 @@ function copyBlock(id, btn) {
     if (btn) btn.textContent = lang === "en" ? "ES" : "EN";
   }
   window.toggleLang = function () {
-    var current = localStorage.getItem("grupoFitcoreLang") || "es";
+    var current = localStorage.getItem("grupoFitcoreLang") || ((navigator.language||"").toLowerCase().startsWith("en")?"en":"es");
     var next = current === "es" ? "en" : "es";
     localStorage.setItem("grupoFitcoreLang", next);
     applyLang(next);
   };
   document.addEventListener("DOMContentLoaded", function () {
-    applyLang(localStorage.getItem("grupoFitcoreLang") || "es");
+    applyLang(localStorage.getItem("grupoFitcoreLang") || ((navigator.language||"").toLowerCase().startsWith("en")?"en":"es"));
   });
 })();
 </script>
