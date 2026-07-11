@@ -1,0 +1,66 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "fitcore-faq",
+      "settings": {
+        "title": "Preguntas frecuentes",
+        "subtitle": "Todo lo que necesitas saber para comprar con confianza."
+      },
+      "blocks": {
+        "q1": {
+          "type": "faq",
+          "settings": {
+            "question": "¿Cómo hago un pedido?",
+            "answer": "<p>Explora el catálogo por categoría, agrega al carrito lo que quieras y completa tu pedido con tus datos y ciudad de entrega. Luego te contactamos para coordinar el pago y el envío.</p>"
+          }
+        },
+        "q2": {
+          "type": "faq",
+          "settings": {
+            "question": "¿Qué métodos de pago aceptan?",
+            "answer": "<p>Aceptamos Zelle y transferencias en divisas, USDT, Pago Móvil y transferencia en bolívares, y efectivo en la tienda. Coordinamos el método contigo al confirmar el pedido.</p>"
+          }
+        },
+        "q3": {
+          "type": "faq",
+          "settings": {
+            "question": "¿A qué zonas hacen entregas?",
+            "answer": "<p>Entregamos en toda Venezuela. En Valera y sus alrededores el envío es gratis en compras desde $30 y llega el mismo día. En el resto del Edo. Trujillo también entregamos el mismo día (con costo de envío), y al resto del país enviamos por MRW o Tealca. También puedes retirar tu pedido en nuestra tienda del CC Plaza, Valera.</p>"
+          }
+        },
+        "q4": {
+          "type": "faq",
+          "settings": {
+            "question": "¿Los productos son originales?",
+            "answer": "<p>Sí. Todos nuestros suplementos son 100% originales, importados directamente desde Estados Unidos. Trabajamos con marcas reconocidas a nivel mundial.</p>"
+          }
+        },
+        "q5": {
+          "type": "faq",
+          "settings": {
+            "question": "¿Puedo pagar en bolívares?",
+            "answer": "<p>Sí. Aceptamos Pago Móvil y transferencias en bolívares, además de divisas. Te indicamos el monto al confirmar tu pedido.</p>"
+          }
+        },
+        "q6": {
+          "type": "faq",
+          "settings": {
+            "question": "¿Tienen tienda física?",
+            "answer": "<p>Sí, nuestra tienda está en el CC Plaza, en Valera, estado Trujillo. Puedes visitarnos o escribirnos por WhatsApp para atención inmediata.</p>"
+          }
+        }
+      },
+      "block_order": ["q1", "q2", "q3", "q4", "q5", "q6"]
+    }
+  },
+  "order": ["main"]
+}

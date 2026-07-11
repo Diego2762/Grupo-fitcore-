@@ -1,0 +1,93 @@
+{%- comment -%}
+  FitCore Store · SEO / GEO / NAP base
+  Datos estructurados schema.org: WebSite + Organization + LocalBusiness (NAP).
+  NAP = Name, Address, Phone consistentes en todo el sitio.
+  Render desde layout/theme.liquid <head>: {% render 'fitcore-seo' %}
+
+  NOTA: datos verificados de Grupo Fitcore. Lo que aún falta (calle exacta,
+  horario del kiosco, coordenadas y redes sociales) está como TODO para
+  completar apenas Diego los confirme. No se inventa nada.
+{%- endcomment -%}
+
+{%- liquid
+  assign biz_name = 'FitCore Store'
+  assign biz_phone = '+584246218863'
+  assign biz_email = 'contacto@grupofitcore.com'
+  assign biz_locality = 'Valera'
+  assign biz_region = 'Trujillo'
+  assign biz_country = 'VE'
+  assign biz_postal = '3101'
+  assign biz_street = 'Avenida 6, Calles 25 y 25A, C.C. Plaza, Puente Nivel Comercio'
+  assign biz_geo_lat = '9.297655'
+  assign biz_geo_lng = '-70.617916'
+  assign biz_map = 'https://www.google.com/maps?q=9.297655,-70.617916'
+  assign biz_logo = 'fitcore-store-logo.png' | asset_url | prepend: 'https:'
+  assign base_url = request.origin
+-%}
+
+{%- if request.page_type == 'index' -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": {{ biz_name | json }},
+  "url": {{ base_url | json }},
+  "inLanguage": "es-VE",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": {
+      "@type": "EntryPoint",
+      "urlTemplate": "{{ base_url }}/search?q={search_term_string}"
+    },
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": ["Store", "HealthAndBeautyBusiness"],
+  "name": {{ biz_name | json }},
+  "description": "Suplementos deportivos y vitaminas en Venezuela: proteínas, creatina, pre-entrenos y más. Importados de EE.UU., con tienda física en Valera, Trujillo, y envío a todo el país.",
+  "url": {{ base_url | json }},
+  "image": {{ biz_logo | json }},
+  "logo": {{ biz_logo | json }},
+  "telephone": {{ biz_phone | json }},
+  "email": {{ biz_email | json }},
+  "priceRange": "$$",
+  "currenciesAccepted": "USD, VES",
+  "paymentAccepted": "Zelle, USDT, Pago Móvil, Transferencia, Efectivo",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": {{ biz_street | json }},
+    "addressLocality": {{ biz_locality | json }},
+    "addressRegion": {{ biz_region | json }},
+    "postalCode": {{ biz_postal | json }},
+    "addressCountry": {{ biz_country | json }}
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": {{ biz_geo_lat | json }},
+    "longitude": {{ biz_geo_lng | json }}
+  },
+  "hasMap": {{ biz_map | json }},
+  "areaServed": [
+    { "@type": "City", "name": "Valera" },
+    { "@type": "State", "name": "Trujillo" },
+    { "@type": "Country", "name": "Venezuela" }
+  ],
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": {{ biz_phone | json }},
+    "contactType": "sales",
+    "areaServed": "VE",
+    "availableLanguage": ["es"]
+  },
+  "parentOrganization": {
+    "@type": "Organization",
+    "name": "Grupo Fitcore",
+    "url": "https://grupofitcore.com"
+  }
+}
+</script>
+{%- endif -%}

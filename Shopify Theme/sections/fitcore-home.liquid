@@ -1,0 +1,268 @@
+{%- comment -%}
+  FitCore Store · Sección de inicio (B2C)
+  Sección autónoma para la home: hero, beneficios, categorías,
+  "¿Cómo comprar?", envíos, pagos y ubicación del kiosco.
+  Pegar en: Online Store > Themes > Edit code > Sections > Add new > "fitcore-home"
+  Luego añadirla a la plantilla de inicio (index) desde el editor de temas.
+{%- endcomment -%}
+
+{%- liquid
+  assign wa = section.settings.whatsapp | default: '584246218863'
+  assign wa_msg = section.settings.whatsapp_msg | default: 'Hola Fitcore Store, quiero hacer un pedido'
+  assign wa_msg_enc = wa_msg | url_encode
+-%}
+
+<style>
+  #fc-home-{{ section.id }} {
+    --fc-navy: {{ section.settings.color_navy | default: '#0B1840' }};
+    --fc-purple: {{ section.settings.color_purple | default: '#3B1F6B' }};
+    --fc-dark: #111D3E;
+    --fc-darker: #071631;
+    --fc-light: #F6F7FA;
+    --fc-accent: {{ section.settings.color_accent | default: '#19C37D' }};
+    --fc-line: rgba(255,255,255,.12);
+  }
+  #fc-home-{{ section.id }} * { box-sizing: border-box; }
+  #fc-home-{{ section.id }} .fc-wrap { max-width: 1300px; margin: 0 auto; padding: 0 22px; }
+  #fc-home-{{ section.id }} .fc-eyebrow {
+    display:inline-block; font: 700 13px/1 var(--font-body-family, sans-serif);
+    letter-spacing:.18em; text-transform:uppercase; color: var(--fc-accent);
+    margin-bottom: 14px;
+  }
+  #fc-home-{{ section.id }} h2.fc-h, #fc-home-{{ section.id }} h1.fc-h {
+    font-family: var(--font-heading-family, sans-serif);
+    line-height: 1.04; margin: 0 0 14px; letter-spacing: .01em;
+  }
+
+  /* HERO */
+  #fc-home-{{ section.id }} .fc-hero {
+    background:
+      radial-gradient(1100px 600px at 15% -10%, var(--fc-purple) 0%, transparent 55%),
+      linear-gradient(160deg, var(--fc-navy) 0%, var(--fc-darker) 100%);
+    color:#fff; padding: 84px 0 76px; position: relative; overflow: hidden;
+  }
+  #fc-home-{{ section.id }} .fc-hero h1 { font-size: clamp(34px, 5.4vw, 62px); font-weight: 800; max-width: 16ch; }
+  #fc-home-{{ section.id }} .fc-hero p { font: 400 clamp(16px,1.4vw,20px)/1.55 var(--font-body-family, sans-serif); color: rgba(255,255,255,.82); max-width: 56ch; margin: 0 0 30px; }
+  #fc-home-{{ section.id }} .fc-cta-row { display:flex; flex-wrap:wrap; gap:14px; }
+  #fc-home-{{ section.id }} .fc-btn {
+    display:inline-flex; align-items:center; gap:9px; cursor:pointer;
+    font: 700 16px/1 var(--font-body-family, sans-serif); text-decoration:none;
+    padding: 16px 26px; border-radius: 10px; transition: transform .12s ease, filter .12s ease;
+  }
+  #fc-home-{{ section.id }} .fc-btn:hover { transform: translateY(-2px); }
+  #fc-home-{{ section.id }} .fc-btn--primary { background:#fff; color: var(--fc-navy); }
+  #fc-home-{{ section.id }} .fc-btn--wa { background:#25D366; color:#04231a; }
+  #fc-home-{{ section.id }} .fc-btn--ghost { background: transparent; color:#fff; border:1.5px solid rgba(255,255,255,.28); }
+
+  /* BENEFITS */
+  #fc-home-{{ section.id }} .fc-bene { background: var(--fc-dark); color:#fff; padding: 26px 0; }
+  #fc-home-{{ section.id }} .fc-bene-grid { display:grid; grid-template-columns: repeat(4,1fr); gap: 14px; }
+  #fc-home-{{ section.id }} .fc-bene-item { display:flex; gap:12px; align-items:flex-start; }
+  #fc-home-{{ section.id }} .fc-bene-item svg { flex:0 0 auto; width:26px; height:26px; color:#fff; opacity:.92; }
+  #fc-home-{{ section.id }} .fc-bene-item b { display:block; font: 700 15px/1.2 var(--font-body-family, sans-serif); margin-bottom:3px; }
+  #fc-home-{{ section.id }} .fc-bene-item span { font: 400 13px/1.4 var(--font-body-family, sans-serif); color: rgba(255,255,255,.7); }
+
+  /* CATEGORIES */
+  #fc-home-{{ section.id }} .fc-cats { background: var(--fc-light); padding: 70px 0; }
+  #fc-home-{{ section.id }} .fc-cats h2 { color: var(--fc-navy); font-size: clamp(28px,3.4vw,42px); font-weight:800; }
+  #fc-home-{{ section.id }} .fc-cats .fc-sub { color:#56607a; font: 400 17px/1.5 var(--font-body-family, sans-serif); margin:0 0 34px; }
+  #fc-home-{{ section.id }} .fc-cat-grid { display:grid; grid-template-columns: repeat(3,1fr); gap: 18px; }
+  #fc-home-{{ section.id }} .fc-cat {
+    display:flex; flex-direction:column; justify-content:flex-end; min-height: 168px;
+    padding: 22px; border-radius: 16px; text-decoration:none; color:#fff; position:relative; overflow:hidden;
+    background: linear-gradient(150deg, var(--fc-navy), var(--fc-purple));
+    transition: transform .14s ease, box-shadow .14s ease;
+  }
+  #fc-home-{{ section.id }} .fc-cat:hover { transform: translateY(-4px); box-shadow: 0 16px 34px rgba(11,24,64,.22); }
+  #fc-home-{{ section.id }} .fc-cat b { font-family: var(--font-heading-family, sans-serif); font-size: 24px; font-weight:800; margin-bottom:4px; }
+  #fc-home-{{ section.id }} .fc-cat span { font: 600 13px/1 var(--font-body-family, sans-serif); color: rgba(255,255,255,.55); letter-spacing:.08em; text-transform:uppercase; }
+
+  /* COMO COMPRAR */
+  #fc-home-{{ section.id }} .fc-steps { background:#fff; padding: 74px 0; }
+  #fc-home-{{ section.id }} .fc-steps h2 { color: var(--fc-navy); text-align:center; font-size: clamp(28px,3.4vw,42px); font-weight:800; }
+  #fc-home-{{ section.id }} .fc-steps .fc-sub { text-align:center; color:#56607a; font: 400 17px/1.5 var(--font-body-family, sans-serif); margin:0 auto 44px; max-width: 60ch; }
+  #fc-home-{{ section.id }} .fc-steps-grid { display:grid; grid-template-columns: repeat(4,1fr); gap: 20px; }
+  #fc-home-{{ section.id }} .fc-step { text-align:center; padding: 28px 18px; border:1px solid #e7eaf2; border-radius:16px; position:relative; }
+  #fc-home-{{ section.id }} .fc-step-num {
+    width:46px; height:46px; border-radius:50%; margin:0 auto 16px; display:grid; place-items:center;
+    background: linear-gradient(150deg, var(--fc-navy), var(--fc-purple)); color:#fff;
+    font: 800 20px/1 var(--font-heading-family, sans-serif);
+  }
+  #fc-home-{{ section.id }} .fc-step b { display:block; color: var(--fc-navy); font: 700 18px/1.25 var(--font-body-family, sans-serif); margin-bottom:8px; }
+  #fc-home-{{ section.id }} .fc-step p { color:#56607a; font: 400 14px/1.55 var(--font-body-family, sans-serif); margin:0; }
+
+  /* ENVIOS + PAGOS */
+  #fc-home-{{ section.id }} .fc-info { background: var(--fc-navy); color:#fff; padding: 70px 0; }
+  #fc-home-{{ section.id }} .fc-info-cols { display:grid; grid-template-columns: 1fr 1fr; gap: 46px; }
+  #fc-home-{{ section.id }} .fc-info h2 { font-size: clamp(24px,2.6vw,32px); font-weight:800; }
+  #fc-home-{{ section.id }} .fc-list { list-style:none; margin:18px 0 0; padding:0; }
+  #fc-home-{{ section.id }} .fc-list li { display:flex; gap:13px; padding:13px 0; border-bottom:1px solid var(--fc-line); }
+  #fc-home-{{ section.id }} .fc-list li svg { flex:0 0 auto; width:22px; height:22px; color:#fff; opacity:.9; margin-top:2px; }
+  #fc-home-{{ section.id }} .fc-list b { display:block; font: 700 15px/1.3 var(--font-body-family, sans-serif); }
+  #fc-home-{{ section.id }} .fc-list span { font: 400 13px/1.45 var(--font-body-family, sans-serif); color: rgba(255,255,255,.66); }
+  #fc-home-{{ section.id }} .fc-pays { display:flex; flex-wrap:wrap; gap:10px; margin-top:18px; }
+  #fc-home-{{ section.id }} .fc-pay { background: rgba(255,255,255,.08); border:1px solid var(--fc-line); border-radius:9px; padding:11px 15px; font:700 14px/1 var(--font-body-family, sans-serif); }
+
+  /* UBICACION */
+  #fc-home-{{ section.id }} .fc-loc { background: var(--fc-light); padding: 70px 0; }
+  #fc-home-{{ section.id }} .fc-loc-card {
+    background: linear-gradient(150deg, var(--fc-navy), var(--fc-purple)); color:#fff;
+    border-radius: 20px; padding: 46px; display:flex; flex-wrap:wrap; gap:26px; align-items:center; justify-content:space-between;
+  }
+  #fc-home-{{ section.id }} .fc-loc-card h2 { font-size: clamp(24px,2.8vw,34px); font-weight:800; }
+  #fc-home-{{ section.id }} .fc-loc-card p { font: 400 16px/1.55 var(--font-body-family, sans-serif); color: rgba(255,255,255,.82); margin:6px 0 0; max-width: 46ch; }
+
+  @media (max-width: 990px) {
+    #fc-home-{{ section.id }} .fc-bene-grid { grid-template-columns: repeat(2,1fr); gap:20px; }
+    #fc-home-{{ section.id }} .fc-cat-grid { grid-template-columns: repeat(2,1fr); }
+    #fc-home-{{ section.id }} .fc-steps-grid { grid-template-columns: repeat(2,1fr); }
+    #fc-home-{{ section.id }} .fc-info-cols { grid-template-columns: 1fr; gap:40px; }
+  }
+  @media (max-width: 560px) {
+    #fc-home-{{ section.id }} .fc-cat-grid { grid-template-columns: 1fr; }
+    #fc-home-{{ section.id }} .fc-steps-grid { grid-template-columns: 1fr; }
+    #fc-home-{{ section.id }} .fc-bene-grid { grid-template-columns: 1fr; }
+  }
+</style>
+
+<div id="fc-home-{{ section.id }}">
+
+  {%- comment -%} ===== HERO ===== {%- endcomment -%}
+  <section class="fc-hero">
+    <div class="fc-wrap">
+      <span class="fc-eyebrow">{{ section.settings.eyebrow | default: 'Fitcore Store · Valera' }}</span>
+      <h1 class="fc-h">{{ section.settings.hero_title | default: 'Suplementos originales al mejor precio de Venezuela' }}</h1>
+      <p>{{ section.settings.hero_text | default: 'Proteínas, pre-entrenos, vitaminas y más. Marcas importadas desde EE.UU., entrega rápida y pagas como tú prefieras.' }}</p>
+      <div class="fc-cta-row">
+        <a class="fc-btn fc-btn--primary" href="{{ section.settings.hero_cta_url | default: '/collections/all' }}">
+          {{ section.settings.hero_cta_label | default: 'Ver catálogo' }}
+        </a>
+        <a class="fc-btn fc-btn--wa" href="https://wa.me/{{ wa }}?text={{ wa_msg_enc }}" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.82 11.82 0 018.413 3.488 11.82 11.82 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 001.51 5.26l-.999 3.648 3.477-.911z"/></svg>
+          Pedir por WhatsApp
+        </a>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} ===== BENEFICIOS ===== {%- endcomment -%}
+  <section class="fc-bene">
+    <div class="fc-wrap fc-bene-grid">
+      <div class="fc-bene-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><path d="M12 2l8 4v6c0 5-3.4 8.5-8 10-4.6-1.5-8-5-8-10V6l8-4z"/></svg>
+        <div><b>100% originales</b><span>Importados directo desde EE.UU.</span></div>
+      </div>
+      <div class="fc-bene-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 3h15v13H1z"/><path d="M16 8h4l3 3v5h-7z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        <div><b>Entrega rápida</b><span>Mismo día en ciudades con tienda</span></div>
+      </div>
+      <div class="fc-bene-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+        <div><b>Pagas como prefieras</b><span>Zelle, USDT, Pago Móvil, efectivo</span></div>
+      </div>
+      <div class="fc-bene-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <div><b>Kiosco físico</b><span>CC Plaza, Valera</span></div>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} ===== CATEGORIAS ===== {%- endcomment -%}
+  <section class="fc-cats">
+    <div class="fc-wrap">
+      <h2 class="fc-h">Compra por categoría</h2>
+      <p class="fc-sub">Encuentra justo lo que tu entrenamiento necesita.</p>
+      <div class="fc-cat-grid">
+        <a class="fc-cat" href="/collections/proteinas"><span>Categoría</span><b>Proteínas</b></a>
+        <a class="fc-cat" href="/collections/aminoacidos"><span>Categoría</span><b>Aminoácidos</b></a>
+        <a class="fc-cat" href="/collections/pre-entrenos"><span>Categoría</span><b>Pre-entrenos</b></a>
+        <a class="fc-cat" href="/collections/vitaminas"><span>Categoría</span><b>Vitaminas</b></a>
+        <a class="fc-cat" href="/collections/salud-y-bienestar"><span>Categoría</span><b>Salud y Bienestar</b></a>
+        <a class="fc-cat" href="/collections/accesorios"><span>Categoría</span><b>Accesorios</b></a>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} ===== COMO COMPRAR ===== {%- endcomment -%}
+  <section class="fc-steps">
+    <div class="fc-wrap">
+      <h2 class="fc-h">¿Cómo comprar en Fitcore Store?</h2>
+      <p class="fc-sub">En 4 pasos simples recibes tus suplementos originales donde estés.</p>
+      <div class="fc-steps-grid">
+        <div class="fc-step"><div class="fc-step-num">1</div><b>Elige tus productos</b><p>Explora el catálogo y agrega al carrito lo que quieras.</p></div>
+        <div class="fc-step"><div class="fc-step-num">2</div><b>Confirma tu pedido</b><p>Indícanos tus datos y la ciudad de entrega.</p></div>
+        <div class="fc-step"><div class="fc-step-num">3</div><b>Paga como prefieras</b><p>Zelle, USDT, Pago Móvil, transferencia o efectivo.</p></div>
+        <div class="fc-step"><div class="fc-step-num">4</div><b>Recibe en tu casa</b><p>Entrega el mismo día en tu ciudad o envío nacional.</p></div>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} ===== ENVIOS + PAGOS ===== {%- endcomment -%}
+  <section class="fc-info">
+    <div class="fc-wrap fc-info-cols">
+      <div>
+        <h2 class="fc-h">Cómo llegamos a ti</h2>
+        <ul class="fc-list">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><div><b>Express mismo día</b><span>Pedidos en ciudades con tienda física.</span></div></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 3h15v13H1z"/><path d="M16 8h4l3 3v5h-7z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg><div><b>Envío nacional</b><span>A todo el país vía MRW o Tealca.</span></div></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg><div><b>Retiro en kiosco</b><span>Recoge tu pedido en CC Plaza, Valera.</span></div></li>
+        </ul>
+      </div>
+      <div>
+        <h2 class="fc-h">Pagas como tú prefieras</h2>
+        <p style="font: 400 16px/1.55 var(--font-body-family, sans-serif); color: rgba(255,255,255,.72); margin:14px 0 0;">Aceptamos los métodos que de verdad usas en Venezuela. Sin complicaciones.</p>
+        <div class="fc-pays">
+          <span class="fc-pay">Zelle</span>
+          <span class="fc-pay">USDT</span>
+          <span class="fc-pay">Pago Móvil</span>
+          <span class="fc-pay">Transferencia</span>
+          <span class="fc-pay">Efectivo</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} ===== UBICACION ===== {%- endcomment -%}
+  <section class="fc-loc">
+    <div class="fc-wrap">
+      <div class="fc-loc-card">
+        <div>
+          <span class="fc-eyebrow">Visítanos</span>
+          <h2 class="fc-h">Estamos en el CC Plaza, Valera</h2>
+          <p>Pásate por nuestro kiosco o escríbenos por WhatsApp y te atendemos al instante.</p>
+        </div>
+        <a class="fc-btn fc-btn--wa" href="https://wa.me/{{ wa }}?text={{ wa_msg_enc }}" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.82 11.82 0 018.413 3.488 11.82 11.82 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 001.51 5.26l-.999 3.648 3.477-.911z"/></svg>
+          Escríbenos
+        </a>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+{% schema %}
+{
+  "name": "FitCore Inicio",
+  "tag": "section",
+  "class": "fitcore-home-section",
+  "settings": [
+    { "type": "header", "content": "Hero" },
+    { "type": "text", "id": "eyebrow", "label": "Etiqueta superior", "default": "Fitcore Store · Valera" },
+    { "type": "text", "id": "hero_title", "label": "Título principal", "default": "Suplementos originales al mejor precio de Venezuela" },
+    { "type": "textarea", "id": "hero_text", "label": "Texto del hero", "default": "Proteínas, pre-entrenos, vitaminas y más. Marcas importadas desde EE.UU., entrega rápida y pagas como tú prefieras." },
+    { "type": "text", "id": "hero_cta_label", "label": "Texto del botón", "default": "Ver catálogo" },
+    { "type": "url", "id": "hero_cta_url", "label": "Enlace del botón", "default": "/collections/all" },
+    { "type": "header", "content": "WhatsApp" },
+    { "type": "text", "id": "whatsapp", "label": "Número (solo dígitos, con país)", "default": "584246218863" },
+    { "type": "text", "id": "whatsapp_msg", "label": "Mensaje precargado", "default": "Hola Fitcore Store, quiero hacer un pedido" },
+    { "type": "header", "content": "Colores de marca" },
+    { "type": "color", "id": "color_navy", "label": "Navy", "default": "#0B1840" },
+    { "type": "color", "id": "color_purple", "label": "Morado", "default": "#3B1F6B" },
+    { "type": "color", "id": "color_accent", "label": "Acento", "default": "#19C37D" }
+  ],
+  "presets": [
+    { "name": "FitCore Inicio" }
+  ]
+}
+{% endschema %}

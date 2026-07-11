@@ -49,11 +49,12 @@ You are the marketing operator for Grupo Fitcore — holding venezolano de suple
 ## Arquitectura web & deploy (website estático actual)
 
 - **Stack**: sitio estático multipágina, HTML/CSS/JS puro (sin framework, sin build step). Bilingüe ES/EN.
-- **Repo root**: `/Users/diegorojas/Desktop/Grupo Fitcore/Website Deploy`. HTML servido desde `HTML Website/`. Corre `git` siempre desde el repo root (el cwd de Bash vuelve a "HTML Website" tras cada comando — shell es **zsh**, así que loops de array bash van envueltos en `bash -c '...'`).
+- **Repo root**: `/Users/diegorojas/Desktop/Grupo Fitcore/Website Deploy`. HTML servido desde `Grupo Fitcore Website/`. Corre `git` siempre desde el repo root (el cwd de Bash vuelve a "Grupo Fitcore Website" tras cada comando; shell es **zsh**, así que loops de array bash van envueltos en `bash -c '...'`).
+- **Carpetas** (renombradas jul 2026): `Grupo Fitcore Website/` = website estático B2B (antes "HTML Website"; `vercel.json` apunta ahí con `outputDirectory`, si la renombras actualiza esa línea). `Fitcore Store/` = tema Shopify B2C de FitCore Store (antes "Shopify Live Theme"). `Shopify Theme/` = carpeta de tema secundaria/antigua.
 - **Deploy**: push a GitHub → auto-deploy en Vercel (grupofitcore.vercel.app). Host canónico https://grupofitcore.com. `vercel.json` tiene `cleanUrls=true` → URLs canónicas sin `.html`.
 - **Bilingüe**: atributos `data-en`/`data-es`; `applyLang` hace `el.innerHTML = data-*` (HTML dentro de los atributos debe ir escapado, p.ej. `&lt;b&gt;`); idioma en `localStorage["grupoFitcoreLang"]`; `toggleLang` dispara el evento `gf-langchange`.
 - **Imágenes**: solo `sips` disponible (PIL NO instalado). Convertir: `sips -s format jpeg -Z 1024 -s formatOptions 86 in --out out.jpg`. Render headless con Chrome para tiles/facts: **siempre** `--force-device-scale-factor=1` (el default 2 duplica píxeles y rompe el crop). `sips -c H W` recorta CENTRADO → usar `--cropOffset 0 0` para anclar arriba. Imágenes de catálogo en `assets/img/catalogo/` (minúsculas).
-- **SEO/** (carpeta fuera de "HTML Website" → NO se despliega): `dashboard-seo.html` y `plan-ads.html` llevan estado y roadmap SEO.
+- **SEO/** (carpeta fuera de "Grupo Fitcore Website" → NO se despliega): `dashboard-seo.html` y `plan-ads.html` llevan estado y roadmap SEO.
 
 ## Pipeline de listings de producto (website estático)
 
@@ -121,7 +122,7 @@ If nothing matches, help directly, then note what you did.
 - "El crop de facts cortó el título" → Chrome headless default device-scale-factor=2 dobla los píxeles y `sips -c` recorta centrado. Re-render con `--force-device-scale-factor=1` y recortar con `--cropOffset 0 0`.
 - "El HTML del data-en/data-es se rompe" → `applyLang` hace innerHTML; escapar el markup dentro de los atributos (`&lt;b&gt;`).
 - "Loop bash falla en zsh" → envolver en `bash -c '...'`.
-- "git no encuentra cambios / carpeta equivocada" → correr git desde el repo root, no desde "HTML Website".
+- "git no encuentra cambios / carpeta equivocada" → correr git desde el repo root, no desde "Grupo Fitcore Website".
 - "Datos de facts no cuadran con WebFetch" → reconciliar con la matemática del envase (caps totales ÷ caps por servicio) y la imagen de modo de uso antes de construir el panel.
 - "catalogo.html Edit falla o inserta en lugar equivocado" → leer la línea del body completa antes de cada Edit; cambia tras cada inserción de tarjeta.
 

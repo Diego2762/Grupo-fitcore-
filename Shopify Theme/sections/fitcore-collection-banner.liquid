@@ -1,0 +1,71 @@
+{%- comment -%}
+  FitCore Store · Banner de categoría (B2C)
+  Encabezado de marca para páginas de colección: breadcrumb, título y descripción
+  sobre degradado navy/morado. Reemplaza al banner nativo de Dawn.
+  Pegar en: Edit code > Sections > Add new > "fitcore-collection-banner"
+{%- endcomment -%}
+
+<style>
+  #fc-cb-{{ section.id }} {
+    --fc-navy: {{ section.settings.color_navy | default: '#0B1840' }};
+    --fc-purple: {{ section.settings.color_purple | default: '#3B1F6B' }};
+    --fc-accent: {{ section.settings.color_accent | default: '#19C37D' }};
+  }
+  #fc-cb-{{ section.id }} {
+    background:
+      radial-gradient(900px 480px at 12% -20%, var(--fc-purple) 0%, transparent 58%),
+      linear-gradient(160deg, var(--fc-navy) 0%, #071631 100%);
+    color:#fff; padding: 52px 0 48px;
+  }
+  #fc-cb-{{ section.id }} .fc-wrap { max-width: 1300px; margin:0 auto; padding: 0 22px; }
+  #fc-cb-{{ section.id }} .fc-bc { font: 600 13px/1 var(--font-body-family, sans-serif); color: rgba(255,255,255,.6); margin-bottom: 18px; }
+  #fc-cb-{{ section.id }} .fc-bc a { color: rgba(255,255,255,.6); text-decoration:none; }
+  #fc-cb-{{ section.id }} .fc-bc a:hover { color: var(--fc-accent); }
+  #fc-cb-{{ section.id }} .fc-bc span { color: var(--fc-accent); }
+  #fc-cb-{{ section.id }} h1 {
+    font-family: var(--font-heading-family, sans-serif); font-weight: 800;
+    font-size: clamp(30px, 4.4vw, 50px); line-height: 1.04; margin: 0;
+  }
+  #fc-cb-{{ section.id }} .fc-desc {
+    font: 400 17px/1.55 var(--font-body-family, sans-serif);
+    color: rgba(255,255,255,.78); max-width: 64ch; margin: 14px 0 0;
+  }
+  #fc-cb-{{ section.id }} .fc-count {
+    display:inline-block; margin-top: 18px; font: 700 13px/1 var(--font-body-family, sans-serif);
+    letter-spacing:.04em; color: var(--fc-accent); background: rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.14); border-radius: 999px; padding: 8px 14px;
+  }
+</style>
+
+<div id="fc-cb-{{ section.id }}">
+  <div class="fc-wrap">
+    <nav class="fc-bc" aria-label="breadcrumb">
+      <a href="/">Inicio</a> / <a href="/collections">Categorías</a> / <span>{{ collection.title }}</span>
+    </nav>
+    <h1>{{ collection.title }}</h1>
+    {%- if collection.description != blank -%}
+      <div class="fc-desc">{{ collection.description }}</div>
+    {%- endif -%}
+    {%- if section.settings.show_count -%}
+      <span class="fc-count">{{ collection.products_count }} productos</span>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "FitCore Banner categoría",
+  "tag": "section",
+  "class": "fitcore-collection-banner",
+  "settings": [
+    { "type": "checkbox", "id": "show_count", "label": "Mostrar número de productos", "default": true },
+    { "type": "header", "content": "Colores de marca" },
+    { "type": "color", "id": "color_navy", "label": "Navy", "default": "#0B1840" },
+    { "type": "color", "id": "color_purple", "label": "Morado", "default": "#3B1F6B" },
+    { "type": "color", "id": "color_accent", "label": "Acento", "default": "#19C37D" }
+  ],
+  "presets": [
+    { "name": "FitCore Banner categoría" }
+  ]
+}
+{% endschema %}

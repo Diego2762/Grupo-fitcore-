@@ -1,0 +1,3 @@
+{"ts":"2026-06-30T02:03:17Z","pkg":"@shopify/cli@latest","version":"latest","scope":"global","decision":"refused-no-metadata","reason":"registry fetch failed","campaign_active":1}
+{"ts":"2026-06-30T02:03:46Z","pkg":"@shopify/cli@4.1.0","version":"latest","scope":"global","decision":"refused-no-metadata","reason":"registry fetch failed","campaign_active":1}
+{"ts":"2026-06-30T02:05:00Z","pkg":"@shopify/cli","version":"4.1.0","scope":"global","decision":"installed","reason":"33 dias (fuera cuarentena 14d), no deprecated, 397k dl/sem, no compromisos; script bug con scoped+version, validado a mano e instalado con --ignore-scripts","campaign_active":true}

@@ -1,0 +1,32 @@
+{
+  "sections": {
+    "main": {
+      "type": "fitcore-page",
+      "settings": {
+        "title": "Envíos y entregas",
+        "subtitle": "Llevamos tus suplementos originales a donde estés, en tu ciudad o en todo el país."
+      },
+      "blocks": {
+        "cards": {
+          "type": "cards",
+          "settings": {
+            "c1_title": "Express mismo día",
+            "c1_text": "En ciudades donde tenemos tienda física, recibes tu pedido el mismo día.",
+            "c2_title": "Envío nacional",
+            "c2_text": "A todo el país a través de MRW o Tealca, directo a tu domicilio o agencia.",
+            "c3_title": "Retiro en kiosco",
+            "c3_text": "Recoge tu pedido sin costo en nuestro kiosco del CC Plaza, Valera."
+          }
+        },
+        "rt": {
+          "type": "richtext",
+          "settings": {
+            "content": "<h2>Cómo funciona</h2><p>Al confirmar tu pedido coordinamos contigo la opción de entrega y el método de pago. Una vez verificado el pago, despachamos tu pedido.</p><h2>Cobertura</h2><p>Hacemos entregas en todo el territorio nacional. Los tiempos de entrega dependen de tu ubicación y de la empresa de encomienda. Para zonas o casos especiales, escríbenos por WhatsApp y te confirmamos.</p>"
+          }
+        }
+      },
+      "block_order": ["cards", "rt"]
+    }
+  },
+  "order": ["main"]
+}

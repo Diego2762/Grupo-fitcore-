@@ -1,0 +1,32 @@
+{
+  "sections": {
+    "main": {
+      "type": "fitcore-page",
+      "settings": {
+        "title": "Sobre Fitcore Store",
+        "subtitle": "Suplementos originales, al mejor precio, con atención local de verdad."
+      },
+      "blocks": {
+        "rt": {
+          "type": "richtext",
+          "settings": {
+            "content": "<p>Fitcore Store es la tienda retail del Grupo Fitcore, dedicada a acercar suplementos deportivos y vitaminas originales a los atletas y a quien quiere cuidarse, en Venezuela.</p><h2>Marcas originales importadas</h2><p>Traemos marcas reconocidas a nivel mundial directamente desde Estados Unidos. Productos 100% originales, los mismos que pides por nombre.</p><h2>Cerca de ti</h2><p>Nuestro primer kiosco está en el CC Plaza, en Valera, estado Trujillo, llevando suplementos de calidad al interior del país. Comprar con nosotros es fácil: en línea o en persona, con pagos flexibles y entrega rápida.</p><h2>Nuestra promesa</h2><p>Marcas globales, resultados locales. Producto auténtico, precios justos y una atención que responde cuando la necesitas.</p>"
+          }
+        },
+        "cards": {
+          "type": "cards",
+          "settings": {
+            "c1_title": "100% originales",
+            "c1_text": "Importados directo desde EE.UU., sin intermediarios sueltos.",
+            "c2_title": "Pagas como prefieras",
+            "c2_text": "Zelle, USDT, Pago Móvil, transferencia o efectivo.",
+            "c3_title": "Atención local",
+            "c3_text": "Te respondemos por WhatsApp y te entregamos rápido."
+          }
+        }
+      },
+      "block_order": ["rt", "cards"]
+    }
+  },
+  "order": ["main"]
+}

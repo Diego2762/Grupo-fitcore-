@@ -1,0 +1,73 @@
+{%- comment -%}
+  FitCore Store · Banda de confianza para el carrito (B2C)
+  Refuerza pagos, envíos y ayuda por WhatsApp debajo del carrito.
+  Pegar en: Edit code > Sections > Add new > "fitcore-cart-help"
+{%- endcomment -%}
+
+{%- liquid
+  assign wa = section.settings.whatsapp | default: '584246218863'
+  assign wa_msg = section.settings.whatsapp_msg | default: 'Hola Fitcore Store, tengo una duda con mi pedido'
+  assign wa_msg_enc = wa_msg | url_encode
+-%}
+
+<style>
+  #fc-ch-{{ section.id }} {
+    --fc-navy:#0B1840; --fc-purple:#3B1F6B; --fc-accent:#19C37D; --fc-line:#e7eaf2; --fc-muted:#56607a;
+    max-width:1300px; margin:0 auto; padding: 10px 22px 48px;
+  }
+  #fc-ch-{{ section.id }} .fc-ch-grid { display:grid; grid-template-columns: repeat(3,1fr); gap:16px; }
+  #fc-ch-{{ section.id }} .fc-ch-card { background:#fff; border:1px solid var(--fc-line); border-radius:16px; padding:22px; }
+  #fc-ch-{{ section.id }} .fc-ch-card svg { width:26px; height:26px; color:var(--fc-accent); }
+  #fc-ch-{{ section.id }} .fc-ch-card b { display:block; color:var(--fc-navy); font:700 16px/1.3 var(--font-body-family,sans-serif); margin:12px 0 5px; }
+  #fc-ch-{{ section.id }} .fc-ch-card p { color:var(--fc-muted); font:400 13.5px/1.5 var(--font-body-family,sans-serif); margin:0; }
+  #fc-ch-{{ section.id }} .fc-ch-pays { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+  #fc-ch-{{ section.id }} .fc-ch-pay { background:#f1f3f9; border:1px solid var(--fc-line); border-radius:8px; padding:7px 11px; font:700 12.5px/1 var(--font-body-family,sans-serif); color:var(--fc-navy); }
+  #fc-ch-{{ section.id }} .fc-ch-wa { display:inline-flex; align-items:center; gap:8px; margin-top:12px; text-decoration:none; font:700 14px/1 var(--font-body-family,sans-serif); color:#0a7d3f; }
+  @media (max-width:780px){ #fc-ch-{{ section.id }} .fc-ch-grid { grid-template-columns:1fr; } }
+</style>
+
+<div id="fc-ch-{{ section.id }}">
+  <div class="fc-ch-grid">
+    <div class="fc-ch-card">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+      <b>Pagas como prefieras</b>
+      <p>Coordinamos el pago al confirmar tu pedido. Sin complicaciones.</p>
+      <div class="fc-ch-pays">
+        <span class="fc-ch-pay">Zelle</span>
+        <span class="fc-ch-pay">USDT</span>
+        <span class="fc-ch-pay">Pago Móvil</span>
+        <span class="fc-ch-pay">Transferencia</span>
+        <span class="fc-ch-pay">Efectivo</span>
+      </div>
+    </div>
+    <div class="fc-ch-card">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 3h15v13H1z"/><path d="M16 8h4l3 3v5h-7z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+      <b>Envío a todo el país</b>
+      <p>Mismo día en ciudades con tienda, o nacional vía MRW y Tealca. También retiro en el kiosco de Valera.</p>
+    </div>
+    <div class="fc-ch-card">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+      <b>¿Dudas con tu pedido?</b>
+      <p>Te ayudamos en minutos por WhatsApp antes de pagar.</p>
+      <a class="fc-ch-wa" href="https://wa.me/{{ wa }}?text={{ wa_msg_enc }}" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.82 11.82 0 018.413 3.488 11.82 11.82 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 001.51 5.26l-.999 3.648 3.477-.911z"/></svg>
+        Escríbenos por WhatsApp
+      </a>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "FitCore Ayuda carrito",
+  "tag": "section",
+  "class": "fitcore-cart-help",
+  "settings": [
+    { "type": "text", "id": "whatsapp", "label": "Número de WhatsApp (solo dígitos)", "default": "584246218863" },
+    { "type": "text", "id": "whatsapp_msg", "label": "Mensaje precargado", "default": "Hola Fitcore Store, tengo una duda con mi pedido" }
+  ],
+  "presets": [
+    { "name": "FitCore Ayuda carrito" }
+  ]
+}
+{% endschema %}

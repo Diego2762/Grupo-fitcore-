@@ -1,0 +1,35 @@
+{
+  "sections": {
+    "fitcore_banner": {
+      "type": "fitcore-collection-banner",
+      "settings": {
+        "show_count": true,
+        "color_navy": "#0B1840",
+        "color_purple": "#3B1F6B",
+        "color_accent": "#19C37D"
+      }
+    },
+    "product_grid": {
+      "type": "main-collection-product-grid",
+      "settings": {
+        "products_per_page": 16,
+        "columns_desktop": 4,
+        "image_ratio": "portrait",
+        "show_secondary_image": true,
+        "show_vendor": true,
+        "show_rating": false,
+        "enable_quick_add": true,
+        "enable_filtering": true,
+        "filter_type": "vertical",
+        "enable_sorting": true,
+        "columns_mobile": "2",
+        "padding_top": 28,
+        "padding_bottom": 56
+      }
+    }
+  },
+  "order": [
+    "fitcore_banner",
+    "product_grid"
+  ]
+}

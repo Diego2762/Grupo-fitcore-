@@ -1,0 +1,31 @@
+{
+  "sections": {
+    "cart-items": {
+      "type": "main-cart-items",
+      "settings": {
+        "padding_top": 36,
+        "padding_bottom": 12
+      }
+    },
+    "cart-footer": {
+      "type": "main-cart-footer",
+      "settings": {
+        "show_cart_note": true,
+        "padding_top": 12,
+        "padding_bottom": 24
+      }
+    },
+    "fitcore_cart_help": {
+      "type": "fitcore-cart-help",
+      "settings": {
+        "whatsapp": "584246218863",
+        "whatsapp_msg": "Hola Fitcore Store, tengo una duda con mi pedido"
+      }
+    }
+  },
+  "order": [
+    "cart-items",
+    "cart-footer",
+    "fitcore_cart_help"
+  ]
+}

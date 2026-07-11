@@ -1,0 +1,57 @@
+{
+  "sections": {
+    "main": {
+      "type": "fitcore-faq",
+      "settings": {
+        "title": "Preguntas frecuentes",
+        "subtitle": "Todo lo que necesitas saber para comprar con confianza."
+      },
+      "blocks": {
+        "q1": {
+          "type": "faq",
+          "settings": {
+            "question": "¿Cómo hago un pedido?",
+            "answer": "<p>Explora el catálogo por categoría, agrega al carrito lo que quieras y completa tu pedido con tus datos y ciudad de entrega. Luego te contactamos para coordinar el pago y el envío.</p>"
+          }
+        },
+        "q2": {
+          "type": "faq",
+          "settings": {
+            "question": "¿Qué métodos de pago aceptan?",
+            "answer": "<p>Aceptamos Zelle y transferencias en divisas, USDT, Pago Móvil y transferencia en bolívares, y efectivo en el kiosco. Coordinamos el método contigo al confirmar el pedido.</p>"
+          }
+        },
+        "q3": {
+          "type": "faq",
+          "settings": {
+            "question": "¿Hacen envíos a todo el país?",
+            "answer": "<p>Sí. Tenemos entrega express el mismo día en ciudades con tienda física, y envío nacional a todo el país vía MRW o Tealca. También puedes retirar tu pedido en nuestro kiosco del CC Plaza, Valera.</p>"
+          }
+        },
+        "q4": {
+          "type": "faq",
+          "settings": {
+            "question": "¿Los productos son originales?",
+            "answer": "<p>Sí. Todos nuestros suplementos son 100% originales, importados directamente desde Estados Unidos. Trabajamos con marcas reconocidas a nivel mundial.</p>"
+          }
+        },
+        "q5": {
+          "type": "faq",
+          "settings": {
+            "question": "¿Puedo pagar en bolívares?",
+            "answer": "<p>Sí. Aceptamos Pago Móvil y transferencias en bolívares, además de divisas. Te indicamos el monto al confirmar tu pedido.</p>"
+          }
+        },
+        "q6": {
+          "type": "faq",
+          "settings": {
+            "question": "¿Tienen tienda física?",
+            "answer": "<p>Sí, nuestro kiosco está en el CC Plaza, en Valera, estado Trujillo. Puedes visitarnos o escribirnos por WhatsApp para atención inmediata.</p>"
+          }
+        }
+      },
+      "block_order": ["q1", "q2", "q3", "q4", "q5", "q6"]
+    }
+  },
+  "order": ["main"]
+}

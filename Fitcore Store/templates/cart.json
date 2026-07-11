@@ -1,0 +1,48 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "cart-items": {
+      "type": "main-cart-items",
+      "settings": {
+        "padding_top": 36,
+        "padding_bottom": 12
+      }
+    },
+    "cart-footer": {
+      "type": "main-cart-footer",
+      "settings": {
+        "padding_top": 12,
+        "padding_bottom": 24
+      }
+    },
+    "fitcore_cart_pay": {
+      "type": "fitcore-cart-pay",
+      "settings": {
+        "discount_code": "DIVISAS25",
+        "discount_pct": 25,
+        "free_ship_threshold": 30
+      }
+    },
+    "fitcore_cart_help": {
+      "type": "fitcore-cart-help",
+      "settings": {
+        "whatsapp": "584246218863",
+        "whatsapp_msg": "Hola FitCore Store, tengo una duda con mi pedido"
+      }
+    }
+  },
+  "order": [
+    "cart-items",
+    "fitcore_cart_pay",
+    "cart-footer",
+    "fitcore_cart_help"
+  ]
+}

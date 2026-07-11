@@ -1,0 +1,9 @@
+.fc-divisa{display:flex;align-items:baseline;gap:.55rem;flex-wrap:wrap;margin-top:.7rem;font-family:var(--font-body-family)}
+.fc-divisa__label{text-transform:uppercase;font-weight:700;font-size:1.25rem;letter-spacing:.04em;color:#0B1840 !important;opacity:.92;line-height:1}
+.fc-divisa__amount{font-weight:800;font-size:2rem;line-height:1;color:#12994f !important}
+.fc-divisa__off{display:inline-flex;align-items:center;background:#19C37D;color:#071631 !important;font-weight:700;font-size:1.05rem;line-height:1;padding:.3rem .5rem;border-radius:4px;letter-spacing:.02em;white-space:nowrap}
+.fc-divisa__hint{display:block;font-size:1.15rem;color:#0B1840 !important;opacity:.6;margin-top:.2rem;font-family:var(--font-body-family)}
+.fc-divisa--card{margin-top:.4rem;gap:.4rem;align-items:center}
+.fc-divisa--card .fc-divisa__label{font-size:1rem;color:#0B1840 !important;opacity:.9}
+.fc-divisa--card .fc-divisa__amount{font-size:1.5rem;color:#12994f !important}
+.fc-divisa--card .fc-divisa__off{font-size:.95rem;padding:.22rem .4rem}

@@ -1,0 +1,75 @@
+{%- comment -%}
+  FitCore Store · FAQ (B2C) con acordeón
+{%- endcomment -%}
+
+<style>
+  #fc-faq-{{ section.id }} {
+    --fc-navy:#0B1840; --fc-purple:#3B1F6B; --fc-accent:#19C37D; --fc-line:#e7eaf2; --fc-muted:#56607a;
+  }
+  #fc-faq-{{ section.id }} .fc-faq-hero {
+    background: radial-gradient(800px 420px at 12% -20%, var(--fc-purple) 0%, transparent 58%), linear-gradient(160deg, var(--fc-navy) 0%, #071631 100%);
+    color:#fff; padding:56px 0 50px;
+  }
+  #fc-faq-{{ section.id }} .fc-wrap { max-width:900px; margin:0 auto; padding:0 22px; }
+  #fc-faq-{{ section.id }} .fc-faq-hero h1 { font-family:var(--font-heading-family,sans-serif); font-weight:800; font-size:clamp(30px,4.4vw,48px); margin:0; }
+  #fc-faq-{{ section.id }} .fc-faq-hero p { font:400 17px/1.55 var(--font-body-family,sans-serif); color:rgba(255,255,255,.78); margin:12px 0 0; }
+  #fc-faq-{{ section.id }} .fc-faq-body { background:#fff; padding:48px 0 64px; }
+  #fc-faq-{{ section.id }} details { border:1px solid var(--fc-line); border-radius:14px; padding:0; margin:0 0 12px; overflow:hidden; background:#fff; }
+  #fc-faq-{{ section.id }} summary { list-style:none; cursor:pointer; padding:20px 22px; font:700 17px/1.35 var(--font-body-family,sans-serif); color:var(--fc-navy); display:flex; justify-content:space-between; gap:16px; align-items:center; }
+  #fc-faq-{{ section.id }} summary::-webkit-details-marker { display:none; }
+  #fc-faq-{{ section.id }} summary .fc-ico { flex:0 0 auto; width:22px; height:22px; border-radius:50%; background:var(--fc-accent); color:#04231a; display:grid; place-items:center; font-weight:900; transition:transform .2s ease; }
+  #fc-faq-{{ section.id }} details[open] summary .fc-ico { transform:rotate(45deg); }
+  #fc-faq-{{ section.id }} .fc-faq-ans { padding:0 22px 20px; color:var(--fc-muted); font:400 15px/1.6 var(--font-body-family,sans-serif); }
+  #fc-faq-{{ section.id }} .fc-faq-ans :is(p,ul) { margin:0 0 10px; }
+</style>
+
+<div id="fc-faq-{{ section.id }}">
+  <section class="fc-faq-hero">
+    <div class="fc-wrap">
+      <h1>{{ section.settings.title | default: 'Preguntas frecuentes' }}</h1>
+      {%- if section.settings.subtitle != blank -%}<p>{{ section.settings.subtitle }}</p>{%- endif -%}
+    </div>
+  </section>
+  <section class="fc-faq-body">
+    <div class="fc-wrap">
+      {%- for block in section.blocks -%}
+        <details {{ block.shopify_attributes }}{% if forloop.first %} open{% endif %}>
+          <summary>{{ block.settings.question | default: 'Pregunta' }}<span class="fc-ico">+</span></summary>
+          <div class="fc-faq-ans">{{ block.settings.answer }}</div>
+        </details>
+      {%- endfor -%}
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "FitCore FAQ",
+  "tag": "section",
+  "class": "fitcore-faq",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Título", "default": "Preguntas frecuentes" },
+    { "type": "text", "id": "subtitle", "label": "Subtítulo", "default": "Todo lo que necesitas saber para comprar con confianza." }
+  ],
+  "blocks": [
+    {
+      "type": "faq",
+      "name": "Pregunta",
+      "settings": [
+        { "type": "text", "id": "question", "label": "Pregunta", "default": "¿Cómo hago un pedido?" },
+        { "type": "richtext", "id": "answer", "label": "Respuesta", "default": "<p>Agrega productos al carrito y completa tu pedido. Te contactamos para coordinar pago y entrega.</p>" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "FitCore FAQ",
+      "blocks": [
+        { "type": "faq" },
+        { "type": "faq" },
+        { "type": "faq" }
+      ]
+    }
+  ]
+}
+{% endschema %}

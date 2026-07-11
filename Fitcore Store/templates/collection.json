@@ -1,0 +1,43 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "fitcore_banner": {
+      "type": "fitcore-collection-banner",
+      "settings": {
+        "show_count": true,
+        "color_navy": "#0B1840",
+        "color_purple": "#3B1F6B",
+        "color_accent": "#19C37D"
+      }
+    },
+    "product_grid": {
+      "type": "main-collection-product-grid",
+      "settings": {
+        "products_per_page": 16,
+        "columns_desktop": 4,
+        "columns_mobile": "2",
+        "image_ratio": "portrait",
+        "show_secondary_image": true,
+        "show_vendor": true,
+        "show_rating": false,
+        "enable_filtering": true,
+        "filter_type": "vertical",
+        "enable_sorting": true,
+        "padding_top": 28,
+        "padding_bottom": 56
+      }
+    }
+  },
+  "order": [
+    "fitcore_banner",
+    "product_grid"
+  ]
+}

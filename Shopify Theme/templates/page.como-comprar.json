@@ -1,0 +1,14 @@
+{
+  "sections": {
+    "main": {
+      "type": "fitcore-como-comprar",
+      "settings": {
+        "title": "¿Cómo comprar en Fitcore Store?",
+        "subtitle": "Comprar tus suplementos originales es rápido y seguro. Te explicamos paso a paso.",
+        "whatsapp": "584246218863",
+        "whatsapp_msg": "Hola Fitcore Store, quiero hacer un pedido"
+      }
+    }
+  },
+  "order": ["main"]
+}
