@@ -114,11 +114,16 @@
   #fc-home-{{ section.id }} .fc-pc-cur { font:700 10px/1 var(--font-body-family, sans-serif); letter-spacing:.06em; text-transform:uppercase; opacity:.6; }
   #fc-home-{{ section.id }} .fc-pc-price--divisa .fc-pc-cur { color:#12994f; opacity:.85; }
   #fc-home-{{ section.id }} .fc-pc-form { margin:0; }
-  #fc-home-{{ section.id }} .fc-pc-cart { display:inline-flex; align-items:center; justify-content:center; width:44px; height:44px; background: var(--fc-navy); color:#fff; border:0; border-radius:12px; cursor:pointer; text-decoration:none; transition: background .18s ease, color .18s ease, transform .18s ease; }
+  #fc-home-{{ section.id }} .fc-pc-cart { position:relative; display:inline-flex; align-items:center; justify-content:center; width:44px; height:44px; background: var(--fc-navy); color:#fff; border:0; border-radius:12px; cursor:pointer; text-decoration:none; transition: background .18s ease, color .18s ease, transform .18s ease; }
   #fc-home-{{ section.id }} .fc-pc-cart svg { width:20px; height:20px; }
   #fc-home-{{ section.id }} .fc-pc-cart:hover { background: var(--fc-accent); color: var(--fc-darker); transform: translateY(-2px); }
   #fc-home-{{ section.id }} .fc-pc-cart.is-added { background: var(--fc-accent); color: var(--fc-darker); }
   #fc-home-{{ section.id }} .fc-pc-cart--out { background: var(--fc-line); color: var(--fc-navy); }
+  /* Estado de carga: spinner instantaneo al tocar mientras responde la red */
+  #fc-home-{{ section.id }} .fc-pc-cart.is-loading { background: var(--fc-navy); color:#fff; pointer-events:none; transform:none; }
+  #fc-home-{{ section.id }} .fc-pc-cart.is-loading svg { opacity:0; }
+  #fc-home-{{ section.id }} .fc-pc-cart.is-loading::after { content:""; position:absolute; width:18px; height:18px; border:2px solid currentColor; border-top-color:transparent; border-radius:50%; animation:fc-cart-spin .6s linear infinite; }
+  @keyframes fc-cart-spin { to { transform:rotate(360deg); } }
   #fc-home-{{ section.id }} .fc-goal { padding: 56px 0; }
   #fc-home-{{ section.id }} .fc-goal--alt { background: var(--fc-light); }
   #fc-home-{{ section.id }} .fc-best-foot { text-align:center; margin-top: 36px; }
