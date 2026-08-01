@@ -1,10 +1,10 @@
 {%- comment -%}
-  FitCore Store · Banda de confianza para el carrito (B2C)
+  Fitcore Store · Banda de confianza para el carrito (B2C)
 {%- endcomment -%}
 
 {%- liquid
   assign wa = section.settings.whatsapp | default: '584246218863'
-  assign wa_msg = section.settings.whatsapp_msg | default: 'Hola FitCore Store, tengo una duda con mi pedido'
+  assign wa_msg = section.settings.whatsapp_msg | default: 'Hola Fitcore Store, tengo una duda con mi pedido'
   assign wa_msg_enc = wa_msg | url_encode
 -%}
 
@@ -41,7 +41,7 @@
     <div class="fc-ch-card">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 3h15v13H1z"/><path d="M16 8h4l3 3v5h-7z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
       <b>Envío a todo el país</b>
-      <p>Mismo día en Valera y el Edo. Trujillo, o envío nacional por MRW o Tealca. También puedes retirar en la tienda del CC Plaza.</p>
+      <p>Mismo día en Valera y sus alrededores. Al resto del país, por MRW o Tealca en 1 a 2 días hábiles. También puedes retirar en la tienda del CC Plaza.</p>
     </div>
     <div class="fc-ch-card">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
@@ -57,15 +57,15 @@
 
 {% schema %}
 {
-  "name": "FitCore Ayuda carrito",
+  "name": "Fitcore Ayuda carrito",
   "tag": "section",
   "class": "fitcore-cart-help",
   "settings": [
     { "type": "text", "id": "whatsapp", "label": "Número de WhatsApp (solo dígitos)", "default": "584246218863" },
-    { "type": "text", "id": "whatsapp_msg", "label": "Mensaje precargado", "default": "Hola FitCore Store, tengo una duda con mi pedido" }
+    { "type": "text", "id": "whatsapp_msg", "label": "Mensaje precargado", "default": "Hola Fitcore Store, tengo una duda con mi pedido" }
   ],
   "presets": [
-    { "name": "FitCore Ayuda carrito" }
+    { "name": "Fitcore Ayuda carrito" }
   ]
 }
 {% endschema %}

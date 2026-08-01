@@ -25,6 +25,85 @@
       padding-bottom: {{ section.settings.padding_bottom }}px;
     }
   }
+
+  /* Fitcore footer */
+  .footer.section-{{ section.id }}-padding {
+    background: linear-gradient(180deg, #0B1840 0%, #071631 100%) !important;
+    border-top: 3px solid #19C37D;
+    color: #E8EBF5;
+  }
+  .footer.section-{{ section.id }}-padding .footer__content-top {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    row-gap: 2.4rem;
+  }
+  .fc-footer-logo {
+    order: 1;
+    margin: 0;
+    flex: 0 0 auto;
+  }
+  .fc-footer-logo img {
+    width: auto;
+    height: 60px;
+    max-width: 260px;
+    display: block;
+    filter: brightness(0) invert(1);
+  }
+  .footer.section-{{ section.id }}-padding .footer-block--newsletter {
+    order: 2;
+    flex: 1 1 300px;
+    max-width: 420px;
+    margin: 0;
+    text-align: left;
+  }
+  .footer.section-{{ section.id }}-padding .footer-block__heading {
+    color: #FFFFFF !important;
+  }
+  .footer.section-{{ section.id }}-padding a {
+    color: #E8EBF5;
+    text-decoration: none;
+    transition: color .15s ease;
+  }
+  .footer.section-{{ section.id }}-padding a:hover {
+    color: #19C37D;
+  }
+  .footer.section-{{ section.id }}-padding .field__input {
+    background: rgba(255,255,255,.06);
+    color: #FFFFFF;
+    border-color: rgba(255,255,255,.28);
+  }
+  .footer.section-{{ section.id }}-padding .field__label {
+    color: rgba(232,235,245,.7);
+  }
+  .footer.section-{{ section.id }}-padding .newsletter-form__button { color: #FFFFFF; }
+  .footer.section-{{ section.id }}-padding .newsletter-form__button:hover { color: #19C37D; }
+  .footer.section-{{ section.id }}-padding .footer__content-bottom {
+    border-top: 1px solid rgba(255,255,255,.12);
+  }
+  .footer.section-{{ section.id }}-padding .localization-selector,
+  .footer.section-{{ section.id }}-padding .copyright__content,
+  .footer.section-{{ section.id }}-padding .policies a {
+    color: rgba(232,235,245,.72);
+  }
+  @media screen and (max-width: 749px) {
+    .footer.section-{{ section.id }}-padding .footer__content-top {
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+    }
+  }
+  .footer.section-{{ section.id }}-padding a {
+    color: #0B1840;
+    text-decoration: none;
+    transition: color .15s ease;
+  }
+  .footer.section-{{ section.id }}-padding a:hover {
+    color: #12994f;
+  }
 {%- endstyle -%}
 
 <footer class="footer color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
@@ -50,6 +129,17 @@
   -%}
     {%- unless only_empty_brand -%}
       <div class="footer__content-top page-width">
+        <div class="fc-footer-logo">
+          <a href="{{ routes.root_url }}" aria-label="FitCore Store">
+            <img
+              src="{{ 'fitcore-store-logo.png' | asset_url }}"
+              alt="FitCore Store"
+              width="200"
+              height="80"
+              loading="lazy"
+            >
+          </a>
+        </div>
         {%- if section.blocks.size > 0 -%}
           {%- liquid
             if section.blocks.size == 9
@@ -170,69 +260,45 @@
               {%- if section.settings.newsletter_heading != blank -%}
                 <h2 class="footer-block__heading inline-richtext">{{ section.settings.newsletter_heading }}</h2>
               {%- endif -%}
-              {%- form 'customer', id: 'ContactFooter', class: 'footer__newsletter newsletter-form' -%}
-                <input type="hidden" name="contact[tags]" value="newsletter">
-                <div class="newsletter-form__field-wrapper">
+              <form
+                action="https://app.kit.com/forms/9576032/subscriptions"
+                method="post"
+                data-sv-form="9576032"
+                data-uid="83d646edb1"
+                data-format="inline"
+                data-version="5"
+                class="seva-form formkit-form footer__newsletter newsletter-form"
+              >
+                <ul class="formkit-alert formkit-alert-error newsletter-form__message form__message" data-element="errors" data-group="alert"></ul>
+                <div data-element="fields" data-stacked="false" class="seva-fields formkit-fields newsletter-form__field-wrapper">
                   <div class="field">
                     <input
                       id="NewsletterForm--{{ section.id }}"
+                      class="formkit-input field__input"
+                      name="email_address"
                       type="email"
-                      name="contact[email]"
-                      class="field__input"
-                      value="{{ form.email }}"
+                      required
                       aria-required="true"
                       autocorrect="off"
                       autocapitalize="off"
                       autocomplete="email"
-                      {% if form.errors %}
-                        autofocus
-                        aria-invalid="true"
-                        aria-describedby="ContactFooter-error"
-                      {% elsif form.posted_successfully? %}
-                        aria-describedby="ContactFooter-success"
-                      {% endif %}
-                      placeholder="{{ 'newsletter.label' | t }}"
-                      required
+                      placeholder="Correo electrónico"
                     >
-                    <label class="field__label" for="NewsletterForm--{{ section.id }}">
-                      {{ 'newsletter.label' | t }}
-                    </label>
+                    <label class="field__label" for="NewsletterForm--{{ section.id }}">Correo electrónico</label>
                     <button
                       type="submit"
-                      class="newsletter-form__button field__button"
-                      name="commit"
-                      id="Subscribe"
-                      aria-label="{{ 'newsletter.button_label' | t }}"
+                      data-element="submit"
+                      class="newsletter-form__button field__button formkit-submit"
+                      aria-label="Suscribirse"
                     >
                       <span class="svg-wrapper">
                         {{- 'icon-arrow.svg' | inline_asset_content -}}
                       </span>
                     </button>
                   </div>
-                  {%- if form.errors -%}
-                    <small class="newsletter-form__message form__message" id="ContactFooter-error">
-                      <span class="svg-wrapper">
-                        {{- 'icon-error.svg' | inline_asset_content -}}
-                      </span>
-                      {{- form.errors.translated_fields.email | capitalize }}
-                      {{ form.errors.messages.email -}}
-                    </small>
-                  {%- endif -%}
                 </div>
-                {%- if form.posted_successfully? -%}
-                  <h3
-                    class="newsletter-form__message newsletter-form__message--success form__message"
-                    id="ContactFooter-success"
-                    tabindex="-1"
-                    autofocus
-                  >
-                    <span class="svg-wrapper">
-                      {{- 'icon-success.svg' | inline_asset_content -}}
-                    </span>
-                    {{- 'newsletter.success' | t }}
-                  </h3>
-                {%- endif -%}
-              {%- endform -%}
+              </form>
+              <script async src="https://f.convertkit.com/ckjs/ck.5.js"></script>
             </div>
           {%- endif -%}
 

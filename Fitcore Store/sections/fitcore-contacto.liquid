@@ -1,0 +1,252 @@
+{%- comment -%}
+  Fitcore Store · Página "Contacto" (B2C) · formulario nativo + WhatsApp + NAP + mapa
+{%- endcomment -%}
+
+{%- liquid
+  assign wa = section.settings.whatsapp | default: '584246218863'
+  assign wa_msg = section.settings.whatsapp_msg | default: 'Hola Fitcore Store, quiero hacer una consulta'
+  assign wa_msg_enc = wa_msg | url_encode
+  assign phone_display = section.settings.phone_display | default: '+58 424-621-8863'
+  assign email = section.settings.email | default: 'info@fitcore.com'
+  assign address = section.settings.address | default: 'C.C. Plaza, Puente Nivel Comercio, Avenida 6 entre Calles 25 y 25A. Valera, Edo. Trujillo.'
+  assign map_link = section.settings.map_link | default: 'https://maps.app.goo.gl/qANKT3VGwkeNcpJT6'
+-%}
+
+<style>
+  #fc-ct-{{ section.id }} { --fc-navy:#0B1840; --fc-purple:#3B1F6B; --fc-accent:#19C37D; --fc-darker:#071631; --fc-line:#e7eaf2; --fc-muted:#56607a; --fc-wa:#25D366; }
+  #fc-ct-{{ section.id }} .fc-wrap { max-width:1140px; margin:0 auto; padding:0 22px; }
+
+  /* HERO */
+  #fc-ct-{{ section.id }} .fc-ct-hero { position:relative; overflow:hidden; color:#fff; padding:clamp(52px,6.5vw,80px) 0; background:radial-gradient(720px 400px at 12% -20%, var(--fc-purple) 0%, transparent 60%), linear-gradient(155deg, var(--fc-navy) 0%, var(--fc-darker) 100%); }
+  #fc-ct-{{ section.id }} .fc-ct-hero:before { content:""; position:absolute; inset:0; background:radial-gradient(circle at 90% 120%, rgba(25,195,125,.16), transparent 55%); pointer-events:none; }
+  #fc-ct-{{ section.id }} .fc-ct-hero .fc-wrap { position:relative; z-index:2; text-align:center; }
+  #fc-ct-{{ section.id }} .fc-ct-eyebrow { display:inline-flex; align-items:center; gap:8px; background:rgba(25,195,125,.14); border:1px solid rgba(25,195,125,.4); color:#7ff0bd; font:700 12px/1 var(--font-body-family,sans-serif); letter-spacing:.08em; text-transform:uppercase; padding:9px 15px; border-radius:999px; margin:0 0 20px; }
+  #fc-ct-{{ section.id }} .fc-ct-eyebrow svg { width:14px; height:14px; }
+  #fc-ct-{{ section.id }} .fc-ct-hero h1 { font-family:var(--font-heading-family,sans-serif); font-weight:800; font-size:clamp(30px,4.6vw,50px); line-height:1.05; letter-spacing:-.02em; margin:0 auto; max-width:18ch; }
+  #fc-ct-{{ section.id }} .fc-ct-hero p { font:400 clamp(16px,1.6vw,19px)/1.55 var(--font-body-family,sans-serif); color:rgba(255,255,255,.8); margin:16px auto 0; max-width:58ch; }
+
+  /* CUERPO */
+  #fc-ct-{{ section.id }} .fc-ct-body { background:#F6F7FA; padding:clamp(44px,6vw,72px) 0; }
+  #fc-ct-{{ section.id }} .fc-ct-grid { display:grid; grid-template-columns:1.05fr .95fr; gap:clamp(20px,3vw,34px); align-items:start; }
+
+  /* FORM CARD */
+  #fc-ct-{{ section.id }} .fc-ct-form { background:#fff; border:1px solid var(--fc-line); border-radius:20px; padding:clamp(26px,3.4vw,40px); box-shadow:0 24px 54px rgba(11,24,64,.08); }
+  #fc-ct-{{ section.id }} .fc-ct-form h2 { color:var(--fc-navy); font:800 clamp(21px,2.4vw,26px)/1.2 var(--font-heading-family,sans-serif); margin:0 0 6px; letter-spacing:-.01em; }
+  #fc-ct-{{ section.id }} .fc-ct-form .fc-ct-lead { color:var(--fc-muted); font:400 14.5px/1.55 var(--font-body-family,sans-serif); margin:0 0 22px; }
+  #fc-ct-{{ section.id }} .fc-field { margin:0 0 15px; }
+  #fc-ct-{{ section.id }} .fc-field label { display:block; font:600 13px/1 var(--font-body-family,sans-serif); color:var(--fc-navy); margin:0 0 7px; }
+  #fc-ct-{{ section.id }} .fc-field input, #fc-ct-{{ section.id }} .fc-field textarea { width:100%; font:400 15px/1.4 var(--font-body-family,sans-serif); color:#11182f; padding:13px 15px; border:1.5px solid #e3e7f0; border-radius:11px; background:#fff; transition:border-color .16s ease, box-shadow .16s ease; }
+  #fc-ct-{{ section.id }} .fc-field input::placeholder, #fc-ct-{{ section.id }} .fc-field textarea::placeholder { color:#9aa3bd; }
+  #fc-ct-{{ section.id }} .fc-field input:focus, #fc-ct-{{ section.id }} .fc-field textarea:focus { outline:none; border-color:var(--fc-purple); box-shadow:0 0 0 4px rgba(59,31,107,.1); }
+  #fc-ct-{{ section.id }} .fc-field textarea { min-height:130px; resize:vertical; }
+  #fc-ct-{{ section.id }} .fc-field-row { display:grid; grid-template-columns:1fr 1fr; gap:15px; }
+  #fc-ct-{{ section.id }} .fc-ct-submit { width:100%; border:0; cursor:pointer; margin-top:6px; background:var(--fc-navy); color:#fff; font:700 15.5px/1 var(--font-body-family,sans-serif); padding:16px; border-radius:12px; display:flex; align-items:center; justify-content:center; gap:9px; transition:transform .16s ease, background .16s ease, box-shadow .16s ease; box-shadow:0 14px 30px rgba(11,24,64,.22); }
+  #fc-ct-{{ section.id }} .fc-ct-submit:hover { transform:translateY(-2px); background:#152352; box-shadow:0 20px 40px rgba(11,24,64,.3); }
+  #fc-ct-{{ section.id }} .fc-ct-alt { display:flex; align-items:center; gap:10px; margin:20px 0 0; color:var(--fc-muted); font:500 13px/1.4 var(--font-body-family,sans-serif); }
+  #fc-ct-{{ section.id }} .fc-ct-alt:before, #fc-ct-{{ section.id }} .fc-ct-alt:after { content:""; flex:1; height:1px; background:var(--fc-line); }
+  #fc-ct-{{ section.id }} .fc-ct-wa { display:flex; align-items:center; justify-content:center; gap:9px; margin-top:16px; width:100%; text-decoration:none; background:var(--fc-wa); color:#04231a; font:700 15px/1 var(--font-body-family,sans-serif); padding:15px; border-radius:12px; transition:transform .16s ease, box-shadow .16s ease; box-shadow:0 12px 26px rgba(37,211,102,.28); }
+  #fc-ct-{{ section.id }} .fc-ct-wa:hover { transform:translateY(-2px); box-shadow:0 18px 36px rgba(37,211,102,.4); }
+  #fc-ct-{{ section.id }} .fc-ct-wa svg { width:18px; height:18px; }
+  #fc-ct-{{ section.id }} .fc-ct-ok { background:rgba(25,195,125,.1); border:1px solid rgba(25,195,125,.45); color:#0f7a4f; border-radius:12px; padding:16px 18px; font:500 14.5px/1.5 var(--font-body-family,sans-serif); margin:0 0 20px; display:flex; gap:11px; align-items:flex-start; }
+  #fc-ct-{{ section.id }} .fc-ct-ok svg { width:20px; height:20px; flex:none; margin-top:1px; color:var(--fc-accent); }
+  #fc-ct-{{ section.id }} .fc-ct-err { background:#fde8e2; border:1px solid #f2643b; color:#c53a13; border-radius:12px; padding:13px 16px; font:500 13.5px/1.5 var(--font-body-family,sans-serif); margin:0 0 18px; }
+  #fc-ct-{{ section.id }} .fc-ct-err ul { margin:0; padding-left:18px; }
+
+  /* INFO CARD (NAP) */
+  #fc-ct-{{ section.id }} .fc-ct-info { background:var(--fc-navy); color:#fff; border-radius:20px; padding:clamp(26px,3.4vw,38px); box-shadow:0 24px 54px rgba(11,24,64,.18); position:relative; overflow:hidden; }
+  #fc-ct-{{ section.id }} .fc-ct-info-in { position:relative; z-index:2; }
+  #fc-ct-{{ section.id }} .fc-ct-info .fc-ct-tag { display:inline-flex; align-items:center; gap:8px; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.18); color:#cdd6ee; font:700 11.5px/1 var(--font-body-family,sans-serif); letter-spacing:.08em; text-transform:uppercase; padding:7px 13px; border-radius:999px; margin:0 0 18px; }
+  #fc-ct-{{ section.id }} .fc-ct-info h2 { font:800 clamp(20px,2.3vw,25px)/1.22 var(--font-heading-family,sans-serif); margin:0 0 8px; letter-spacing:-.01em; }
+  #fc-ct-{{ section.id }} .fc-ct-info > .fc-ct-info-in > p { color:rgba(255,255,255,.78); font:400 14.5px/1.55 var(--font-body-family,sans-serif); margin:0 0 24px; }
+  #fc-ct-{{ section.id }} .fc-ct-list { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:16px; }
+  #fc-ct-{{ section.id }} .fc-ct-list li { display:flex; align-items:flex-start; gap:13px; }
+  #fc-ct-{{ section.id }} .fc-ct-list .ic { width:40px; height:40px; border-radius:11px; flex:none; display:grid; place-items:center; background:rgba(25,195,125,.16); border:1px solid rgba(25,195,125,.32); color:var(--fc-accent); }
+  #fc-ct-{{ section.id }} .fc-ct-list .ic svg { width:19px; height:19px; }
+  #fc-ct-{{ section.id }} .fc-ct-list b { display:block; font:700 13px/1.3 var(--font-body-family,sans-serif); color:#fff; margin:2px 0 3px; }
+  #fc-ct-{{ section.id }} .fc-ct-list span, #fc-ct-{{ section.id }} .fc-ct-list a { font:400 14px/1.5 var(--font-body-family,sans-serif); color:rgba(255,255,255,.82); text-decoration:none; }
+  #fc-ct-{{ section.id }} .fc-ct-list a:hover { color:var(--fc-accent); }
+  #fc-ct-{{ section.id }} .fc-ct-info-btns { display:flex; flex-wrap:wrap; gap:11px; margin:26px 0 0; }
+  #fc-ct-{{ section.id }} .fc-ct-info-btns a { display:inline-flex; align-items:center; gap:8px; text-decoration:none; font:700 14px/1 var(--font-body-family,sans-serif); padding:13px 18px; border-radius:11px; transition:transform .16s ease, background .16s ease, border-color .16s ease; }
+  #fc-ct-{{ section.id }} .fc-ct-info-btns a svg { width:17px; height:17px; }
+  #fc-ct-{{ section.id }} .fc-ct-info-btns .b-map { background:transparent; color:#fff; border:1.5px solid rgba(255,255,255,.28); }
+  #fc-ct-{{ section.id }} .fc-ct-info-btns .b-map:hover { transform:translateY(-2px); border-color:rgba(255,255,255,.55); }
+  #fc-ct-{{ section.id }} .fc-ct-info-btns .b-wa { background:var(--fc-wa); color:#04231a; }
+  #fc-ct-{{ section.id }} .fc-ct-info-btns .b-wa:hover { transform:translateY(-2px); }
+
+  /* MAPA */
+  #fc-ct-{{ section.id }} .fc-ct-map { margin-top:clamp(20px,3vw,30px); border-radius:20px; overflow:hidden; border:1px solid var(--fc-line); box-shadow:0 20px 44px rgba(11,24,64,.1); line-height:0; }
+  #fc-ct-{{ section.id }} .fc-ct-map iframe { width:100%; height:clamp(300px,38vw,430px); border:0; display:block; }
+
+  /* REVEAL */
+  #fc-ct-{{ section.id }} .fc-ct-rv { opacity:0; transform:translateY(22px); transition:opacity .6s ease, transform .6s ease; }
+  #fc-ct-{{ section.id }} .fc-ct-rv.is-in { opacity:1; transform:none; }
+  @media (prefers-reduced-motion:reduce){ #fc-ct-{{ section.id }} .fc-ct-rv { opacity:1; transform:none; transition:none; } }
+
+  @media (max-width:860px){
+    #fc-ct-{{ section.id }} .fc-ct-grid { grid-template-columns:1fr; }
+  }
+  @media (max-width:480px){
+    #fc-ct-{{ section.id }} .fc-field-row { grid-template-columns:1fr; }
+  }
+</style>
+
+<div id="fc-ct-{{ section.id }}">
+
+  {%- comment -%} ===== HERO ===== {%- endcomment -%}
+  <section class="fc-ct-hero">
+    <div class="fc-wrap">
+      <h1>{{ section.settings.title | default: 'Hablemos: estamos para ayudarte' }}</h1>
+      <p>{{ section.settings.subtitle | default: '¿Tienes una duda, quieres validar un pago o necesitas ayuda con tu pedido? Escríbenos y te respondemos rápido.' }}</p>
+    </div>
+  </section>
+
+  {%- comment -%} ===== FORM + NAP ===== {%- endcomment -%}
+  <section class="fc-ct-body">
+    <div class="fc-wrap fc-ct-grid">
+
+      {%- comment -%} --- Formulario --- {%- endcomment -%}
+      <div class="fc-ct-form fc-ct-rv">
+        <h2>{{ section.settings.form_title | default: 'Envíanos un mensaje' }}</h2>
+        <p class="fc-ct-lead">{{ section.settings.form_subtitle | default: 'Completa el formulario y te contactamos por correo. Para respuesta inmediata, escríbenos por WhatsApp.' }}</p>
+
+        {%- form 'contact' -%}
+          {%- if form.posted_successfully? -%}
+            <div class="fc-ct-ok">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+              <span>¡Gracias! Recibimos tu mensaje y te responderemos muy pronto.</span>
+            </div>
+          {%- endif -%}
+          {%- if form.errors -%}
+            <div class="fc-ct-err">
+              <ul>
+                {%- for field in form.errors -%}
+                  <li>{{ form.errors.messages[field] }}</li>
+                {%- endfor -%}
+              </ul>
+            </div>
+          {%- endif -%}
+
+          <div class="fc-field-row">
+            <div class="fc-field">
+              <label for="fc-ct-name">Nombre</label>
+              <input type="text" id="fc-ct-name" name="contact[name]" placeholder="Tu nombre" value="{{ form.name }}" required>
+            </div>
+            <div class="fc-field">
+              <label for="fc-ct-phone">Teléfono / WhatsApp</label>
+              <input type="tel" id="fc-ct-phone" name="contact[phone]" placeholder="0424-000-0000" value="{{ form.phone }}">
+            </div>
+          </div>
+          <div class="fc-field">
+            <label for="fc-ct-email">Correo</label>
+            <input type="email" id="fc-ct-email" name="contact[email]" placeholder="tu@email.com" value="{{ form.email }}" required>
+          </div>
+          <div class="fc-field">
+            <label for="fc-ct-body">Mensaje</label>
+            <textarea id="fc-ct-body" name="contact[body]" placeholder="Cuéntanos en qué te ayudamos..." required>{{ form.body }}</textarea>
+          </div>
+          <button type="submit" class="fc-ct-submit">
+            Enviar mensaje
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
+          </button>
+        {%- endform -%}
+
+        <div class="fc-ct-alt">o escríbenos directo</div>
+        <a class="fc-ct-wa" href="https://wa.me/{{ wa }}?text={{ wa_msg_enc }}" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.82 11.82 0 018.413 3.488 11.82 11.82 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 001.51 5.26l-.999 3.648 3.477-.911z"/></svg>
+          Escríbenos por WhatsApp
+        </a>
+      </div>
+
+      {%- comment -%} --- Info / NAP --- {%- endcomment -%}
+      <div class="fc-ct-info fc-ct-rv" style="transition-delay:.1s">
+        <div class="fc-ct-info-in">
+          <span class="fc-ct-tag">Tienda física</span>
+          <h2>{{ section.settings.info_title | default: 'Visítanos en el CC Plaza, Valera' }}</h2>
+          <p>{{ section.settings.info_text | default: 'Estamos en el corazón de Valera, Edo. Trujillo. Pásate por la tienda, retira tu pedido o escríbenos y te atendemos al instante.' }}</p>
+          <ul class="fc-ct-list">
+            <li>
+              <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></span>
+              <div><b>Dirección</b><span>{{ address }}</span></div>
+            </li>
+            <li>
+              <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.13.96.36 1.9.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0122 16.92z"/></svg></span>
+              <div><b>Teléfono / WhatsApp</b><a href="https://wa.me/{{ wa }}" target="_blank" rel="noopener">{{ phone_display }}</a></div>
+            </li>
+            <li>
+              <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16a2 2 0 012 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V6a2 2 0 012-2z"/><path d="M22 6l-10 7L2 6"/></svg></span>
+              <div><b>Correo</b><a href="mailto:{{ email }}">{{ email }}</a></div>
+            </li>
+            {%- if section.settings.hours != blank -%}
+            <li>
+              <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+              <div><b>Horario</b><span>{{ section.settings.hours }}</span></div>
+            </li>
+            {%- endif -%}
+          </ul>
+          <div class="fc-ct-info-btns">
+            <a class="b-map" href="{{ map_link }}" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Cómo llegar
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    {%- comment -%} --- Mapa --- {%- endcomment -%}
+    {%- if section.settings.map_embed != blank -%}
+    <div class="fc-wrap">
+      <div class="fc-ct-map fc-ct-rv" style="transition-delay:.15s">
+        {{ section.settings.map_embed }}
+      </div>
+    </div>
+    {%- endif -%}
+  </section>
+
+</div>
+
+<script>
+  (function(){
+    var root = document.getElementById('fc-ct-{{ section.id }}');
+    if(!root) return;
+    var els = root.querySelectorAll('.fc-ct-rv');
+    if(!('IntersectionObserver' in window)){ els.forEach(function(e){ e.classList.add('is-in'); }); return; }
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add('is-in'); io.unobserve(en.target); } });
+    }, { threshold:0.12 });
+    els.forEach(function(e){ io.observe(e); });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Fitcore Contacto",
+  "tag": "section",
+  "class": "fitcore-contacto-section",
+  "settings": [
+    { "type": "header", "content": "Encabezado" },
+    { "type": "text", "id": "eyebrow", "label": "Etiqueta", "default": "Contacto" },
+    { "type": "text", "id": "title", "label": "Título", "default": "Hablemos: estamos para ayudarte" },
+    { "type": "textarea", "id": "subtitle", "label": "Subtítulo", "default": "¿Tienes una duda, quieres validar un pago o necesitas ayuda con tu pedido? Escríbenos y te respondemos rápido." },
+    { "type": "header", "content": "Formulario" },
+    { "type": "text", "id": "form_title", "label": "Título del formulario", "default": "Envíanos un mensaje" },
+    { "type": "textarea", "id": "form_subtitle", "label": "Subtítulo del formulario", "default": "Completa el formulario y te contactamos por correo. Para respuesta inmediata, escríbenos por WhatsApp." },
+    { "type": "header", "content": "Datos de contacto (NAP)" },
+    { "type": "text", "id": "info_title", "label": "Título del bloque", "default": "Visítanos en el CC Plaza, Valera" },
+    { "type": "textarea", "id": "info_text", "label": "Texto del bloque", "default": "Estamos en el corazón de Valera, Edo. Trujillo. Pásate por la tienda, retira tu pedido o escríbenos y te atendemos al instante." },
+    { "type": "textarea", "id": "address", "label": "Dirección", "default": "C.C. Plaza, Puente Nivel Comercio, Avenida 6 entre Calles 25 y 25A. Valera, Edo. Trujillo." },
+    { "type": "text", "id": "phone_display", "label": "Teléfono (visible)", "default": "+58 424-621-8863" },
+    { "type": "text", "id": "email", "label": "Correo", "default": "info@fitcore.com" },
+    { "type": "text", "id": "hours", "label": "Horario (opcional)", "info": "Se muestra solo si lo completas." },
+    { "type": "text", "id": "map_link", "label": "Enlace 'Cómo llegar'", "default": "https://maps.app.goo.gl/qANKT3VGwkeNcpJT6" },
+    { "type": "html", "id": "map_embed", "label": "Mapa (iframe embed de Google Maps)", "default": "<iframe src=\"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3937.401401659396!2d-70.6153411!3d9.2976551!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e63289b55caf539%3A0x29216434ce78857f!2sC.C.%20Plaza%20Valera!5e0!3m2!1ses!2sus!4v1782975236675!5m2!1ses!2sus\" width=\"600\" height=\"450\" allowfullscreen=\"\" loading=\"lazy\" referrerpolicy=\"strict-origin-when-cross-origin\" title=\"Ubicación Fitcore Store en el CC Plaza, Valera\"></iframe>" },
+    { "type": "header", "content": "WhatsApp" },
+    { "type": "text", "id": "whatsapp", "label": "Número (solo dígitos, con país)", "default": "584246218863" },
+    { "type": "text", "id": "whatsapp_msg", "label": "Mensaje precargado", "default": "Hola Fitcore Store, quiero hacer una consulta" }
+  ],
+  "presets": [
+    { "name": "Fitcore Contacto" }
+  ]
+}
+{% endschema %}

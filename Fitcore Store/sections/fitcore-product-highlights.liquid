@@ -1,0 +1,109 @@
+{%- comment -%}
+  Fitcore Store · Sección de destacados por categoría (data-driven)
+  Lee el metafield JSON `fitcore.highlights`:
+  {
+    "eyebrow": "IDEAL PARA",
+    "title": "Deportes y disciplinas donde ",
+    "accent": "rinden",
+    "items": [ { "icon":"pilates", "t":"Pilates", "d":"Tonificación..." }, ... ],
+    "footnote": "texto opcional"
+  }
+  Si el producto no tiene el metafield, no renderiza nada.
+{%- endcomment -%}
+
+{%- assign hl = product.metafields.fitcore.highlights.value -%}
+
+{%- if hl and hl.items -%}
+<style>
+  #fc-hl-{{ section.id }} {
+    --fc-navy: #0B1840; --fc-purple: #3B1F6B; --fc-purple-l:#5a2fa0; --fc-green:#19C37D;
+    --fc-muted:#56607a; --fc-line:#e7eaf2; --fc-bg-alt:#F6F7FA;
+    max-width: 1300px; margin: 0 auto; padding: 8px 22px 30px;
+    font-family: var(--font-body-family, sans-serif);
+  }
+  #fc-hl-{{ section.id }} .fc-hl-card {
+    background: var(--fc-bg-alt); border:1px solid var(--fc-line);
+    border-radius: 20px; padding: clamp(22px,3vw,34px);
+  }
+  #fc-hl-{{ section.id }} .fc-hl-eyebrow {
+    font-weight: 800; font-size: 11.5px; letter-spacing:.14em; text-transform:uppercase;
+    color: var(--fc-purple-l); margin:0 0 10px;
+  }
+  #fc-hl-{{ section.id }} .fc-hl-title {
+    font-family: var(--font-heading-family, sans-serif); font-weight: 800;
+    font-size: clamp(22px,3vw,30px); line-height:1.1; color: var(--fc-navy); margin:0 0 22px;
+  }
+  #fc-hl-{{ section.id }} .fc-hl-title span { color: var(--fc-purple-l); }
+  #fc-hl-{{ section.id }} .fc-hl-grid {
+    display:grid; grid-template-columns: repeat(3,1fr); gap: 16px;
+  }
+  #fc-hl-{{ section.id }} .fc-hl-item {
+    display:flex; gap:14px; align-items:flex-start;
+    background:#fff; border:1px solid var(--fc-line); border-radius:14px; padding:18px 18px;
+  }
+  #fc-hl-{{ section.id }} .fc-hl-ic {
+    flex:0 0 42px; width:42px; height:42px; border-radius:11px;
+    background: rgba(59,31,107,.08); color: var(--fc-purple-l);
+    display:flex; align-items:center; justify-content:center;
+  }
+  #fc-hl-{{ section.id }} .fc-hl-ic svg { width:20px; height:20px; }
+  #fc-hl-{{ section.id }} .fc-hl-it-t { font-weight:800; font-size:15px; color:var(--fc-navy); margin:2px 0 4px; }
+  #fc-hl-{{ section.id }} .fc-hl-it-d { font-size:13px; line-height:1.5; color:var(--fc-muted); margin:0; }
+  #fc-hl-{{ section.id }} .fc-hl-foot { margin:18px 0 0; font-size:12px; color:#9aa3b6; line-height:1.5; }
+  @media (max-width:900px){ #fc-hl-{{ section.id }} .fc-hl-grid { grid-template-columns: repeat(2,1fr); } }
+  @media (max-width:560px){ #fc-hl-{{ section.id }} .fc-hl-grid { grid-template-columns: 1fr; } }
+</style>
+
+<div id="fc-hl-{{ section.id }}">
+  <div class="fc-hl-card">
+    {%- if hl.eyebrow != blank -%}<p class="fc-hl-eyebrow">{{ hl.eyebrow }}</p>{%- endif -%}
+    {%- if hl.title != blank -%}
+      <h2 class="fc-hl-title">{{ hl.title }}{% if hl.accent != blank %}<span>{{ hl.accent }}</span>{% endif %}</h2>
+    {%- endif -%}
+    <div class="fc-hl-grid">
+      {%- for it in hl.items -%}
+        <div class="fc-hl-item">
+          <span class="fc-hl-ic">
+            {%- case it.icon -%}
+              {%- when 'muscle' -%}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 6.5h11M6.5 17.5h11M4 6.5v11M20 6.5v11M8 6.5v11M16 6.5v11"/></svg>
+              {%- when 'bolt' -%}<svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>
+              {%- when 'heart' -%}<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5.5 6 5.5c2 0 3.2 1.2 4 2.3.8-1.1 2-2.3 4-2.3 3.5 0 5 3.5 3.5 6.5C19 16.5 12 21 12 21z"/></svg>
+              {%- when 'shield' -%}<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l8 3v6c0 5-3.5 8.5-8 11-4.5-2.5-8-6-8-11V5l8-3z"/></svg>
+              {%- when 'moon' -%}<svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></svg>
+              {%- when 'sun' -%}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19"/></svg>
+              {%- when 'home' -%}<svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 11l9-8 9 8v9a1 1 0 01-1 1h-5v-6H10v6H4a1 1 0 01-1-1v-9z"/></svg>
+              {%- when 'run' -%}<svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 4a2 2 0 11-.001 4.001A2 2 0 0113 4zM7 22l3-7-2-2-2 3-2-1 3-4 3-1 3 2 2 4 3-1 .8 1.8L15 15l-2-2-1.5 3L14 22h-2l-2-4-3 4H7z"/></svg>
+              {%- when 'timer' -%}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M9 2h6"/></svg>
+              {%- when 'drop' -%}<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2s6 7 6 11a6 6 0 11-12 0c0-4 6-11 6-11z"/></svg>
+              {%- when 'leaf' -%}<svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 20c0-8 6-14 16-14 0 10-6 16-14 16-2 0-2-2-2-2z"/></svg>
+              {%- when 'brain' -%}<svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 3a3 3 0 00-3 3 3 3 0 00-1 5.8V15a3 3 0 003 3h1V3H9zM15 3h-1v18h1a3 3 0 003-3v-3.2A3 3 0 0018 6a3 3 0 00-3-3z"/></svg>
+              {%- when 'plus' -%}<svg viewBox="0 0 24 24" fill="currentColor"><path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6V5z"/></svg>
+              {%- when 'star' -%}<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 6.5 7 .8-5.2 4.7L18 21l-6-3.4L6 21l1.2-7L2 9.3l7-.8L12 2z"/></svg>
+              {%- else -%}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 6"/></svg>
+            {%- endcase -%}
+          </span>
+          <div>
+            <p class="fc-hl-it-t">{{ it.t }}</p>
+            {%- if it.d != blank -%}<p class="fc-hl-it-d">{{ it.d }}</p>{%- endif -%}
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+    {%- if hl.footnote != blank -%}<p class="fc-hl-foot">{{ hl.footnote }}</p>{%- endif -%}
+  </div>
+</div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Fitcore Destacados",
+  "tag": "section",
+  "class": "fitcore-product-highlights",
+  "settings": [
+    { "type": "paragraph", "content": "Renderiza una grilla de destacados por categoría (usos, deportes, beneficios). Requiere el metafield JSON fitcore.highlights en el producto. Si no existe, no muestra nada." }
+  ],
+  "presets": [
+    { "name": "Fitcore Destacados" }
+  ]
+}
+{% endschema %}

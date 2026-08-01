@@ -1,5 +1,5 @@
 {%- comment -%}
-  FitCore Store · Mini-dashboard "Conveniencia por objetivo" (B2C)
+  Fitcore Store · Mini-dashboard "Conveniencia por objetivo" (B2C)
 {%- endcomment -%}
 
 {%- liquid
@@ -71,9 +71,9 @@
     var pd=cal>0?p/cal*100:0;
     if(cal<=5&&p<=1&&c<=2){ return {neutral:true,keto:5,definicion:5,volumen:3,mantenimiento:5}; }
     var keto=c<=3?5:c<=7?4:c<=12?3:c<=20?2:1;
-    var def=pd>=18?5:pd>=13?4:pd>=9?3:pd>=5?2:1; if(s>=10&&def>2)def--;
+    var def=pd>=18?5:pd>=11?4:pd>=7?3:pd>=4?2:1; if(s>=10&&def>2)def--;
     var vol=cal>=600?5:cal>=350?4:cal>=200?3:cal>=120?2:1;
-    var man=(pd>=12&&s<=5)?5:(pd>=9&&s<=8)?4:(pd>=6)?3:2;
+    var man=(pd>=11&&s<=6)?5:(pd>=8&&s<=9)?4:(pd>=5)?3:2;
     return {keto:keto,definicion:def,volumen:vol,mantenimiento:man};
   }
   function whyText(key,sc,m,lang,neutral){
@@ -114,14 +114,14 @@
 
 {% schema %}
 {
-  "name": "FitCore Conveniencia",
+  "name": "Fitcore Conveniencia",
   "tag": "section",
   "class": "fitcore-product-fit",
   "settings": [
     { "type": "paragraph", "content": "Muestra el mini-dashboard de conveniencia por objetivo. Requiere que el producto tenga cargados los metafields de macros (namespace fitcore): calorias, proteina, carbohidratos, azucar, grasa." }
   ],
   "presets": [
-    { "name": "FitCore Conveniencia" }
+    { "name": "Fitcore Conveniencia" }
   ]
 }
 {% endschema %}

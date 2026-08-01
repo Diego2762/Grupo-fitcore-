@@ -22,7 +22,7 @@
         "description": { "type": "description", "settings": {} },
         "share": { "type": "share", "settings": { "share_label": "Compartir" } }
       },
-      "block_order": ["vendor","title","price","fc_divisa","variant_picker","quantity_selector","buy_buttons","description","share"],
+      "block_order": ["vendor","title","fc_divisa","variant_picker","quantity_selector","buy_buttons","description","share"],
       "settings": {
         "enable_sticky_info": true,
         "gallery_layout": "thumbnail",
@@ -37,6 +37,7 @@
       }
     },
     "fitcore_fit": { "type": "fitcore-product-fit", "settings": {} },
+    "fitcore_highlights": { "type": "fitcore-product-highlights", "settings": {} },
     "related": {
       "type": "related-products",
       "settings": {
@@ -49,5 +50,5 @@
       }
     }
   },
-  "order": ["main","fitcore_fit","related"]
+  "order": ["main","fitcore_fit","fitcore_highlights","related"]
 }

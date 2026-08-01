@@ -1,6 +1,8 @@
 {% comment %}
-  FitCore dual price: base price + divisa price (-25%).
-  Divisas = Zelle / USDT / efectivo. Value = variant.price * 0.75 (data-driven, no invented data).
+  Fitcore dual price (Plan B):
+  - El precio de Shopify (variant.price) ES el precio en bolívares BCV. Es el monto que se factura.
+  - En divisas (Zelle / USDT / efectivo) el cliente aplica el cupón MEJORPRECIO y baja 13%:
+    divisa = BCV * 0.87. Ese es el mejor precio.
 
   Accepts:
   - product: {Object} Product Liquid object (required)
@@ -14,41 +16,54 @@
 {%- liquid
   assign fc_ctx = context | default: 'product'
   if fc_ctx == 'card'
-    assign fc_base = product.price
+    assign fc_bcv = product.price
   else
-    assign fc_base = product.selected_or_first_available_variant.price | default: product.price
+    assign fc_bcv = product.selected_or_first_available_variant.price | default: product.price
   endif
-  assign fc_divisa = fc_base | times: 75 | divided_by: 100
+  assign fc_base = fc_bcv | times: 100 | divided_by: 115
   if settings.currency_code_enabled
-    assign fc_divisa_money = fc_divisa | money_with_currency
+    assign fc_base_money = fc_base | money_with_currency
+    assign fc_bs_money = fc_bcv | money_with_currency
   else
-    assign fc_divisa_money = fc_divisa | money
+    assign fc_base_money = fc_base | money
+    assign fc_bs_money = fc_bcv | money
   endif
 -%}
 {%- if fc_ctx == 'card' -%}
-  <div class="fc-divisa fc-divisa--card">
-    <span class="fc-divisa__label">Pago en divisas:</span>
-    <span class="fc-divisa__amount">{{ fc_divisa_money }}</span>
+  <div class="fc-dual fc-divisa--card">
+    <div class="fc-divisa">
+      <span class="fc-divisa__label">Divisa:</span>
+      <span class="fc-divisa__amount">{{ fc_base_money }}</span>
+    </div>
+    <div class="fc-bs">
+      <span class="fc-bs__label">En bolívares BCV:</span>
+      <span class="fc-bs__amount">{{ fc_bs_money }}</span>    </div>
   </div>
 {%- else -%}
-  <div class="fc-divisa" id="fc-divisa-{{ uid }}">
-    <span class="fc-divisa__label">Pago en divisas:</span>
-    <span class="fc-divisa__amount" data-fc-divisa-amount>{{ fc_divisa_money }}</span>
+  <div class="fc-dual" id="fc-divisa-{{ uid }}">
+    <div class="fc-divisa">
+      <span class="fc-divisa__label">En divisas:</span>
+      <span class="fc-divisa__amount" data-fc-base-amount>{{ fc_base_money }}</span>
+      <span class="fc-divisa__off">Mejor precio</span>
+    </div>
+    <div class="fc-bs">
+      <span class="fc-bs__label">En bolívares BCV:</span>
+      <span class="fc-bs__amount" data-fc-bs-amount>{{ fc_bs_money }}</span>    </div>
   </div>
-  <span class="fc-divisa__hint">Zelle · USDT · efectivo en dólares</span>
   <script>
     (function () {
       var wrap = document.getElementById('fc-divisa-{{ uid }}');
       if (!wrap) return;
-      var map = { {%- for v in product.variants -%}"{{ v.id }}":"{% if settings.currency_code_enabled %}{{ v.price | times: 75 | divided_by: 100 | money_with_currency }}{% else %}{{ v.price | times: 75 | divided_by: 100 | money }}{% endif %}"{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%} };
-      var out = wrap.querySelector('[data-fc-divisa-amount]');
       var pi = wrap.closest('product-info');
+      var map = { {%- for v in product.variants -%}"{{ v.id }}":{"b":"{% if settings.currency_code_enabled %}{{ v.price | times: 100 | divided_by: 115 | money_with_currency }}{% else %}{{ v.price | times: 100 | divided_by: 115 | money }}{% endif %}","bs":"{% if settings.currency_code_enabled %}{{ v.price | money_with_currency }}{% else %}{{ v.price | money }}{% endif %}"}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%} };
+      var baseOut = wrap.querySelector('[data-fc-base-amount]');
+      var bsOut = wrap.querySelector('[data-fc-bs-amount]');
       function cur() { var i = (pi || document).querySelector('[name="id"]'); return i ? i.value : null; }
       function upd() {
         var id = cur();
-        if (!id || !map[id] || !out) return;
-        if (out.textContent === map[id]) return; // avoid re-triggering the observer (prevents infinite loop)
-        out.textContent = map[id];
+        if (!id || !map[id]) return;
+        if (baseOut && baseOut.textContent !== map[id].b) baseOut.textContent = map[id].b;
+        if (bsOut && bsOut.textContent !== map[id].bs) bsOut.textContent = map[id].bs;
       }
       if (pi) {
         pi.addEventListener('change', function () { setTimeout(upd, 60); });

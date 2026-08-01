@@ -1,0 +1,67 @@
+{% comment %}
+  Fitcore Store · Fila "Compra por objetivo" (home).
+  Renderiza un encabezado + grid de hasta 4 tarjetas de producto reales.
+  Reutiliza las clases .fc-best / .fc-best-grid / .fc-pc del home (no requiere CSS nuevo).
+
+  Parámetros:
+  - title:   {String} Título de la fila (requerido).
+  - sub:     {String} Subtítulo corto. Opcional.
+  - eyebrow: {String} Etiqueta pequeña arriba del título. Opcional.
+  - badge:   {String} Texto del badge sobre la imagen. Opcional.
+  - handles: {String} Lista de handles reales separados por coma (requerido).
+{% endcomment %}
+{%- assign gr_handles = handles | split: ',' -%}
+<section class="fc-best fc-goal{% if alt %} fc-goal--alt{% endif %}">
+  <div class="fc-wrap">
+    <div class="fc-best-head fc-reveal">
+      {%- if eyebrow != blank -%}<span class="fc-eyebrow">{{ eyebrow }}</span>{%- endif -%}
+      <h2>{{ title }}</h2>
+      {%- if sub != blank -%}<p>{{ sub }}</p>{%- endif -%}
+    </div>
+    <div class="fc-best-grid">
+      {%- for gr_h in gr_handles -%}
+        {%- assign gr_handle = gr_h | strip -%}
+        {%- assign fc_prod = all_products[gr_handle] -%}
+        {%- if fc_prod != blank and fc_prod.id -%}
+          {%- assign fc_delay = forloop.index0 | times: 60 -%}
+          {%- assign fc_var = fc_prod.selected_or_first_available_variant -%}
+          <div class="fc-pc fc-reveal" style="--fc-d:{{ fc_delay }}ms">
+            <a class="fc-pc-media" href="{{ fc_prod.url }}">
+              {%- if badge != blank -%}
+                <span class="fc-pc-rank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/></svg>{{ badge }}</span>
+              {%- endif -%}
+              {%- if fc_prod.featured_image -%}
+                <img src="{{ fc_prod.featured_image | image_url: width: 600 }}" alt="{{ fc_prod.title | escape }}" loading="lazy" width="600" height="600">
+              {%- endif -%}
+            </a>
+            <div class="fc-pc-body">
+              {%- if fc_prod.vendor != blank -%}<span class="fc-pc-vendor">{{ fc_prod.vendor }}</span>{%- endif -%}
+              <a class="fc-pc-title" href="{{ fc_prod.url }}">{{ fc_prod.title }}</a>
+              <div class="fc-pc-foot">
+                {%- assign fc_divisa = fc_prod.price | times: 100 | divided_by: 115 -%}
+                <div class="fc-pc-prices">
+                  <span class="fc-pc-price fc-pc-price--divisa">{{ fc_divisa | money }}<span class="fc-pc-cur">Divisa</span></span>
+                  <span class="fc-pc-price">{{ fc_prod.price | money }}<span class="fc-pc-cur">BCV</span></span>
+                </div>
+                {%- if fc_var and fc_var.available -%}
+                  <form method="post" action="{{ routes.cart_add_url }}" class="fc-pc-form" data-fc-add>
+                    <input type="hidden" name="form_type" value="product">
+                    <input type="hidden" name="utf8" value="✓">
+                    <input type="hidden" name="id" value="{{ fc_var.id }}">
+                    <button type="submit" class="fc-pc-cart" aria-label="Agregar {{ fc_prod.title | escape }} al carrito">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                    </button>
+                  </form>
+                {%- else -%}
+                  <a class="fc-pc-cart fc-pc-cart--out" href="{{ fc_prod.url }}" aria-label="Ver {{ fc_prod.title | escape }}">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 5l7 7-7 7"/></svg>
+                  </a>
+                {%- endif -%}
+              </div>
+            </div>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</section>

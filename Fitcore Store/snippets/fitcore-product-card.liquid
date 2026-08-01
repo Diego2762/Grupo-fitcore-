@@ -1,0 +1,49 @@
+{% comment %}
+  Fitcore Store · Tarjeta de producto compacta y reutilizable.
+  Misma estructura y estilo que las tarjetas del home (.fc-pc).
+  Requiere el CSS global: assets/fitcore-cards.css
+
+  Parámetros:
+  - product: {Object} Producto de Shopify (requerido).
+  - lazy:    {Boolean} Si true, carga la imagen con loading="lazy". Opcional.
+  - badge:   {String} Texto del badge sobre la imagen. Opcional.
+{% endcomment %}
+{%- if product != blank and product.id -%}
+  {%- assign fc_var = product.selected_or_first_available_variant -%}
+  {%- if lazy -%}{%- assign fc_loading = 'lazy' -%}{%- else -%}{%- assign fc_loading = 'eager' -%}{%- endif -%}
+  <div class="fc-pc" data-handle="{{ product.handle }}">
+    <a class="fc-pc-media" href="{{ product.url }}">
+      {%- if badge != blank -%}
+        <span class="fc-pc-rank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/></svg>{{ badge }}</span>
+      {%- endif -%}
+      {%- if product.featured_image -%}
+        <img src="{{ product.featured_image | image_url: width: 600 }}" alt="{{ product.title | escape }}" loading="{{ fc_loading }}" width="600" height="600">
+      {%- endif -%}
+    </a>
+    <div class="fc-pc-body">
+      {%- if product.vendor != blank -%}<span class="fc-pc-vendor">{{ product.vendor }}</span>{%- endif -%}
+      <a class="fc-pc-title" href="{{ product.url }}">{{ product.title }}</a>
+      <div class="fc-pc-foot">
+        {%- assign fc_divisa = product.price | times: 100 | divided_by: 115 -%}
+        <div class="fc-pc-prices">
+          <span class="fc-pc-price fc-pc-price--divisa">{{ fc_divisa | money }}<span class="fc-pc-cur">Divisa</span></span>
+          <span class="fc-pc-price">{{ product.price | money }}<span class="fc-pc-cur">BCV</span></span>
+        </div>
+        {%- if fc_var and fc_var.available -%}
+          <form method="post" action="{{ routes.cart_add_url }}" class="fc-pc-form" data-fc-add>
+            <input type="hidden" name="form_type" value="product">
+            <input type="hidden" name="utf8" value="✓">
+            <input type="hidden" name="id" value="{{ fc_var.id }}">
+            <button type="submit" class="fc-pc-cart" aria-label="Agregar {{ product.title | escape }} al carrito">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+            </button>
+          </form>
+        {%- else -%}
+          <a class="fc-pc-cart fc-pc-cart--out" href="{{ product.url }}" aria-label="Ver {{ product.title | escape }}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 5l7 7-7 7"/></svg>
+          </a>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+{%- endif -%}

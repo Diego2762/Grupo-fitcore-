@@ -1,7 +1,9 @@
 # FitCore Store · Handoff / Estado de trabajo
 
 > Documento de traspaso para retomar el trabajo de **FitCore Store** (tienda B2C en Shopify) en otra sesión / cowork.
-> Última actualización: 5 jul 2026. Autor: sesión de trabajo con Claude.
+> Última actualización: 29 jul 2026. Autor: sesión de trabajo con Claude.
+>
+> **NOTA DE VIGENCIA (jul 2026):** el modelo de precios (§4) y el de envíos (§6) fueron reestructurados. La versión vigente está en la **§11 (Actualización 29 jul 2026)** al final de este documento. Donde §4 y §6 contradigan a la §11, manda la §11.
 
 ---
 

@@ -1,26 +1,37 @@
 {%- comment -%}
-  FitCore Store · Carrito B2C
-  - Barra de envío gratis (compras sobre el umbral).
-  - Selector de método de pago: divisas (Zelle/USDT/efectivo) = -25% aplicado al carrito vía código.
-    Bs (Pago Móvil/Transferencia) y Tarjeta internacional (Shop Pay) = sin descuento.
-  - Campo de agencia de envío (MRW/Tealca), guardado como atributo del carrito.
+  Fitcore Store · Carrito B2C (Plan B)
+  - Barra de progreso a envío gratis (compras sobre el umbral, aplica a entrega local).
+  - El precio del carrito (variant.price) ES el precio en bolívares BCV: es lo que se factura.
+  - En divisa el cliente aplica el cupón MEJORPRECIO en el checkout: divisa = BCV / 1.15 (= precio PV, gancho .99).
+  - Selector "¿Cómo quieres recibir tu pedido?" (nacional / local / retiro).
+    Los campos cambian según la opción. Se guardan como atributos del carrito.
 {%- endcomment -%}
 
 {%- liquid
-  assign code = section.settings.discount_code | default: 'DIVISAS25'
-  assign pct = section.settings.discount_pct | default: 25
+  assign discount = section.settings.divisa_discount_pct | default: 13
   assign threshold = section.settings.free_ship_threshold | default: 30
   assign threshold_cents = threshold | times: 100
   assign base = cart.original_total_price
   assign remaining = threshold_cents | minus: base
-  assign keep = 100 | minus: pct
-  assign divisa_total = base | times: keep | divided_by: 100
+  assign divisa_total = base | times: 100 | divided_by: 115
   assign progress = base | times: 100 | divided_by: threshold_cents
   if progress > 100
     assign progress = 100
   endif
   assign current_method = cart.attributes['Método de pago']
+  assign current_delivery = cart.attributes['Método de entrega']
   assign current_agency = cart.attributes['Agencia de envío']
+  assign current_cedula = cart.attributes['Cédula']
+  assign current_phone = cart.attributes['Teléfono / WhatsApp']
+  assign current_company = cart.attributes['Empresa de envío']
+  assign is_bs = false
+  if current_method == 'Bolívares BCV (Pago Móvil / Transferencia)'
+    assign is_bs = true
+  endif
+  assign is_nac = false
+  if current_delivery == 'Envío nacional (fuera de Trujillo)'
+    assign is_nac = true
+  endif
 -%}
 
 <style>
@@ -29,12 +40,27 @@
     max-width:1300px; margin:0 auto; padding: 4px 22px 8px;
     font-family: var(--font-body-family, sans-serif);
   }
-  #fc-pay-{{ section.id }} .fc-pay-ship { background:#fff; border:1px solid var(--fc-line); border-radius:16px; padding:16px 20px; margin-bottom:16px; }
+  #fc-pay-{{ section.id }} .fc-pay-ship { position:relative; overflow:hidden; background:#fff; border:1.5px solid var(--fc-line); border-radius:16px; padding:16px 20px; margin-bottom:16px; transition:border-color .3s, background .3s; }
   #fc-pay-{{ section.id }} .fc-pay-ship b { color:var(--fc-navy); font-weight:700; }
-  #fc-pay-{{ section.id }} .fc-pay-ship .fc-pay-ship-msg { font-size:14px; color:var(--fc-navy); margin:0 0 10px; }
-  #fc-pay-{{ section.id }} .fc-pay-ship .fc-pay-ship-msg.free { color:#0a7d3f; }
-  #fc-pay-{{ section.id }} .fc-pay-track { height:8px; border-radius:99px; background:#eef0f6; overflow:hidden; }
-  #fc-pay-{{ section.id }} .fc-pay-fill { height:100%; border-radius:99px; background:var(--fc-accent); transition:width .4s ease; }
+  #fc-pay-{{ section.id }} .fc-pay-ship .fc-pay-ship-msg { font-size:14px; color:var(--fc-navy); margin:0 0 10px; display:flex; align-items:center; gap:9px; flex-wrap:wrap; }
+  #fc-pay-{{ section.id }} .fc-ship-amt { color:#b26a00; }
+  #fc-pay-{{ section.id }} .fc-pay-track { height:9px; border-radius:99px; background:#eef0f6; overflow:hidden; }
+  #fc-pay-{{ section.id }} .fc-pay-fill { display:block; height:100%; min-width:6px; border-radius:99px; background:linear-gradient(90deg,#f5a623,#ffbe4d); transition:width .5s ease, background .3s; position:relative; }
+
+  /* Estado: envío gratis conseguido */
+  #fc-pay-{{ section.id }} .fc-pay-ship.is-free { border-color:#8fe3b8; background:linear-gradient(180deg,#f0fbf5,#e7f9f0); animation:fcFreePop .6s cubic-bezier(.18,.89,.32,1.28) both; }
+  #fc-pay-{{ section.id }} .fc-pay-ship.is-free .fc-pay-ship-msg { color:#0a7d3f; }
+  #fc-pay-{{ section.id }} .fc-pay-ship.is-free .fc-pay-fill { background:linear-gradient(90deg,#12a866,#19C37D); }
+  #fc-pay-{{ section.id }} .fc-pay-ship.is-free .fc-pay-fill::after { content:""; position:absolute; inset:0; background:linear-gradient(120deg,transparent 25%,rgba(255,255,255,.6) 50%,transparent 75%); transform:translateX(-100%); animation:fcShine 1.8s ease-in-out .35s infinite; }
+  #fc-pay-{{ section.id }} .fc-free-badge { display:inline-flex; align-items:center; gap:6px; background:var(--fc-accent); color:#062b1a; font-weight:800; font-size:12.5px; letter-spacing:.2px; padding:5px 11px; border-radius:99px; white-space:nowrap; box-shadow:0 2px 8px rgba(25,195,125,.35); animation:fcBadgePop .6s .12s cubic-bezier(.18,.89,.32,1.5) both; }
+  #fc-pay-{{ section.id }} .fc-free-badge svg { width:15px; height:15px; }
+  #fc-pay-{{ section.id }} .fc-free-badge::before { content:""; position:absolute; }
+  #fc-pay-{{ section.id }} .fc-pay-ship.is-free::before { content:""; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,#12a866,#19C37D,#7ef0b8); animation:fcSweep 1.8s ease-in-out infinite; }
+  @keyframes fcFreePop { 0%{ transform:scale(.985); } 55%{ transform:scale(1.012); } 100%{ transform:scale(1); } }
+  @keyframes fcBadgePop { 0%{ transform:scale(0); opacity:0; } 70%{ transform:scale(1.15); opacity:1; } 100%{ transform:scale(1); } }
+  @keyframes fcShine { to{ transform:translateX(100%); } }
+  @keyframes fcSweep { 0%{ opacity:.4; } 50%{ opacity:1; } 100%{ opacity:.4; } }
+  @media (prefers-reduced-motion:reduce){ #fc-pay-{{ section.id }} .fc-pay-ship.is-free, #fc-pay-{{ section.id }} .fc-free-badge, #fc-pay-{{ section.id }} .fc-pay-ship.is-free .fc-pay-fill::after, #fc-pay-{{ section.id }} .fc-pay-ship.is-free::before { animation:none; } }
   #fc-pay-{{ section.id }} .fc-pay-box { background:#fff; border:1px solid var(--fc-line); border-radius:16px; padding:20px; }
   #fc-pay-{{ section.id }} .fc-pay-title { color:var(--fc-navy); font:700 16px/1.3 var(--font-body-family,sans-serif); margin:0 0 4px; }
   #fc-pay-{{ section.id }} .fc-pay-sub { color:var(--fc-muted); font-size:13px; margin:0 0 14px; }
@@ -46,75 +72,171 @@
   #fc-pay-{{ section.id }} .fc-pay-opt .fc-pay-lbl { color:var(--fc-navy); font-weight:700; font-size:14.5px; line-height:1.2; }
   #fc-pay-{{ section.id }} .fc-pay-opt .fc-pay-hint { color:var(--fc-muted); font-size:12.5px; margin-top:2px; }
   #fc-pay-{{ section.id }} .fc-pay-badge { margin-left:auto; background:var(--fc-accent); color:#071631; font-weight:700; font-size:12px; padding:5px 9px; border-radius:8px; white-space:nowrap; }
-  #fc-pay-{{ section.id }} .fc-pay-total { margin-top:14px; padding-top:14px; border-top:1px dashed var(--fc-line); display:flex; align-items:baseline; justify-content:space-between; }
-  #fc-pay-{{ section.id }} .fc-pay-total span { color:var(--fc-muted); font-size:13.5px; }
-  #fc-pay-{{ section.id }} .fc-pay-total b { color:var(--fc-navy); font-size:20px; font-weight:700; }
-  #fc-pay-{{ section.id }} .fc-pay-total .fc-pay-off { color:#0a7d3f; font-weight:700; font-size:13px; }
-  #fc-pay-{{ section.id }} .fc-pay-agency { margin-top:16px; }
-  #fc-pay-{{ section.id }} .fc-pay-agency label { display:block; color:var(--fc-navy); font-weight:700; font-size:13.5px; margin-bottom:6px; }
-  #fc-pay-{{ section.id }} .fc-pay-agency input { width:100%; border:1.5px solid var(--fc-line); border-radius:10px; padding:11px 13px; font-size:14px; color:var(--fc-navy); }
-  #fc-pay-{{ section.id }} .fc-pay-agency input:focus { outline:none; border-color:var(--fc-purple); }
+  #fc-pay-{{ section.id }} .fc-pay-badge--up { background:#fff3e0; color:#9a5b00; border:1px solid #ffd8a1; }
+  #fc-pay-{{ section.id }} .fc-pay-badge--info { background:#eef1fb; color:#3b3f6b; border:1px solid #d8ddf5; }
+  #fc-pay-{{ section.id }} .fc-pay-totals { margin-top:14px; padding-top:14px; border-top:1px dashed var(--fc-line); display:grid; gap:9px; }
+  #fc-pay-{{ section.id }} .fc-pay-trow { display:flex; align-items:baseline; justify-content:space-between; gap:12px; padding:11px 14px; border:1.5px solid var(--fc-line); border-radius:12px; transition:border-color .15s, background .15s; }
+  #fc-pay-{{ section.id }} .fc-pay-trow.is-sel { border-color:var(--fc-accent); background:#f2fbf6; }
+  #fc-pay-{{ section.id }} .fc-pay-trow-lbl { color:var(--fc-muted); font-size:13.5px; line-height:1.25; }
+  #fc-pay-{{ section.id }} .fc-pay-trow-lbl small { display:block; font-size:11.5px; opacity:.85; }
+  #fc-pay-{{ section.id }} .fc-pay-trow b { color:var(--fc-navy); font-size:19px; font-weight:700; white-space:nowrap; }
+  #fc-pay-{{ section.id }} .fc-pay-trow.is-sel .fc-pay-trow-lbl { color:var(--fc-navy); }
+  #fc-pay-{{ section.id }} .fc-pay-trow.is-sel b { color:#0a7d3f; }
+  #fc-pay-{{ section.id }} .fc-pay-trow-pill { margin-left:auto; margin-right:10px; background:var(--fc-accent); color:#062b1a; font-weight:800; font-size:11px; padding:3px 8px; border-radius:99px; white-space:nowrap; }
   #fc-pay-{{ section.id }} .fc-pay-note { color:var(--fc-muted); font-size:12px; margin:10px 0 0; }
-  #fc-pay-{{ section.id }} .fc-pay-busy { opacity:.55; pointer-events:none; }
+  #fc-pay-{{ section.id }} .fc-pay-note[hidden] { display:none; }
+  #fc-pay-{{ section.id }} .fc-pay-note b { color:var(--fc-navy); }
+  #fc-pay-{{ section.id }} .fc-coupon { display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap; margin-top:14px; padding:14px 16px; border:2px dashed var(--fc-accent); border-radius:14px; background:linear-gradient(180deg,#f1fbf6,#e6f9ef); }
+  #fc-pay-{{ section.id }} .fc-coupon-txt { display:flex; flex-direction:column; gap:3px; min-width:0; }
+  #fc-pay-{{ section.id }} .fc-coupon-cap { color:#0a7d3f; font-size:12.5px; font-weight:700; text-transform:uppercase; letter-spacing:.4px; }
+  #fc-pay-{{ section.id }} .fc-coupon-code { color:var(--fc-navy); font-weight:800; font-size:22px; letter-spacing:2px; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; line-height:1.1; }
+  #fc-pay-{{ section.id }} .fc-coupon-copy { display:inline-flex; align-items:center; gap:8px; background:var(--fc-accent); color:#062b1a; font-weight:800; font-size:14.5px; border:none; border-radius:11px; padding:12px 18px; cursor:pointer; transition:transform .1s, background .15s; white-space:nowrap; box-shadow:0 2px 8px rgba(25,195,125,.35); }
+  #fc-pay-{{ section.id }} .fc-coupon-copy:hover { background:#12a866; }
+  #fc-pay-{{ section.id }} .fc-coupon-copy:active { transform:scale(.96); }
+  #fc-pay-{{ section.id }} .fc-coupon-copy svg { width:17px; height:17px; }
+  #fc-pay-{{ section.id }} .fc-coupon-copy.is-done { background:var(--fc-navy); color:#fff; box-shadow:none; }
+  #fc-pay-{{ section.id }} .fc-coupon.is-hidden { display:none; }
+  #fc-pay-{{ section.id }} .fc-ship-box { background:#fff; border:1px solid var(--fc-line); border-radius:16px; padding:20px; margin-top:16px; }
+  #fc-pay-{{ section.id }} .fc-ship-grid { display:grid; grid-template-columns:1fr 1fr; gap:13px; margin-top:16px; }
+  #fc-pay-{{ section.id }} .fc-ship-field { display:flex; flex-direction:column; }
+  #fc-pay-{{ section.id }} .fc-ship-field.fc-span2 { grid-column:1 / -1; }
+  #fc-pay-{{ section.id }} .fc-ship-field label { color:var(--fc-navy); font-weight:700; font-size:13px; margin-bottom:6px; }
+  #fc-pay-{{ section.id }} .fc-ship-field input,
+  #fc-pay-{{ section.id }} .fc-ship-field select { width:100%; border:1.5px solid var(--fc-line); border-radius:10px; padding:11px 13px; font-size:14px; color:var(--fc-navy); background:#fff; }
+  #fc-pay-{{ section.id }} .fc-ship-field input:focus,
+  #fc-pay-{{ section.id }} .fc-ship-field select:focus { outline:none; border-color:var(--fc-purple); }
+  #fc-pay-{{ section.id }} .fc-nat-wrap { display:contents; }
+  #fc-pay-{{ section.id }} .fc-nat-wrap.is-off { display:none; }
+  #fc-pay-{{ section.id }} .fc-ship-saved { color:#0a7d3f; font-size:12px; font-weight:700; margin:12px 0 0; opacity:0; transition:opacity .2s; }
+  #fc-pay-{{ section.id }} .fc-ship-saved.is-on { opacity:1; }
   @media (max-width:780px){ #fc-pay-{{ section.id }} { padding:4px 16px 8px; } }
 </style>
 
 <div id="fc-pay-{{ section.id }}"
-  data-code="{{ code }}"
-  data-threshold="{{ threshold_cents }}"
-  data-keep="{{ keep }}">
+  data-base-money="{{ base | money }}"
+  data-divisa-money="{{ divisa_total | money }}"
+  data-discount="{{ discount }}"
+  data-threshold-cents="{{ threshold_cents }}">
 
-  <div class="fc-pay-ship">
+  <div class="fc-pay-ship{% if remaining <= 0 %} is-free{% endif %}">
     {%- if remaining > 0 -%}
-      <p class="fc-pay-ship-msg">Te faltan <b>{{ remaining | money }}</b> para <b>envío gratis en Valera y sus alrededores</b> (compras desde {{ threshold_cents | money }}).</p>
+      <p class="fc-pay-ship-msg"><span>Te faltan <b class="fc-ship-amt">{{ remaining | money }}</b> para <b>entrega local gratis en Valera y Trujillo</b> (compras desde {{ threshold_cents | money }}).</span></p>
     {%- else -%}
-      <p class="fc-pay-ship-msg free"><b>¡Tienes envío gratis en Valera y sus alrededores!</b> También puedes retirar en la tienda del CC Plaza.</p>
+      <p class="fc-pay-ship-msg free"><span class="fc-free-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>¡Envío gratis!</span> <span><b>Tienes entrega local gratis en Valera y Trujillo.</b> También puedes retirar gratis en la tienda del CC Plaza.</span></p>
     {%- endif -%}
     <div class="fc-pay-track"><div class="fc-pay-fill" style="width:{{ progress }}%"></div></div>
   </div>
 
   <div class="fc-pay-box">
-    <p class="fc-pay-title">¿Cómo vas a pagar?</p>
-    <p class="fc-pay-sub">Elige tu método y el total se ajusta al instante. Coordinamos el pago al confirmar tu pedido.</p>
+    <p class="fc-pay-title">¿Con qué vas a pagar?</p>
+    <p class="fc-pay-sub">Elige tu forma de pago para ver el total. Aquí abajo puedes comparar ambos precios de una vez.</p>
 
     <div class="fc-pay-opts">
-      <label class="fc-pay-opt{% if current_method == 'Divisas (Zelle / USDT / efectivo)' %} is-on{% endif %}" data-method="divisa">
-        <input type="radio" name="fc-pay-{{ section.id }}" value="divisa"{% if current_method == 'Divisas (Zelle / USDT / efectivo)' %} checked{% endif %}>
+      <label class="fc-pay-opt{% unless is_bs %} is-on{% endunless %}" data-method="divisa">
+        <input type="radio" name="fc-pay-{{ section.id }}" value="divisa"{% unless is_bs %} checked{% endunless %}>
         <span>
-          <span class="fc-pay-lbl">Divisas: Zelle, USDT o efectivo</span>
-          <span class="fc-pay-hint">El mejor precio. Pago en dólares.</span>
+          <span class="fc-pay-lbl">Divisa: Zelle, efectivo o tarjeta</span>
+          <span class="fc-pay-hint">El mejor precio. Aplica el cupón <b>MEJORPRECIO</b> en el checkout.</span>
         </span>
-        <span class="fc-pay-badge">−{{ pct }}%</span>
+        <span class="fc-pay-badge">Mejor precio</span>
       </label>
 
-      <label class="fc-pay-opt{% if current_method == 'Bolívares (Pago Móvil / Transferencia)' %} is-on{% endif %}" data-method="bs">
-        <input type="radio" name="fc-pay-{{ section.id }}" value="bs"{% if current_method == 'Bolívares (Pago Móvil / Transferencia)' %} checked{% endif %}>
+      <label class="fc-pay-opt{% if is_bs %} is-on{% endif %}" data-method="bs">
+        <input type="radio" name="fc-pay-{{ section.id }}" value="bs"{% if is_bs %} checked{% endif %}>
         <span>
-          <span class="fc-pay-lbl">Bolívares: Pago Móvil o Transferencia</span>
-          <span class="fc-pay-hint">A la tasa del día al confirmar.</span>
-        </span>
-      </label>
-
-      <label class="fc-pay-opt{% if current_method == 'Tarjeta internacional (Shop Pay)' %} is-on{% endif %}" data-method="card">
-        <input type="radio" name="fc-pay-{{ section.id }}" value="card"{% if current_method == 'Tarjeta internacional (Shop Pay)' %} checked{% endif %}>
-        <span>
-          <span class="fc-pay-lbl">Tarjeta internacional</span>
-          <span class="fc-pay-hint">Pago seguro con Shop Pay.</span>
+          <span class="fc-pay-lbl">Bolívares BCV: Pago Móvil o Transferencia</span>
+          <span class="fc-pay-hint">A la tasa BCV del día al confirmar.</span>
         </span>
       </label>
     </div>
 
-    <div class="fc-pay-total">
-      <span>Total pagando en divisas</span>
-      <b>{{ divisa_total | money }} <span class="fc-pay-off">−{{ pct }}%</span></b>
+    <div class="fc-pay-totals">
+      <div class="fc-pay-trow{% unless is_bs %} is-sel{% endunless %}" data-trow="divisa">
+        <span class="fc-pay-trow-lbl">Total en divisa <small>con cupón MEJORPRECIO</small></span>
+        <span class="fc-pay-trow-pill">Mejor precio</span>
+        <b>{{ divisa_total | money }}</b>
+      </div>
+      <div class="fc-pay-trow{% if is_bs %} is-sel{% endif %}" data-trow="bs">
+        <span class="fc-pay-trow-lbl">Total en bolívares <small>BCV, tasa del día</small></span>
+        <b>{{ base | money }}</b>
+      </div>
     </div>
 
-    <div class="fc-pay-agency">
-      <label for="fc-agency-{{ section.id }}">Agencia de envío (MRW / Tealca, opcional)</label>
-      <input type="text" id="fc-agency-{{ section.id }}" placeholder="Ej. MRW Valera centro" value="{{ current_agency | escape }}">
+    <div class="fc-coupon{% if is_bs %} is-hidden{% endif %}" data-coupon>
+      <div class="fc-coupon-txt">
+        <span class="fc-coupon-cap">Tu cupón para pagar en divisa</span>
+        <span class="fc-coupon-code" data-coupon-code>MEJORPRECIO</span>
+      </div>
+      <button type="button" class="fc-coupon-copy" data-coupon-copy aria-label="Copiar cupón MEJORPRECIO">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        <span data-coupon-label>Copiar</span>
+      </button>
     </div>
 
-    <p class="fc-pay-note">El descuento por divisas se aplica automáticamente al total de tu carrito. Verás el precio final antes de pagar.</p>
+    <p class="fc-pay-note">El total en bolívares BCV es el que se factura, a la <b>tasa BCV del día</b>. Si pagas en divisa, aplica el cupón <b>MEJORPRECIO</b> en el checkout. Tu forma de pago queda anotada en el pedido para el personal de la tienda.</p>
+  </div>
+
+  <div class="fc-ship-box">
+    <p class="fc-pay-title">¿Cómo quieres recibir tu pedido?</p>
+    <p class="fc-pay-sub">Elige una opción y déjanos tus datos. La dirección y el pago los confirmas en el siguiente paso.</p>
+
+    <div class="fc-pay-opts fc-recv-opts">
+      <label class="fc-pay-opt{% if is_nac %} is-on{% endif %}" data-recv="nacional">
+        <input type="radio" name="fc-recv-{{ section.id }}" value="nacional"{% if is_nac %} checked{% endif %}>
+        <span>
+          <span class="fc-pay-lbl">Envío nacional (fuera de Trujillo)</span>
+          <span class="fc-pay-hint">Zoom, MRW o Tealca. Llega en 1 a 2 días. Flete por cobrar en destino.</span>
+        </span>
+        <span class="fc-pay-badge fc-pay-badge--info">1-2 días</span>
+      </label>
+
+      <label class="fc-pay-opt{% if current_delivery == 'Entrega local (Valera y Trujillo)' %} is-on{% endif %}" data-recv="local">
+        <input type="radio" name="fc-recv-{{ section.id }}" value="local"{% if current_delivery == 'Entrega local (Valera y Trujillo)' %} checked{% endif %}>
+        <span>
+          <span class="fc-pay-lbl">Entrega local (Valera y Trujillo)</span>
+          <span class="fc-pay-hint">Te lo llevamos a tu dirección. Gratis en compras desde {{ threshold_cents | money }}.</span>
+        </span>
+        <span class="fc-pay-badge fc-pay-badge--up">Desde $3</span>
+      </label>
+
+      <label class="fc-pay-opt{% if current_delivery == 'Retiro en tienda (CC Plaza, Valera)' %} is-on{% endif %}" data-recv="retiro">
+        <input type="radio" name="fc-recv-{{ section.id }}" value="retiro"{% if current_delivery == 'Retiro en tienda (CC Plaza, Valera)' %} checked{% endif %}>
+        <span>
+          <span class="fc-pay-lbl">Retiro en tienda (CC Plaza, Valera)</span>
+          <span class="fc-pay-hint">Recoge tu pedido cuando quieras. Sin costo.</span>
+        </span>
+        <span class="fc-pay-badge">Gratis</span>
+      </label>
+    </div>
+
+    <div class="fc-ship-grid">
+      <div class="fc-ship-field">
+        <label for="fc-cedula-{{ section.id }}">Cédula</label>
+        <input type="text" id="fc-cedula-{{ section.id }}" data-attr="Cédula" placeholder="Ej. V-12345678" value="{{ current_cedula | escape }}">
+      </div>
+      <div class="fc-ship-field">
+        <label for="fc-phone-{{ section.id }}">Teléfono / WhatsApp</label>
+        <input type="tel" id="fc-phone-{{ section.id }}" data-attr="Teléfono / WhatsApp" placeholder="Ej. 0412 1234567" value="{{ current_phone | escape }}">
+      </div>
+
+      <div class="fc-nat-wrap{% unless is_nac %} is-off{% endunless %}" data-nat-wrap>
+        <div class="fc-ship-field">
+          <label for="fc-company-{{ section.id }}">Empresa de envío</label>
+          <select id="fc-company-{{ section.id }}" data-attr="Empresa de envío">
+            <option value=""{% if current_company == blank %} selected{% endif %}>Selecciona una</option>
+            <option value="Tealca"{% if current_company == 'Tealca' %} selected{% endif %}>Tealca</option>
+            <option value="Zoom"{% if current_company == 'Zoom' %} selected{% endif %}>Zoom</option>
+            <option value="MRW"{% if current_company == 'MRW' %} selected{% endif %}>MRW</option>
+          </select>
+        </div>
+        <div class="fc-ship-field fc-span2">
+          <label for="fc-agency-{{ section.id }}">Ciudad y agencia de destino</label>
+          <input type="text" id="fc-agency-{{ section.id }}" data-attr="Agencia de envío" placeholder="Ej. Zoom Barquisimeto centro" value="{{ current_agency | escape }}">
+        </div>
+      </div>
+    </div>
+
+    <p class="fc-ship-saved" data-ship-saved>Datos guardados ✓</p>
   </div>
 </div>
 
@@ -122,13 +244,18 @@
   (function () {
     var root = document.getElementById('fc-pay-{{ section.id }}');
     if (!root) return;
-    var code = root.getAttribute('data-code');
-    var opts = root.querySelectorAll('.fc-pay-opt');
-    var agency = document.getElementById('fc-agency-{{ section.id }}');
+    var payOpts = root.querySelectorAll('.fc-pay-box .fc-pay-opt');
+    var recvOpts = root.querySelectorAll('.fc-recv-opts .fc-pay-opt');
+    var natWrap = root.querySelector('[data-nat-wrap]');
+    var trows = root.querySelectorAll('[data-trow]');
     var methodLabel = {
-      divisa: 'Divisas (Zelle / USDT / efectivo)',
-      bs: 'Bolívares (Pago Móvil / Transferencia)',
-      card: 'Tarjeta internacional (Shop Pay)'
+      divisa: 'Divisa (Zelle, efectivo o tarjeta)',
+      bs: 'Bolívares BCV (Pago Móvil / Transferencia)'
+    };
+    var recvLabel = {
+      nacional: 'Envío nacional (fuera de Trujillo)',
+      local: 'Entrega local (Valera y Trujillo)',
+      retiro: 'Retiro en tienda (CC Plaza, Valera)'
     };
 
     function post(body) {
@@ -139,40 +266,147 @@
       });
     }
 
-    opts.forEach(function (opt) {
+    var couponWrap = root.querySelector('[data-coupon]');
+    function paint(m) {
+      payOpts.forEach(function (o) { o.classList.toggle('is-on', o.getAttribute('data-method') === m); });
+      trows.forEach(function (t) { t.classList.toggle('is-sel', t.getAttribute('data-trow') === m); });
+      if (couponWrap) couponWrap.classList.toggle('is-hidden', m === 'bs');
+    }
+
+    payOpts.forEach(function (opt) {
       opt.addEventListener('click', function () {
         var m = opt.getAttribute('data-method');
         var input = opt.querySelector('input');
         if (input) input.checked = true;
-        opts.forEach(function (o) { o.classList.toggle('is-on', o === opt); });
-        root.classList.add('fc-pay-busy');
-        var body = { attributes: { 'Método de pago': methodLabel[m] } };
-        body.discount = (m === 'divisa') ? code : '';
-        post(body).then(function () { window.location.reload(); })
-          .catch(function () { root.classList.remove('fc-pay-busy'); });
+        paint(m);
+        post({ attributes: { 'Método de pago': methodLabel[m] } });
       });
     });
 
-    if (agency) {
-      agency.addEventListener('change', function () {
-        post({ attributes: { 'Agencia de envío': agency.value } });
+    var couponBtn = root.querySelector('[data-coupon-copy]');
+    if (couponBtn) {
+      var couponLabel = couponBtn.querySelector('[data-coupon-label]');
+      var couponReset;
+      couponBtn.addEventListener('click', function () {
+        var code = (root.querySelector('[data-coupon-code]') || {}).textContent || 'MEJORPRECIO';
+        code = code.trim();
+        function fallback(t) {
+          var ta = document.createElement('textarea');
+          ta.value = t; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+          document.body.appendChild(ta); ta.select();
+          try { document.execCommand('copy'); } catch (e) {}
+          document.body.removeChild(ta);
+        }
+        function done() {
+          couponBtn.classList.add('is-done');
+          if (couponLabel) couponLabel.textContent = '¡Copiado!';
+          clearTimeout(couponReset);
+          couponReset = setTimeout(function () {
+            couponBtn.classList.remove('is-done');
+            if (couponLabel) couponLabel.textContent = 'Copiar';
+          }, 1900);
+        }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(code).then(done).catch(function () { fallback(code); done(); });
+        } else { fallback(code); done(); }
       });
     }
+
+    var savedMsg = root.querySelector('[data-ship-saved]');
+    var savedTimer;
+    function flashSaved() {
+      if (!savedMsg) return;
+      savedMsg.classList.add('is-on');
+      clearTimeout(savedTimer);
+      savedTimer = setTimeout(function () { savedMsg.classList.remove('is-on'); }, 2200);
+    }
+
+    recvOpts.forEach(function (opt) {
+      opt.addEventListener('click', function () {
+        var r = opt.getAttribute('data-recv');
+        var input = opt.querySelector('input');
+        if (input) input.checked = true;
+        recvOpts.forEach(function (o) { o.classList.toggle('is-on', o === opt); });
+        if (natWrap) natWrap.classList.toggle('is-off', r !== 'nacional');
+        post({ attributes: { 'Método de entrega': recvLabel[r] } });
+        flashSaved();
+      });
+    });
+
+    var fields = root.querySelectorAll('[data-attr]');
+    fields.forEach(function (el) {
+      var evt = (el.tagName === 'SELECT') ? 'change' : 'blur';
+      el.addEventListener(evt, function () {
+        var body = { attributes: {} };
+        body.attributes[el.getAttribute('data-attr')] = el.value;
+        post(body).then(function () { flashSaved(); });
+      });
+    });
+
+    // Recalcular el banner de envío gratis y los totales en vivo cuando el
+    // cliente agrega, cambia cantidad o quita un producto en la página del
+    // carrito (sin recargar). El tema publica el evento 'cart-update'.
+    var ship = root.querySelector('.fc-pay-ship');
+    var thc = parseInt(root.getAttribute('data-threshold-cents'), 10) || 3000;
+    var discount = parseInt(root.getAttribute('data-discount'), 10) || 0;
+    var trowDivisa = root.querySelector('[data-trow="divisa"] b');
+    var trowBs = root.querySelector('[data-trow="bs"] b');
+
+    function money(cents) {
+      return '$' + (cents / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function repaint(base) {
+      if (typeof base !== 'number' || isNaN(base)) return;
+      // Totales: base = BCV (lo que se factura); divisa = base / 1.15 (= precio PV)
+      if (trowDivisa) trowDivisa.textContent = money(Math.round(base * 100 / 115));
+      if (trowBs) trowBs.textContent = money(base);
+      // Banner de envío gratis
+      if (!ship) return;
+      var remaining = thc - base;
+      var progress = Math.min(100, Math.round(base * 100 / thc));
+      var track = '<div class="fc-pay-track"><div class="fc-pay-fill" style="width:' + progress + '%"></div></div>';
+      if (remaining > 0) {
+        ship.classList.remove('is-free');
+        ship.innerHTML = '<p class="fc-pay-ship-msg"><span>Te faltan <b class="fc-ship-amt">' + money(remaining) + '</b> para <b>entrega local gratis en Valera y Trujillo</b> (compras desde ' + money(thc) + ').</span></p>' + track;
+      } else {
+        ship.classList.add('is-free');
+        ship.innerHTML = '<p class="fc-pay-ship-msg free"><span class="fc-free-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>¡Envío gratis!</span> <span><b>Tienes entrega local gratis en Valera y Trujillo.</b> También puedes retirar gratis en la tienda del CC Plaza.</span></p>' + track;
+      }
+    }
+
+    function baseFromCart(cart) {
+      if (!cart) return null;
+      if (typeof cart.original_total_price === 'number') return cart.original_total_price;
+      if (typeof cart.total_price === 'number') return cart.total_price;
+      return null;
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      if (typeof subscribe !== 'function' || typeof PUB_SUB_EVENTS === 'undefined') return;
+      subscribe(PUB_SUB_EVENTS.cartUpdate, function (event) {
+        var base = event && event.cartData ? baseFromCart(event.cartData) : null;
+        if (base != null) {
+          repaint(base);
+        } else {
+          fetch('/cart.js').then(function (r) { return r.json(); }).then(function (c) { repaint(baseFromCart(c)); }).catch(function () {});
+        }
+      });
+    });
   })();
 </script>
 
 {% schema %}
 {
-  "name": "FitCore Pago carrito",
+  "name": "Fitcore Pago carrito",
   "tag": "section",
   "class": "fitcore-cart-pay",
   "settings": [
-    { "type": "text", "id": "discount_code", "label": "Código de descuento por divisas", "default": "DIVISAS25", "info": "Debe existir en Descuentos y estar activo." },
-    { "type": "range", "id": "discount_pct", "min": 5, "max": 50, "step": 1, "unit": "%", "label": "Porcentaje de descuento en divisas", "default": 25 },
-    { "type": "number", "id": "free_ship_threshold", "label": "Monto para envío gratis (USD)", "default": 30 }
+    { "type": "range", "id": "divisa_discount_pct", "min": 0, "max": 50, "step": 1, "unit": "%", "label": "Descuento pagando en divisa (cupón MEJORPRECIO)", "default": 13, "info": "Debe coincidir con el porcentaje del cupón MEJORPRECIO en Shopify. El BCV es el precio base facturado." },
+    { "type": "number", "id": "free_ship_threshold", "label": "Monto para entrega local gratis (USD)", "default": 30 }
   ],
   "presets": [
-    { "name": "FitCore Pago carrito" }
+    { "name": "Fitcore Pago carrito" }
   ]
 }
 {% endschema %}

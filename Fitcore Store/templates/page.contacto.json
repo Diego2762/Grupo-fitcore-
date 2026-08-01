@@ -1,0 +1,9 @@
+{
+  "sections": {
+    "main": {
+      "type": "fitcore-contacto",
+      "settings": {}
+    }
+  },
+  "order": ["main"]
+}

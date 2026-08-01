@@ -96,7 +96,19 @@ body {
 .header__icon { width: 4.6rem !important; height: 4.6rem !important; }
 .header__icon .icon,
 .header__icon svg { width: 2.4rem !important; height: 2.4rem !important; }
-.header__icon--cart .icon { width: 2.6rem !important; height: 2.6rem !important; }
+.header__icon--cart .icon { width: 3rem !important; height: 3rem !important; }
+/* Salvaguarda: el carrito y los iconos SIEMPRE visibles, el header nunca desborda */
+.header { max-width: 100%; overflow: visible; }
+.header__icons { flex: 0 0 auto !important; }
+.header__icon--cart { display: inline-flex !important; }
+.header__inline-menu { min-width: 0; }
+/* Ancho intermedio (laptop pequeña): reduce menú y logo para que todo quepa */
+@media (min-width: 990px) and (max-width: 1200px) {
+  .header__menu-item { font-size: 15px !important; letter-spacing: 0 !important; }
+  .header__heading-logo { max-height: 56px !important; }
+  .header.page-width,
+  .section-header .header { padding-left: 20px !important; padding-right: 20px !important; }
+}
 /* Logo más grande y anclado a la izquierda */
 .header__heading-logo { filter: none; max-height: 72px !important; width: auto; }
 .header__heading,
@@ -116,7 +128,7 @@ body {
   .header__icon { width: 4rem !important; height: 4rem !important; }
   .header__icon .icon,
   .header__icon svg { width: 2.2rem !important; height: 2.2rem !important; }
-  .header__icon--cart .icon { width: 2.3rem !important; height: 2.3rem !important; }
+  .header__icon--cart .icon { width: 2.7rem !important; height: 2.7rem !important; }
 }
 @media (max-width: 749px) {
   .header.page-width,
@@ -348,6 +360,19 @@ main#MainContent { background: var(--fc-bg) !important; }
 }
 .cart__item, .cart-item { border-color: var(--fc-line) !important; }
 .cart-item__name, .cart__heading { color: var(--fc-navy) !important; }
+/* Imagen de producto en carrito: fondo claro (evita el azul del esquema) */
+.cart-item__media, .cart-item__media.gradient { background: transparent !important; background-image: none !important; }
+.cart-item__image-container,
+.cart-item__image-container.gradient {
+  background: #F6F7FA !important;
+  background-image: none !important;
+  border-radius: 14px !important;
+  overflow: hidden !important;
+}
+.cart-item__image {
+  background: #F6F7FA !important;
+  mix-blend-mode: multiply !important;
+}
 .totals { border-top: 1px solid var(--fc-line) !important; color: var(--fc-text) !important; }
 .totals__total { color: var(--fc-navy) !important; font-weight: 700 !important; }
 
@@ -358,7 +383,19 @@ main#MainContent { background: var(--fc-bg) !important; }
   border-radius: var(--fc-radius) !important;
 }
 .facets__summary, .facet-filters__label, .filter-and-sort-form label,
-.facets__heading, .facets__display { color: var(--fc-navy) !important; }
+.facets__heading, .facets__display,
+.facets__display-vertical, .facets__summary-label,
+.facets__label, .facet-checkbox, .facet-checkbox__text,
+.facet-checkbox__text-label, .facets__item, .facets__selected,
+.facets__price, .facets__price .field__label, .facets__price input,
+.facet-filters__field, .facet-filters__label label,
+.mobile-facets__summary, .mobile-facets__label, .mobile-facets__highlight,
+.active-facets__button-inner, .active-facets__button,
+#FacetFiltersForm label, #FacetFiltersForm .field__label,
+.facets-vertical-sort label, .facets-vertical-sort .select__select {
+  color: var(--fc-navy) !important;
+}
+.facets__summary svg, .facets__disclosure summary svg { color: var(--fc-navy) !important; }
 .facets__checkbox:checked + .visually-hidden + label::before,
 .facets__checkbox:checked + label::before {
   background: var(--fc-purple) !important;
@@ -397,6 +434,15 @@ main#MainContent { background: var(--fc-bg) !important; }
   border-color: var(--fc-line) !important;
   background: #ffffff !important;
   color: var(--fc-navy) !important;
+  border-radius: var(--fc-radius) !important;
+  overflow: hidden !important;
+}
+/* Dawn dibuja un pseudo-borde cuadrado (::after) que asoma en las
+   esquinas redondeadas. Lo neutralizamos: el borde propio ya alcanza. */
+.quantity::after {
+  box-shadow: none !important;
+  border: 0 !important;
+  border-radius: var(--fc-radius) !important;
 }
 .quantity__button { color: var(--fc-navy) !important; }
 
@@ -439,3 +485,143 @@ main#MainContent { background: var(--fc-bg) !important; }
   background: linear-gradient(135deg, var(--fc-navy) 0%, var(--fc-purple) 100%) !important;
 }
 .color-scheme-3 h2, .color-scheme-3 p { color: #ffffff !important; }
+
+/* ============================================================
+   FitCore · Rail de categorías (columna izquierda del catálogo)
+   ============================================================ */
+.fc-catnav {
+  flex: 0 0 232px;
+  padding-right: 2.6rem;
+  align-self: flex-start;
+}
+.fc-catnav__title {
+  font-weight: 800;
+  font-size: 11.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fc-navy);
+  opacity: 0.55;
+  margin: 4px 0 12px;
+}
+.fc-catnav__list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.fc-catnav__link {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  padding: 10px 13px; border-radius: 9px;
+  font-weight: 700; font-size: 14px; line-height: 1.2;
+  color: var(--fc-navy); text-decoration: none;
+  border: 1.5px solid transparent; transition: 0.15s;
+}
+.fc-catnav__link:hover { background: var(--fc-bg-alt); border-color: #e3e7f1; }
+.fc-catnav__link.is-active { background: var(--fc-navy); color: #fff; border-color: var(--fc-navy); }
+.fc-catnav__n {
+  font-size: 11.5px; font-weight: 800; color: var(--fc-muted);
+  background: rgba(11,24,64,0.06); border-radius: 999px; padding: 2px 8px; min-width: 22px; text-align: center;
+}
+.fc-catnav__link.is-active .fc-catnav__n { color: #fff; background: rgba(255,255,255,0.18); }
+
+@media screen and (max-width: 749px) {
+  .fc-catnav {
+    flex: none; width: 100%; padding-right: 0; margin-bottom: 6px;
+  }
+  .fc-catnav__list {
+    flex-direction: row; flex-wrap: nowrap; overflow-x: auto;
+    gap: 8px; padding-bottom: 6px; -webkit-overflow-scrolling: touch;
+  }
+  .fc-catnav__link { white-space: nowrap; padding: 8px 14px; }
+  .fc-catnav__link .fc-catnav__n { display: none; }
+}
+
+/* --- Barra de navegación inferior (solo móvil) ------------- */
+.fc-tabbar { display: none; }
+@media (max-width: 749px) {
+  .fc-tabbar {
+    position: fixed;
+    left: 12px; right: 12px; bottom: calc(40px + env(safe-area-inset-bottom, 0px));
+    z-index: 9998;
+    display: flex; align-items: stretch; justify-content: space-around;
+    background: #ffffff;
+    border: 1px solid #eceef4;
+    border-radius: 22px;
+    box-shadow: 0 8px 28px rgba(11,24,64,0.16);
+    padding: 8px 6px;
+  }
+  .fc-tab {
+    flex: 1 1 0; text-decoration: none;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+    padding: 4px 2px; border-radius: 15px;
+    color: #6b7391; font: 700 11px/1 var(--font-body-family, sans-serif);
+    transition: color .18s ease, background .18s ease;
+  }
+  .fc-tab svg { width: 23px; height: 23px; display: block; }
+  .fc-tab span { letter-spacing: .01em; }
+  .fc-tab.is-active { color: var(--fc-purple, #3B1F6B); background: #f3f0fb; }
+  .fc-tab:active { transform: scale(.96); }
+  /* Ícono del carrito con badge */
+  .fc-tab-ico { position: relative; display: inline-flex; }
+  .fc-tab-badge {
+    position: absolute; top: -6px; right: -9px;
+    min-width: 16px; height: 16px; padding: 0 4px;
+    background: var(--fc-accent, #19C37D); color: #fff;
+    border-radius: 999px; font: 800 10px/16px var(--font-body-family, sans-serif);
+    text-align: center; box-shadow: 0 0 0 2px #fff;
+  }
+  .fc-tab-badge.is-empty { display: none; }
+  /* La pestaña Tienda es un <button>: resetear estilos nativos */
+  .fc-tab--btn { appearance: none; -webkit-appearance: none; border: 0; background: transparent; cursor: pointer; width: auto; }
+  /* Dejar aire para que la barra no tape el contenido/footer */
+  body { padding-bottom: calc(118px + env(safe-area-inset-bottom, 0px)) !important; }
+  /* Subir el botón de WhatsApp por encima de la barra */
+  .fc-wa-btn { bottom: calc(122px + env(safe-area-inset-bottom, 0px)) !important; }
+}
+
+/* ===== Mini menú de la pestaña Tienda (bottom sheet) ===== */
+.fc-shop-overlay[hidden], .fc-shop-sheet[hidden] { display: none; }
+.fc-shop-overlay {
+  position: fixed; inset: 0; z-index: 9998;
+  background: rgba(11,24,64,0.42);
+  opacity: 0; transition: opacity .24s ease;
+}
+.fc-shop-overlay.is-open { opacity: 1; }
+.fc-shop-sheet {
+  position: fixed; left: 0; right: 0;
+  bottom: 0; z-index: 9999;
+  background: #ffffff;
+  border-radius: 22px 22px 0 0;
+  box-shadow: 0 -10px 40px rgba(11,24,64,0.22);
+  padding: 6px 0 calc(18px + env(safe-area-inset-bottom, 0px));
+  max-height: 76vh; overflow-y: auto;
+  transform: translateY(102%);
+  transition: transform .28s cubic-bezier(.22,.61,.36,1);
+  -webkit-overflow-scrolling: touch;
+}
+.fc-shop-sheet.is-open { transform: translateY(0); }
+.fc-shop-sheet__head {
+  display: flex; align-items: center; gap: 10px;
+  padding: 14px 18px 12px;
+  position: sticky; top: 0; background: #fff;
+  border-bottom: 1px solid #eef0f6;
+}
+.fc-shop-sheet__back {
+  appearance: none; -webkit-appearance: none; border: 0;
+  background: #f3f0fb; color: var(--fc-purple, #3B1F6B);
+  width: 34px; height: 34px; border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  cursor: pointer; flex: 0 0 auto;
+}
+.fc-shop-sheet__back svg { width: 20px; height: 20px; }
+.fc-shop-sheet__title {
+  font: 800 16px/1 var(--font-body-family, sans-serif);
+  color: var(--fc-navy, #0B1840); letter-spacing: .01em;
+}
+.fc-shop-sheet__list { list-style: none; margin: 0; padding: 4px 0; }
+.fc-shop-sheet__list li { margin: 0; }
+.fc-shop-sheet__list a {
+  display: block; text-decoration: none;
+  padding: 15px 22px;
+  font: 600 16px/1.2 var(--font-body-family, sans-serif);
+  color: var(--fc-navy, #0B1840);
+  border-bottom: 1px solid #f2f3f8;
+}
+.fc-shop-sheet__list li:last-child a { border-bottom: 0; }
+.fc-shop-sheet__list a:active { background: #f3f0fb; }
+body.fc-shop-lock { overflow: hidden; }

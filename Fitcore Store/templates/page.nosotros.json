@@ -12,14 +12,14 @@
     "main": {
       "type": "fitcore-page",
       "settings": {
-        "title": "Sobre FitCore Store",
+        "title": "Sobre Fitcore Store",
         "subtitle": "Suplementos deportivos al mejor precio, con atención local de verdad."
       },
       "blocks": {
         "rt": {
           "type": "richtext",
           "settings": {
-            "content": "<p>FitCore Store es la tienda retail del Grupo Fitcore, dedicada a acercar suplementos deportivos y vitaminas a los atletas y a quien quiere cuidarse, en Venezuela.</p><h2>Marcas importadas de EE.UU.</h2><p>Traemos marcas reconocidas a nivel mundial directamente desde Estados Unidos. Productos 100% originales, los mismos que pides por nombre.</p><h2>Cerca de ti</h2><p>Nuestra primera tienda está en el CC Plaza, en Valera, estado Trujillo, llevando suplementos de calidad al interior del país. Comprar con nosotros es fácil: en línea o en persona, con pagos flexibles y entrega rápida.</p><h2>Nuestra promesa</h2><p>Marcas globales, resultados locales. Producto auténtico, precios justos y una atención que responde cuando la necesitas.</p>"
+            "content": "<p>Fitcore Store es la tienda retail del Grupo Fitcore, dedicada a acercar suplementos deportivos y vitaminas a los atletas y a quien quiere cuidarse, en Venezuela.</p><h2>Marcas importadas de EE.UU.</h2><p>Traemos marcas reconocidas a nivel mundial directamente desde Estados Unidos. Productos 100% originales, los mismos que pides por nombre.</p><h2>Cerca de ti</h2><p>Nuestra primera tienda está en el CC Plaza, en Valera, estado Trujillo, llevando suplementos de calidad al interior del país. Comprar con nosotros es fácil: en línea o en persona, con pagos flexibles y entrega rápida.</p><h2>Nuestra promesa</h2><p>Marcas globales, resultados locales. Producto auténtico, precios justos y una atención que responde cuando la necesitas.</p>"
           }
         },
         "cards": {

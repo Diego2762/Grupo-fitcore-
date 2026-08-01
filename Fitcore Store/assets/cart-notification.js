@@ -10,6 +10,25 @@ class CartNotification extends HTMLElement {
     this.querySelectorAll('button[type="button"]').forEach((closeButton) =>
       closeButton.addEventListener('click', this.close.bind(this))
     );
+
+    // Cierre automático: el banner se oculta solo pasados unos segundos.
+    // Si el cliente pasa el mouse por encima, se pausa para que pueda leer/hacer clic.
+    this.autoCloseDelay = 2500;
+    this.autoCloseTimer = null;
+    this.notification.addEventListener('mouseenter', () => this.cancelAutoClose());
+    this.notification.addEventListener('mouseleave', () => this.scheduleAutoClose(2000));
+  }
+
+  scheduleAutoClose(delay) {
+    this.cancelAutoClose();
+    this.autoCloseTimer = setTimeout(() => this.close(), delay || this.autoCloseDelay);
+  }
+
+  cancelAutoClose() {
+    if (this.autoCloseTimer) {
+      clearTimeout(this.autoCloseTimer);
+      this.autoCloseTimer = null;
+    }
   }
 
   open() {
@@ -27,6 +46,37 @@ class CartNotification extends HTMLElement {
     document.body.addEventListener('click', this.onBodyClick);
 
     this.dispatchCartViewEvent();
+    this.updateFreeShip();
+    this.scheduleAutoClose();
+  }
+
+  // Muestra dentro del banner el progreso hacia el envío gratis local.
+  // Al superar el umbral avisa que el cliente ya lo tiene.
+  async updateFreeShip() {
+    const bar = document.getElementById('cart-notification-freeship');
+    if (!bar) return;
+    const threshold = parseInt(bar.getAttribute('data-threshold'), 10) || 3000;
+    try {
+      const response = await fetch(`${routes.cart_url}.js`);
+      const cart = await response.json();
+      const total = cart.total_price; // en centavos
+      const money = (cents) => '$' + (cents / 100).toFixed(2);
+      if (total >= threshold) {
+        bar.classList.add('is-free');
+        bar.innerHTML =
+          '<span class="cart-notification-freeship__check">&#10003;</span> ' +
+          '<span>&iexcl;Genial! Ya tienes <b>env&iacute;o gratis</b> en Valera y Trujillo.</span>';
+      } else {
+        bar.classList.remove('is-free');
+        bar.innerHTML =
+          '<span>Te faltan <b>' +
+          money(threshold - total) +
+          '</b> para <b>env&iacute;o gratis</b> local en Valera y Trujillo.</span>';
+      }
+      bar.hidden = false;
+    } catch (e) {
+      // informativo; si falla, no mostramos la barra
+    }
   }
 
   // The notification's outer element is server-rendered once at page load, so
@@ -57,6 +107,7 @@ class CartNotification extends HTMLElement {
   }
 
   close() {
+    this.cancelAutoClose();
     this.notification.classList.remove('active');
     document.body.removeEventListener('click', this.onBodyClick);
 

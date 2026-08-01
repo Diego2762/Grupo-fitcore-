@@ -1,0 +1,221 @@
+{%- comment -%}
+  Fitcore Store · Barra de filtros de catálogo (marca + objetivo)
+  Reemplaza los facets nativos de Dawn. Filtra los .grid__item del grid
+  de la colección usando data-fc-vendor y data-fc-obj (client-side).
+{%- endcomment -%}
+
+<style>
+  #fc-fl-{{ section.id }} {
+    --fc-navy: {{ section.settings.color_navy | default: '#0B1840' }};
+    --fc-purple: {{ section.settings.color_purple | default: '#3B1F6B' }};
+    --fc-green: {{ section.settings.color_accent | default: '#19C37D' }};
+    max-width: 1300px; margin: 0 auto; padding: 22px clamp(20px,5vw,44px) 4px;
+    font-family: var(--font-body-family, sans-serif);
+  }
+  #fc-fl-{{ section.id }} .fc-fl-row { display:flex; flex-wrap:wrap; align-items:center; gap:14px 26px; }
+  #fc-fl-{{ section.id }} .fc-fl-group { display:flex; flex-wrap:wrap; align-items:center; gap:8px; }
+  #fc-fl-{{ section.id }} .fc-fl-group[hidden] { display:none !important; }
+  #fc-fl-{{ section.id }} .fc-fl-lbl {
+    font-weight: 800; font-size: 11.5px; letter-spacing:.12em; text-transform:uppercase;
+    color: var(--fc-navy); opacity:.55; margin-right:2px;
+  }
+  #fc-fl-{{ section.id }} .fc-chip {
+    appearance:none; cursor:pointer; border:1.5px solid #dfe3ee; background:#fff;
+    color: var(--fc-navy); font-weight:700; font-size:13.5px; line-height:1;
+    padding:9px 15px; border-radius:999px; transition:.15s;
+  }
+  #fc-fl-{{ section.id }} .fc-chip:hover { border-color: var(--fc-purple); }
+  #fc-fl-{{ section.id }} .fc-chip[aria-pressed="true"] {
+    background: var(--fc-navy); border-color: var(--fc-navy); color:#fff;
+  }
+  #fc-fl-{{ section.id }} .fc-chip.fc-obj[aria-pressed="true"] {
+    background: var(--fc-purple); border-color: var(--fc-purple);
+  }
+  #fc-fl-{{ section.id }} .fc-fl-foot {
+    display:flex; align-items:center; gap:16px; margin-top:14px;
+    padding-top:12px; border-top:1px solid #eceff5;
+  }
+  #fc-fl-{{ section.id }} .fc-fl-count { font-weight:800; font-size:13px; color:var(--fc-navy); }
+  #fc-fl-{{ section.id }} .fc-fl-count b { color: var(--fc-green); }
+  #fc-fl-{{ section.id }} .fc-fl-clear {
+    appearance:none; background:none; border:none; cursor:pointer;
+    font-weight:700; font-size:13px; color:var(--fc-purple); text-decoration:underline;
+    padding:0; display:none;
+  }
+  #fc-fl-{{ section.id }} .fc-fl-clear.is-on { display:inline; }
+  #fc-fl-{{ section.id }} .fc-more {
+    display:none; align-items:center; gap:5px; appearance:none; cursor:pointer;
+    border:1.5px dashed #c9cfe0; background:#fff; color:var(--fc-purple);
+    font-weight:800; font-size:13px; line-height:1; padding:9px 14px; border-radius:999px;
+  }
+  @media (max-width:749px){
+    #fc-fl-{{ section.id }} .fc-fl-lbl { width:100%; margin-bottom:2px; }
+    #fc-fl-{{ section.id }} .fc-chip--extra { display:none; }
+    #fc-fl-{{ section.id }} .fc-fl-group.is-expanded .fc-chip--extra { display:inline-flex; }
+    #fc-fl-{{ section.id }} .fc-more { display:inline-flex; }
+  }
+</style>
+
+<section id="fc-fl-{{ section.id }}" aria-label="Filtros de catálogo">
+  <div class="fc-fl-row">
+    <div class="fc-fl-group" data-fc-marca hidden>
+      <span class="fc-fl-lbl">Marca</span>
+    </div>
+    <div class="fc-fl-group" data-fc-objetivo hidden>
+      <span class="fc-fl-lbl">Objetivo</span>
+    </div>
+  </div>
+  <div class="fc-fl-foot">
+    <span class="fc-fl-count" data-fc-count></span>
+    <button type="button" class="fc-fl-clear" data-fc-clear>Limpiar filtros</button>
+  </div>
+</section>
+
+<script>
+(function(){
+  var root = document.getElementById('fc-fl-{{ section.id }}');
+  if(!root) return;
+
+  var OBJ_LABELS = {
+    keto:'Keto', volumen:'Volumen', definicion:'Definición',
+    fuerza:'Fuerza', recuperacion:'Recuperación', salud:'Salud', energia:'Energía',
+    glp1:'Apoyo GLP-1'
+  };
+
+  function init(){
+    var items = Array.prototype.slice.call(document.querySelectorAll('.grid__item[data-fc-vendor]'));
+    if(!items.length) return;
+
+    var marcaBox = root.querySelector('[data-fc-marca]');
+    var objBox   = root.querySelector('[data-fc-objetivo]');
+    var countEl  = root.querySelector('[data-fc-count]');
+    var clearEl  = root.querySelector('[data-fc-clear]');
+    var total    = items.length;
+
+    var marcas = [], objs = [];
+    items.forEach(function(it){
+      var v = (it.getAttribute('data-fc-vendor')||'').trim();
+      if(v && marcas.indexOf(v)===-1) marcas.push(v);
+      (it.getAttribute('data-fc-obj')||'').split(/\s+/).forEach(function(tok){
+        tok = tok.replace('obj:','').trim();
+        if(tok && objs.indexOf(tok)===-1) objs.push(tok);
+      });
+    });
+    marcas.sort();
+    var objOrder = ['volumen','definicion','fuerza','recuperacion','glp1','energia','salud','keto'];
+    objs.sort(function(a,b){ return objOrder.indexOf(a)-objOrder.indexOf(b); });
+
+    var selMarca = new Set(), selObj = new Set();
+
+    function chip(label, val, cls){
+      var b = document.createElement('button');
+      b.type='button'; b.className='fc-chip'+(cls?' '+cls:'');
+      b.textContent=label; b.setAttribute('aria-pressed','false');
+      b.setAttribute('data-val', val);
+      return b;
+    }
+
+    var MOBILE_LIMIT = 4; // cuántos chips se ven antes del botón "+" en móvil
+
+    function addMoreBtn(box, extraCount){
+      if(extraCount <= 0) return;
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'fc-more';
+      b.textContent = '+' + extraCount + ' más';
+      b.addEventListener('click', function(){
+        var open = box.classList.toggle('is-expanded');
+        b.textContent = open ? 'Ver menos' : '+' + extraCount + ' más';
+      });
+      box.appendChild(b);
+    }
+
+    if(marcas.length >= 2){
+      marcas.forEach(function(m, idx){
+        var c = chip(m, m);
+        if(idx >= MOBILE_LIMIT) c.classList.add('fc-chip--extra');
+        c.addEventListener('click', function(){ toggle(c, selMarca, m); });
+        marcaBox.appendChild(c);
+      });
+      addMoreBtn(marcaBox, marcas.length - MOBILE_LIMIT);
+      marcaBox.hidden = false;
+    }
+    if(objs.length >= 2){
+      objs.forEach(function(o, idx){
+        var c = chip(OBJ_LABELS[o]||o, o, 'fc-obj');
+        if(idx >= MOBILE_LIMIT) c.classList.add('fc-chip--extra');
+        c.addEventListener('click', function(){ toggle(c, selObj, o); });
+        objBox.appendChild(c);
+      });
+      addMoreBtn(objBox, objs.length - MOBILE_LIMIT);
+      objBox.hidden = false;
+    }
+
+    function toggle(btn, set, val){
+      if(set.has(val)){ set.delete(val); btn.setAttribute('aria-pressed','false'); }
+      else { set.add(val); btn.setAttribute('aria-pressed','true'); }
+      apply();
+    }
+
+    function apply(){
+      var shown = 0;
+      items.forEach(function(it){
+        var v = (it.getAttribute('data-fc-vendor')||'').trim();
+        var its = (it.getAttribute('data-fc-obj')||'').replace(/obj:/g,'').split(/\s+/);
+        var okM = selMarca.size===0 || selMarca.has(v);
+        var okO = selObj.size===0 || its.some(function(t){ return selObj.has(t); });
+        var vis = okM && okO;
+        it.style.display = vis ? '' : 'none';
+        if(vis) shown++;
+      });
+      countEl.innerHTML = '<b>'+shown+'</b> de '+total+' producto'+(total===1?'':'s');
+      clearEl.classList.toggle('is-on', selMarca.size>0 || selObj.size>0);
+    }
+
+    clearEl.addEventListener('click', function(){
+      selMarca.clear(); selObj.clear();
+      root.querySelectorAll('.fc-chip[aria-pressed="true"]').forEach(function(b){ b.setAttribute('aria-pressed','false'); });
+      apply();
+    });
+
+    // Pre-selección de marca desde la URL (?marca=Nombre), p.ej. al tocar un logo en el home
+    var urlMarca = null;
+    try { urlMarca = new URLSearchParams(window.location.search).get('marca'); } catch(e){}
+    if(urlMarca){
+      var want = urlMarca.trim().toLowerCase();
+      var mchips = marcaBox.querySelectorAll('.fc-chip');
+      for(var k=0; k<mchips.length; k++){
+        var dv = (mchips[k].getAttribute('data-val')||'').trim();
+        if(dv.toLowerCase() === want){
+          selMarca.add(dv);
+          mchips[k].setAttribute('aria-pressed','true');
+          // Si la marca está entre las ocultas en móvil, expandir el grupo
+          if(mchips[k].classList.contains('fc-chip--extra')){ marcaBox.classList.add('is-expanded'); }
+          break;
+        }
+      }
+    }
+
+    apply();
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Fitcore Filtros catálogo",
+  "tag": "section",
+  "class": "fitcore-catalog-filters",
+  "settings": [
+    { "type": "header", "content": "Colores de marca" },
+    { "type": "color", "id": "color_navy", "label": "Navy", "default": "#0B1840" },
+    { "type": "color", "id": "color_purple", "label": "Morado", "default": "#3B1F6B" },
+    { "type": "color", "id": "color_accent", "label": "Acento", "default": "#19C37D" }
+  ],
+  "presets": [
+    { "name": "Fitcore Filtros catálogo" }
+  ]
+}
+{% endschema %}

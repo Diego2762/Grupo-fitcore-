@@ -1,57 +1,88 @@
 {%- comment -%}
-  FitCore Store · Banner de categoría (B2C)
+  Fitcore Store · Banner de categoría (B2C) — estilo catálogo B2B
 {%- endcomment -%}
+
+{%- liquid
+  assign is_all = false
+  if collection.handle == 'all'
+    assign is_all = true
+  endif
+-%}
 
 <style>
   #fc-cb-{{ section.id }} {
     --fc-navy: {{ section.settings.color_navy | default: '#0B1840' }};
+    --fc-navy-d: #071631;
     --fc-purple: {{ section.settings.color_purple | default: '#3B1F6B' }};
     --fc-accent: {{ section.settings.color_accent | default: '#19C37D' }};
+    position: relative; overflow: hidden;
+    background: linear-gradient(160deg, var(--fc-navy) 0%, var(--fc-navy-d) 100%);
+    color:#fff; padding: clamp(40px,5vw,68px) 0 clamp(34px,4vw,52px);
   }
-  #fc-cb-{{ section.id }} {
-    background:
-      radial-gradient(900px 480px at 12% -20%, var(--fc-purple) 0%, transparent 58%),
-      linear-gradient(160deg, var(--fc-navy) 0%, #071631 100%);
-    color:#fff; padding: 52px 0 48px;
+  /* glow morado */
+  #fc-cb-{{ section.id }}::before {
+    content:""; position:absolute; top:-30%; right:-6%; width:60%; height:170%;
+    background: radial-gradient(circle, rgba(124,77,219,.50), transparent 66%);
+    pointer-events:none;
   }
-  #fc-cb-{{ section.id }} .fc-wrap { max-width: 1300px; margin:0 auto; padding: 0 22px; }
-  #fc-cb-{{ section.id }} .fc-bc { font: 600 13px/1 var(--font-body-family, sans-serif); color: rgba(255,255,255,.6); margin-bottom: 18px; }
-  #fc-cb-{{ section.id }} .fc-bc a { color: rgba(255,255,255,.6); text-decoration:none; }
+  /* textura de puntos */
+  #fc-cb-{{ section.id }}::after {
+    content:""; position:absolute; inset:0;
+    background-image: radial-gradient(rgba(255,255,255,.06) 1px, transparent 1px);
+    background-size: 22px 22px; opacity:.6; pointer-events:none;
+  }
+  #fc-cb-{{ section.id }} .fc-wrap { position:relative; z-index:1; max-width: 1300px; margin:0 auto; padding: 0 clamp(20px,5vw,44px); }
+  #fc-cb-{{ section.id }} .fc-bc { font: 700 12.5px/1 var(--font-body-family, sans-serif); letter-spacing:.02em; color: rgba(255,255,255,.55); margin-bottom: 16px; }
+  #fc-cb-{{ section.id }} .fc-bc a { color: rgba(255,255,255,.55); text-decoration:none; }
   #fc-cb-{{ section.id }} .fc-bc a:hover { color: var(--fc-accent); }
   #fc-cb-{{ section.id }} .fc-bc span { color: var(--fc-accent); }
+  #fc-cb-{{ section.id }} .fc-eyebrow {
+    display:inline-flex; align-items:center; gap:9px;
+    font: 800 12px/1 var(--font-body-family, sans-serif); letter-spacing:.16em; text-transform:uppercase;
+    color:#c4a6ff; margin: 0 0 14px;
+  }
+  #fc-cb-{{ section.id }} .fc-eyebrow::before { display:none; }
   #fc-cb-{{ section.id }} h1 {
-    font-family: var(--font-heading-family, sans-serif); font-weight: 800;
-    font-size: clamp(30px, 4.4vw, 50px); line-height: 1.04; margin: 0;
+    font-family: var(--font-heading-family, sans-serif); font-weight: 900;
+    font-size: clamp(38px, 6vw, 66px); line-height: .98; letter-spacing:-.02em;
+    text-transform: uppercase; margin: 0;
   }
   #fc-cb-{{ section.id }} .fc-desc {
-    font: 400 17px/1.55 var(--font-body-family, sans-serif);
-    color: rgba(255,255,255,.78); max-width: 64ch; margin: 14px 0 0;
+    font: 400 clamp(15px,1.5vw,18px)/1.6 var(--font-body-family, sans-serif);
+    color: rgba(255,255,255,.78); max-width: 58ch; margin: 16px 0 0;
   }
   #fc-cb-{{ section.id }} .fc-count {
-    display:inline-block; margin-top: 18px; font: 700 13px/1 var(--font-body-family, sans-serif);
-    letter-spacing:.04em; color: var(--fc-accent); background: rgba(255,255,255,.08);
-    border:1px solid rgba(255,255,255,.14); border-radius: 999px; padding: 8px 14px;
+    display:inline-block; margin-top: 22px; font: 800 12.5px/1 var(--font-body-family, sans-serif);
+    letter-spacing:.06em; text-transform:uppercase; color: var(--fc-accent); background: rgba(255,255,255,.07);
+    border:1px solid rgba(255,255,255,.16); border-radius: 999px; padding: 9px 16px;
+  }
+  @media (max-width: 749px) {
+    #fc-cb-{{ section.id }} { background: var(--fc-navy); }
+    #fc-cb-{{ section.id }}::before { display:none; }
   }
 </style>
 
 <div id="fc-cb-{{ section.id }}">
   <div class="fc-wrap">
     <nav class="fc-bc" aria-label="breadcrumb">
-      <a href="/">Inicio</a> / <a href="/collections">Categorías</a> / <span>{{ collection.title }}</span>
+      <a href="/">Inicio</a> / <a href="/collections">Categorías</a> / <span>{% if is_all %}Todos los productos{% else %}{{ collection.title }}{% endif %}</span>
     </nav>
-    <h1>{{ collection.title }}</h1>
-    {%- if collection.description != blank -%}
+    <p class="fc-eyebrow">{% if is_all %}Catálogo completo{% else %}Categoría{% endif %}</p>
+    <h1>{% if is_all %}Todos los productos{% else %}{{ collection.title }}{% endif %}</h1>
+    {%- if is_all and collection.description == blank -%}
+      <div class="fc-desc">Explora todo el catálogo de Fitcore Store en un solo lugar. Filtra por marca u objetivo y encuentra tu suplemento ideal. Marcas originales importadas desde EE.UU.</div>
+    {%- elsif collection.description != blank -%}
       <div class="fc-desc">{{ collection.description }}</div>
     {%- endif -%}
     {%- if section.settings.show_count -%}
-      <span class="fc-count">{{ collection.products_count }} productos</span>
+      <span class="fc-count">{{ collection.products_count }} producto{% if collection.products_count != 1 %}s{% endif %}</span>
     {%- endif -%}
   </div>
 </div>
 
 {% schema %}
 {
-  "name": "FitCore Banner categoría",
+  "name": "Fitcore Banner categoría",
   "tag": "section",
   "class": "fitcore-collection-banner",
   "settings": [
@@ -62,7 +93,7 @@
     { "type": "color", "id": "color_accent", "label": "Acento", "default": "#19C37D" }
   ],
   "presets": [
-    { "name": "FitCore Banner categoría" }
+    { "name": "Fitcore Banner categoría" }
   ]
 }
 {% endschema %}

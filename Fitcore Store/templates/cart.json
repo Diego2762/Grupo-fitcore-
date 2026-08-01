@@ -18,6 +18,20 @@
     },
     "cart-footer": {
       "type": "main-cart-footer",
+      "blocks": {
+        "subtotal": {
+          "type": "subtotal",
+          "settings": {}
+        },
+        "buttons": {
+          "type": "buttons",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "subtotal",
+        "buttons"
+      ],
       "settings": {
         "padding_top": 12,
         "padding_bottom": 24
@@ -26,8 +40,7 @@
     "fitcore_cart_pay": {
       "type": "fitcore-cart-pay",
       "settings": {
-        "discount_code": "DIVISAS25",
-        "discount_pct": 25,
+        "bs_surcharge_pct": 15,
         "free_ship_threshold": 30
       }
     },
@@ -35,7 +48,7 @@
       "type": "fitcore-cart-help",
       "settings": {
         "whatsapp": "584246218863",
-        "whatsapp_msg": "Hola FitCore Store, tengo una duda con mi pedido"
+        "whatsapp_msg": "Hola Fitcore Store, tengo una duda con mi pedido"
       }
     }
   },

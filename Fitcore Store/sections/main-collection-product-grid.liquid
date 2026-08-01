@@ -1,6 +1,7 @@
 {{ 'template-collection.css' | asset_url | stylesheet_tag }}
 {{ 'component-card.css' | asset_url | stylesheet_tag }}
 {{ 'component-price.css' | asset_url | stylesheet_tag }}
+{{ 'fitcore-cards.css' | asset_url | stylesheet_tag }}
 
 {% if section.settings.image_shape == 'blob' %}
   {{ 'mask-blobs.css' | asset_url | stylesheet_tag }}
@@ -104,22 +105,30 @@
       <div class="{% if section.settings.filter_type == 'vertical' %} facets-vertical page-width{% endif %}">
         {{ 'component-facets.css' | asset_url | stylesheet_tag }}
         <script src="{{ 'facets.js' | asset_url }}" defer="defer"></script>
-        {%- if section.settings.enable_filtering or section.settings.enable_sorting -%}
-          <aside
-            aria-labelledby="verticalTitle"
-            class="facets-wrapper{% unless section.settings.enable_filtering %} facets-wrapper--no-filters{% endunless %}{% if section.settings.filter_type != 'vertical' %} page-width{% endif %}"
-            id="main-collection-filters"
-            data-id="{{ section.id }}"
-          >
-            {% render 'facets',
-              results: collection,
-              enable_filtering: section.settings.enable_filtering,
-              enable_sorting: section.settings.enable_sorting,
-              filter_type: section.settings.filter_type,
-              paginate: paginate
-            %}
-          </aside>
-        {%- endif -%}
+        {%- comment -%} Fitcore · Rail de categorías (columna izquierda) {%- endcomment -%}
+        <aside class="fc-catnav" aria-label="Categorías">
+          <p class="fc-catnav__title">Categorías</p>
+          <ul class="fc-catnav__list">
+            <li>
+              <a
+                href="/collections/all"
+                class="fc-catnav__link{% if collection.handle == 'all' or collection.handle == blank %} is-active{% endif %}"
+              >Todos los productos</a>
+            </li>
+            {%- assign fc_cats = 'proteinas,creatina,pre-post-entreno,ganadores-de-masa,quemadores-de-grasa,aminoacidos,vitaminas,snacks,accesorios' | split: ',' -%}
+            {%- for h in fc_cats -%}
+              {%- assign c = collections[h] -%}
+              {%- if c.id -%}
+                <li>
+                  <a
+                    href="{{ c.url }}"
+                    class="fc-catnav__link{% if collection.handle == h %} is-active{% endif %}"
+                  >{{ c.title }}{% if c.products_count > 0 %}<span class="fc-catnav__n">{{ c.products_count }}</span>{% endif %}</a>
+                </li>
+              {%- endif -%}
+            {%- endfor -%}
+          </ul>
+        </aside>
 
         <div
           class="product-grid-container{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
@@ -162,25 +171,24 @@
                   {%- if forloop.index > 2 -%}
                     {%- assign lazy_load = true -%}
                   {%- endif -%}
+                  {%- assign fc_objs = '' -%}
+                  {%- for t in product.tags -%}
+                    {%- if t contains 'obj:' -%}
+                      {%- assign fc_objs = fc_objs | append: t | append: ' ' -%}
+                    {%- endif -%}
+                  {%- endfor -%}
                   <li
                     class="grid__item{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+                    data-fc-vendor="{{ product.vendor | escape }}"
+                    data-fc-obj="{{ fc_objs | strip }}"
                     {% if settings.animations_reveal_on_scroll %}
                       data-cascade
                       style="--animation-order: {{ forloop.index }};"
                     {% endif %}
                   >
-                    {% render 'card-product',
-                      card_product: product,
-                      media_aspect_ratio: section.settings.image_ratio,
-                      image_shape: section.settings.image_shape,
-                      show_secondary_image: section.settings.show_secondary_image,
-                      show_vendor: section.settings.show_vendor,
-                      show_rating: section.settings.show_rating,
-                      lazy_load: lazy_load,
-                      skip_styles: skip_card_product_styles,
-                      quick_add: section.settings.quick_add,
-                      section_id: section.id,
-                      product_view_context: 'collection'
+                    {% render 'fitcore-product-card',
+                      product: product,
+                      lazy: lazy_load
                     %}
                   </li>
                   {%- assign skip_card_product_styles = true -%}
@@ -201,6 +209,51 @@
   </div>
 </collection-component>
 
+<script>
+  (function () {
+    var grid = document.getElementById('product-grid');
+    if (!grid) return;
+    // Delegación: cubre las tarjetas actuales y las que carguen al filtrar/paginar
+    grid.addEventListener('submit', function (ev) {
+      var form = ev.target.closest ? ev.target.closest('form[data-fc-add]') : null;
+      if (!form) return;
+      if (!window.fetch) return; // fallback: POST nativo a /cart
+      ev.preventDefault();
+      var btn = form.querySelector('.fc-pc-cart');
+      // Feedback instantaneo al tocar (spinner) + anti doble toque
+      if (btn) {
+        if (btn.classList.contains('is-loading')) return;
+        btn.classList.add('is-loading');
+      }
+      var notif = document.querySelector('cart-notification, cart-drawer');
+      var body = new FormData(form);
+      body.append('sections', 'cart-notification-product,cart-notification-button,cart-icon-bubble');
+      body.append('sections_url', window.location.pathname);
+      fetch('{{ routes.cart_add_url }}.js', {
+        method: 'POST',
+        headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+        body: body
+      }).then(function (r) { return r.json(); }).then(function (res) {
+        if (res && res.status) { if (btn) btn.classList.remove('is-loading'); form.submit(); return; } // error (p.ej. no disponible)
+        if (btn) {
+          btn.classList.remove('is-loading');
+          btn.classList.add('is-added');
+          var svg = btn.innerHTML;
+          btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>';
+          setTimeout(function () { btn.innerHTML = svg; btn.classList.remove('is-added'); }, 1600);
+        }
+        if (notif && typeof notif.renderContents === 'function') {
+          try { notif.renderContents(res); } catch (e) {}
+        } else if (res.sections && res.sections['cart-icon-bubble']) {
+          var b = document.getElementById('cart-icon-bubble');
+          if (b) { var t = document.createElement('div'); t.innerHTML = res.sections['cart-icon-bubble']; var s = t.querySelector('.shopify-section'); b.innerHTML = s ? s.innerHTML : t.innerHTML; }
+        }
+        document.dispatchEvent(new CustomEvent('fc:cart:added'));
+      }).catch(function () { if (btn) btn.classList.remove('is-loading'); form.submit(); });
+    });
+  })();
+</script>
+
 {% schema %}
 {
   "name": "t:sections.main-collection-product-grid.name",
@@ -210,9 +263,9 @@
       "type": "range",
       "id": "products_per_page",
       "min": 8,
-      "max": 36,
-      "step": 4,
-      "default": 16,
+      "max": 50,
+      "step": 1,
+      "default": 50,
       "label": "t:sections.main-collection-product-grid.settings.products_per_page.label"
     },
     {

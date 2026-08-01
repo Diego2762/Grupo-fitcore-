@@ -1,5 +1,5 @@
 {%- comment -%}
-  FitCore Store · Sección de inicio (B2C)
+  Fitcore Store · Sección de inicio (B2C)
   Sección autónoma para la home: hero, beneficios, categorías,
   "¿Cómo comprar?", envíos, pagos y ubicación de la tienda.
   Pegar en: Online Store > Themes > Edit code > Sections > Add new > "fitcore-home"
@@ -8,7 +8,7 @@
 
 {%- liquid
   assign wa = section.settings.whatsapp | default: '584246218863'
-  assign wa_msg = section.settings.whatsapp_msg | default: 'Hola FitCore Store, quiero hacer un pedido'
+  assign wa_msg = section.settings.whatsapp_msg | default: 'Hola Fitcore Store, quiero hacer un pedido'
   assign wa_msg_enc = wa_msg | url_encode
 -%}
 
@@ -43,10 +43,19 @@
     color:#fff; padding: 84px 0 76px; position: relative; overflow: hidden;
     min-height: 540px; display:flex; align-items:center;
   }
+  #fc-home-{{ section.id }} .fc-hero-photo { display: none; }
   #fc-home-{{ section.id }} .fc-hero .fc-wrap { max-width: 1720px; margin: 0 auto; width: 100%; padding-left: 32px; padding-right: 32px; }
   #fc-home-{{ section.id }} .fc-hero .fc-wrap > * { max-width: 540px; }
   #fc-home-{{ section.id }} .fc-hero h1 { font-size: clamp(34px, 5.4vw, 62px); font-weight: 800; max-width: 13ch; }
   #fc-home-{{ section.id }} .fc-hero p { font: 400 clamp(16px,1.4vw,20px)/1.55 var(--font-body-family, sans-serif); color: rgba(255,255,255,.82); max-width: 46ch; margin: 0 0 30px; }
+  #fc-home-{{ section.id }} .fc-hero p .fc-hl-a { color:#fff; font-weight:600; }
+  #fc-home-{{ section.id }} .fc-hero p .fc-hl-g { color:var(--fc-accent,#19C37D); font-weight:600; }
+  #fc-home-{{ section.id }} .fc-hero .fc-hero-eyebrow { display:inline-flex; align-items:center; gap:8px; background:rgba(25,195,125,.14); border:1px solid rgba(25,195,125,.4); color:#7ff0bd; font:700 12.5px/1 var(--font-body-family, sans-serif); letter-spacing:.05em; text-transform:uppercase; padding:9px 15px; border-radius:999px; margin:0 0 20px; }
+  #fc-home-{{ section.id }} .fc-hero .fc-hero-eyebrow svg { width:14px; height:14px; flex:none; }
+  #fc-home-{{ section.id }} .fc-hero h1 .hl { color: var(--fc-accent); }
+  #fc-home-{{ section.id }} .fc-hero .fc-hero-trust { display:flex; flex-wrap:wrap; gap:8px 20px; margin:26px 0 0; padding:0; list-style:none; }
+  #fc-home-{{ section.id }} .fc-hero .fc-hero-trust li { display:flex; align-items:center; gap:8px; font:600 13.5px/1.3 var(--font-body-family, sans-serif); color:rgba(255,255,255,.8); }
+  #fc-home-{{ section.id }} .fc-hero .fc-hero-trust svg { width:16px; height:16px; color: var(--fc-accent); flex:none; }
   #fc-home-{{ section.id }} .fc-cta-row { display:flex; flex-wrap:wrap; gap:14px; }
   #fc-home-{{ section.id }} .fc-btn {
     display:inline-flex; align-items:center; gap:9px; cursor:pointer;
@@ -69,14 +78,102 @@
   /* MARQUEE MARCAS */
   #fc-home-{{ section.id }} .fc-marq { background:#fff; padding: 30px 0 34px; border-bottom: 1px solid #e7eaf2; overflow: hidden; }
   #fc-home-{{ section.id }} .fc-marq-title { text-align:center; color:#8a93b5; font: 800 12px/1 var(--font-body-family, sans-serif); letter-spacing:.16em; text-transform:uppercase; margin:0 0 22px; }
-  #fc-home-{{ section.id }} .fc-marq-mask { position:relative; width:100%; overflow:hidden;
+  #fc-home-{{ section.id }} .fc-marq-mask { position:relative; width:100%;
+    overflow-x:auto; overflow-y:hidden; cursor:grab; -webkit-overflow-scrolling:touch;
+    scrollbar-width:none; -ms-overflow-style:none;
     -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 8%, #000 92%, transparent 100%);
             mask-image: linear-gradient(90deg, transparent 0, #000 8%, #000 92%, transparent 100%); }
-  #fc-home-{{ section.id }} .fc-marq-track { display:flex; width:max-content; align-items:center; animation: fc-scroll 28s linear infinite; }
-  #fc-home-{{ section.id }} .fc-marq-track:hover { animation-play-state: paused; }
-  #fc-home-{{ section.id }} .fc-marq-track img { height:40px; width:auto; max-width:150px; object-fit:contain; margin:0 38px; filter:grayscale(100%); opacity:.55; transition: filter .2s ease, opacity .2s ease; }
-  #fc-home-{{ section.id }} .fc-marq-track img:hover { filter:none; opacity:1; }
-  @keyframes fc-scroll { 0%{ transform:translateX(0); } 100%{ transform:translateX(-50%); } }
+  #fc-home-{{ section.id }} .fc-marq-mask::-webkit-scrollbar { display:none; height:0; width:0; }
+  #fc-home-{{ section.id }} .fc-marq-mask.is-grabbing { cursor:grabbing; }
+  #fc-home-{{ section.id }} .fc-marq-track { display:flex; width:max-content; align-items:center; }
+  #fc-home-{{ section.id }} .fc-marq-track img { height:40px; width:auto; max-width:150px; object-fit:contain; margin:0 38px; filter:grayscale(100%); opacity:.55; transition: filter .2s ease, opacity .2s ease; pointer-events:none; -webkit-user-drag:none; user-select:none; }
+  #fc-home-{{ section.id }} .fc-marq-track img.fc-emblem { height:56px; }
+  #fc-home-{{ section.id }} .fc-marq-link { display:inline-flex; align-items:center; text-decoration:none; cursor:inherit; }
+  #fc-home-{{ section.id }} .fc-marq-link:hover img { filter:none; opacity:1; }
+
+  /* MAS VENDIDOS */
+  #fc-home-{{ section.id }} .fc-best { background:#fff; padding: 70px 0; border-bottom:1px solid #e7eaf2; }
+  #fc-home-{{ section.id }} .fc-best-head { max-width: 760px; margin: 0 0 34px; }
+  #fc-home-{{ section.id }} .fc-best-head h2 { color: var(--fc-navy); font-size: clamp(28px,3.4vw,42px); font-weight:800; margin:0; }
+  #fc-home-{{ section.id }} .fc-best-head p { color:#56607a; font: 400 17px/1.5 var(--font-body-family, sans-serif); margin:12px 0 0; }
+  #fc-home-{{ section.id }} .fc-best-grid { display:grid; grid-template-columns: repeat(4,1fr); gap: 18px; }
+  #fc-home-{{ section.id }} .fc-pc { display:flex; flex-direction:column; background:#fff; border:1px solid #e7eaf2; border-radius:18px; overflow:hidden; text-decoration:none; transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
+  #fc-home-{{ section.id }} .fc-pc:hover { transform: translateY(-4px); box-shadow: 0 22px 46px rgba(11,24,64,.10); border-color:#d5dcf0; }
+  #fc-home-{{ section.id }} .fc-pc-media { position:relative; aspect-ratio:1/1; background:#F6F7FA; display:grid; place-items:center; padding:10px; text-decoration:none; }
+  #fc-home-{{ section.id }} .fc-pc-media img { width:auto; height:auto; max-width:100%; max-height:96%; object-fit:contain; mix-blend-mode:multiply; }
+  #fc-home-{{ section.id }} .fc-pc-rank { position:absolute; top:12px; left:12px; display:inline-flex; align-items:center; gap:5px; background: var(--fc-accent); color: var(--fc-darker); font:800 10.5px/1 var(--font-body-family, sans-serif); letter-spacing:.08em; text-transform:uppercase; padding:6px 10px; border-radius:99px; }
+  #fc-home-{{ section.id }} .fc-pc-rank svg { width:11px; height:11px; }
+  #fc-home-{{ section.id }} .fc-pc-body { padding:16px 18px 20px; display:flex; flex-direction:column; flex:1; border-top:1px solid #e7eaf2; }
+  #fc-home-{{ section.id }} .fc-pc-vendor { color: var(--fc-purple); font:700 11px/1 var(--font-body-family, sans-serif); letter-spacing:.09em; text-transform:uppercase; margin:0 0 7px; }
+  #fc-home-{{ section.id }} .fc-pc-title { color: var(--fc-navy); font:600 14.5px/1.35 var(--font-body-family, sans-serif); margin:0 0 14px; text-decoration:none; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; min-height:40px; transition: color .18s ease; }
+  #fc-home-{{ section.id }} .fc-pc-title:hover { color: var(--fc-purple); }
+  #fc-home-{{ section.id }} .fc-pc-foot { margin-top:auto; display:flex; align-items:center; justify-content:space-between; gap:10px; }
+  #fc-home-{{ section.id }} .fc-pc-prices { display:flex; flex-direction:column; gap:4px; }
+  #fc-home-{{ section.id }} .fc-pc-price { color: var(--fc-navy); font:800 17px/1 var(--font-body-family, sans-serif); display:flex; align-items:baseline; gap:6px; }
+  #fc-home-{{ section.id }} .fc-pc-price--divisa { color:#12994f; }
+  #fc-home-{{ section.id }} .fc-pc-cur { font:700 10px/1 var(--font-body-family, sans-serif); letter-spacing:.06em; text-transform:uppercase; opacity:.6; }
+  #fc-home-{{ section.id }} .fc-pc-price--divisa .fc-pc-cur { color:#12994f; opacity:.85; }
+  #fc-home-{{ section.id }} .fc-pc-form { margin:0; }
+  #fc-home-{{ section.id }} .fc-pc-cart { display:inline-flex; align-items:center; justify-content:center; width:44px; height:44px; background: var(--fc-navy); color:#fff; border:0; border-radius:12px; cursor:pointer; text-decoration:none; transition: background .18s ease, color .18s ease, transform .18s ease; }
+  #fc-home-{{ section.id }} .fc-pc-cart svg { width:20px; height:20px; }
+  #fc-home-{{ section.id }} .fc-pc-cart:hover { background: var(--fc-accent); color: var(--fc-darker); transform: translateY(-2px); }
+  #fc-home-{{ section.id }} .fc-pc-cart.is-added { background: var(--fc-accent); color: var(--fc-darker); }
+  #fc-home-{{ section.id }} .fc-pc-cart--out { background: var(--fc-line); color: var(--fc-navy); }
+  #fc-home-{{ section.id }} .fc-goal { padding: 56px 0; }
+  #fc-home-{{ section.id }} .fc-goal--alt { background: var(--fc-light); }
+  #fc-home-{{ section.id }} .fc-best-foot { text-align:center; margin-top: 36px; }
+  #fc-home-{{ section.id }} .fc-best-all { display:inline-flex; align-items:center; gap:8px; background: var(--fc-navy); color:#fff; text-decoration:none; font:700 15px/1 var(--font-body-family, sans-serif); padding:15px 26px; border-radius:11px; transition: transform .18s ease, background .18s ease; }
+  #fc-home-{{ section.id }} .fc-best-all:hover { transform: translateY(-2px); background: var(--fc-purple); }
+  #fc-home-{{ section.id }} .fc-best-all svg { width:17px; height:17px; }
+  /* Ajuste puntual: la foto de GHOST Legend llena todo el cuadro; la reducimos para igualar al resto */
+  #fc-home-{{ section.id }} .fc-pc[data-handle="ghost-legend-v4-pre-entreno-blue-raspberry-30-servicios"] .fc-pc-media img { max-width:80%; max-height:80%; }
+
+  /* ===== CARRUSEL DESTACADOS POR CATEGORIA ===== */
+  #fc-home-{{ section.id }} .fc-catrot { margin: 6px 0 46px; position: relative; }
+  #fc-home-{{ section.id }} .fc-catrot-head { display:flex; align-items:baseline; gap:12px; margin:0 0 18px; }
+  #fc-home-{{ section.id }} .fc-catrot-eyebrow { color: var(--fc-purple); font:700 12px/1 var(--font-body-family, sans-serif); letter-spacing:.14em; text-transform:uppercase; }
+  #fc-home-{{ section.id }} .fc-catrot-label { color: var(--fc-navy); font:800 18px/1 var(--font-body-family, sans-serif); }
+  #fc-home-{{ section.id }} .fc-catrot-body { display:flex; align-items:stretch; gap:14px; }
+  #fc-home-{{ section.id }} .fc-catrot-arrow { flex:0 0 auto; align-self:center; width:44px; height:44px; border-radius:50%; border:1px solid #e7eaf2; background:#fff; color: var(--fc-navy); display:grid; place-items:center; cursor:pointer; transition: background .18s ease, color .18s ease, transform .18s ease, border-color .18s ease; }
+  #fc-home-{{ section.id }} .fc-catrot-arrow:hover { background: var(--fc-navy); color:#fff; border-color: var(--fc-navy); transform: translateY(-2px); }
+  #fc-home-{{ section.id }} .fc-catrot-arrow svg { width:20px; height:20px; }
+  #fc-home-{{ section.id }} .fc-catrot-slides { flex:1 1 auto; min-width:0; }
+  #fc-home-{{ section.id }} .fc-catrot-slide { display:none; }
+  #fc-home-{{ section.id }} .fc-catrot-slide.is-active { display:block; animation: fc-catfade .4s ease; }
+  #fc-home-{{ section.id }} .fc-catrot-grid { display:grid; grid-template-columns: repeat(4,1fr); gap:18px; }
+  @keyframes fc-catfade { from { opacity:0; transform: translateY(8px); } to { opacity:1; transform:none; } }
+  @media (prefers-reduced-motion: reduce) { #fc-home-{{ section.id }} .fc-catrot-slide.is-active { animation:none; } }
+
+  /* ===== FRANJA ENTREGA / STATS ===== */
+  #fc-home-{{ section.id }} .fc-stats { background:#fff; padding: 58px 0; border-bottom:1px solid #e7eaf2; text-align:center; }
+  #fc-home-{{ section.id }} .fc-stats h2 { color: var(--fc-navy); font-size: clamp(23px,2.9vw,35px); font-weight:800; letter-spacing:-.015em; line-height:1.15; max-width: 840px; margin: 0 auto 40px; }
+  #fc-home-{{ section.id }} .fc-stats-row { display:flex; justify-content:center; align-items:center; gap: clamp(30px,6vw,88px); flex-wrap:wrap; }
+  #fc-home-{{ section.id }} .fc-stat { display:flex; align-items:center; gap:16px; text-align:left; }
+  #fc-home-{{ section.id }} .fc-stat-ico { width:58px; height:58px; flex:0 0 58px; border-radius:16px; display:flex; align-items:center; justify-content:center; background: rgba(59,31,107,.08); color: var(--fc-purple); }
+  #fc-home-{{ section.id }} .fc-stat-ico svg { width:30px; height:30px; }
+  /* Animaciones de la sección de envíos */
+  #fc-home-{{ section.id }} .fc-stat-ico--bolt { background: rgba(25,195,125,.12); color: var(--fc-green, #19C37D); }
+  #fc-home-{{ section.id }} .fc-stat-ico--bolt svg { animation: fc-bolt 2.6s ease-in-out infinite; transform-origin:center; }
+  #fc-home-{{ section.id }} .fc-stat-ico--truck svg { animation: fc-truck 2.8s ease-in-out infinite; }
+  @keyframes fc-bolt {
+    0%, 62%, 100% { transform: scale(1); opacity:1; filter:none; }
+    68% { transform: scale(1.18); opacity:.55; }
+    72% { transform: scale(.94); opacity:1; }
+    78% { transform: scale(1.12); opacity:.7; }
+    84% { transform: scale(1); opacity:1; }
+  }
+  @keyframes fc-truck {
+    0%, 100% { transform: translateX(-3px); }
+    45% { transform: translateX(3px); }
+    50% { transform: translateX(3px) translateY(-.5px); }
+    90% { transform: translateX(-3px); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #fc-home-{{ section.id }} .fc-stat-ico--bolt svg,
+    #fc-home-{{ section.id }} .fc-stat-ico--truck svg { animation: none; }
+  }
+  #fc-home-{{ section.id }} .fc-stat-n { display:block; color: var(--fc-navy); font-size: clamp(25px,2.9vw,33px); font-weight:800; line-height:1; letter-spacing:-.01em; }
+  #fc-home-{{ section.id }} .fc-stat-l { display:block; color:#56607a; font: 500 14px/1.35 var(--font-body-family, sans-serif); margin-top:6px; }
 
   /* CATEGORIES */
   #fc-home-{{ section.id }} .fc-cats { background: var(--fc-light); padding: 70px 0; }
@@ -143,18 +240,24 @@
   #fc-home-{{ section.id }} .fc-cat.fc-reveal { transform: none; transition: opacity .6s ease var(--fc-d,0ms), transform .14s ease, box-shadow .14s ease; }
   #fc-home-{{ section.id }} .fc-step.fc-reveal { transform: none; transition: opacity .6s ease var(--fc-d,0ms), transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
   #fc-home-{{ section.id }} .fc-cat.fc-reveal.is-in, #fc-home-{{ section.id }} .fc-step.fc-reveal.is-in { transform: none; }
+  #fc-home-{{ section.id }} .fc-hero .fc-hero-eyebrow,
   #fc-home-{{ section.id }} .fc-hero h1.fc-h,
   #fc-home-{{ section.id }} .fc-hero p,
-  #fc-home-{{ section.id }} .fc-hero .fc-cta-row { opacity: 0; animation: fc-hero-in .8s cubic-bezier(.2,.7,.2,1) forwards; }
-  #fc-home-{{ section.id }} .fc-hero h1.fc-h { animation-delay: .05s; }
-  #fc-home-{{ section.id }} .fc-hero p { animation-delay: .22s; }
-  #fc-home-{{ section.id }} .fc-hero .fc-cta-row { animation-delay: .38s; }
+  #fc-home-{{ section.id }} .fc-hero .fc-cta-row,
+  #fc-home-{{ section.id }} .fc-hero .fc-hero-trust { opacity: 0; animation: fc-hero-in .8s cubic-bezier(.2,.7,.2,1) forwards; }
+  #fc-home-{{ section.id }} .fc-hero .fc-hero-eyebrow { animation-delay: 0s; }
+  #fc-home-{{ section.id }} .fc-hero h1.fc-h { animation-delay: .12s; }
+  #fc-home-{{ section.id }} .fc-hero p { animation-delay: .26s; }
+  #fc-home-{{ section.id }} .fc-hero .fc-cta-row { animation-delay: .4s; }
+  #fc-home-{{ section.id }} .fc-hero .fc-hero-trust { animation-delay: .54s; }
   @keyframes fc-hero-in { from { opacity:0; transform: translateY(22px); } to { opacity:1; transform:none; } }
   @media (prefers-reduced-motion: reduce) {
     #fc-home-{{ section.id }} .fc-reveal { opacity:1 !important; transform:none !important; transition:none !important; }
+    #fc-home-{{ section.id }} .fc-hero .fc-hero-eyebrow,
     #fc-home-{{ section.id }} .fc-hero h1.fc-h,
     #fc-home-{{ section.id }} .fc-hero p,
-    #fc-home-{{ section.id }} .fc-hero .fc-cta-row { opacity:1 !important; animation:none !important; }
+    #fc-home-{{ section.id }} .fc-hero .fc-cta-row,
+    #fc-home-{{ section.id }} .fc-hero .fc-hero-trust { opacity:1 !important; animation:none !important; }
     #fc-home-{{ section.id }} .fc-marq-track { animation:none !important; }
   }
 
@@ -169,35 +272,6 @@
   #fc-home-{{ section.id }} .fc-list span { font: 400 13px/1.45 var(--font-body-family, sans-serif); color: rgba(255,255,255,.66); }
   #fc-home-{{ section.id }} .fc-pays { display:flex; flex-wrap:wrap; gap:10px; margin-top:18px; }
   #fc-home-{{ section.id }} .fc-pay { background: rgba(255,255,255,.08); border:1px solid var(--fc-line); border-radius:9px; padding:11px 15px; font:700 14px/1 var(--font-body-family, sans-serif); }
-
-  /* ENVIO EXPRESS (banda destacada) */
-  #fc-home-{{ section.id }} .fc-express { background: linear-gradient(120deg, var(--fc-navy) 0%, var(--fc-purple) 100%); color:#fff; padding: 68px 0; position:relative; overflow:hidden; }
-  #fc-home-{{ section.id }} .fc-express::before { content:""; position:absolute; inset:0; background: radial-gradient(circle at 82% 26%, rgba(25,195,125,.30), transparent 44%); pointer-events:none; }
-  #fc-home-{{ section.id }} .fc-express-inner { display:grid; grid-template-columns: 1.35fr .9fr; gap: 44px; align-items:center; position:relative; z-index:1; }
-  #fc-home-{{ section.id }} .fc-express-tag { display:inline-flex; align-items:center; gap:8px; background: var(--fc-accent); color: var(--fc-darker); font:800 12px/1 var(--font-body-family, sans-serif); letter-spacing:.14em; text-transform:uppercase; padding:9px 15px; border-radius:99px; margin-bottom:18px; }
-  #fc-home-{{ section.id }} .fc-express h2 { font-size: clamp(28px,3.7vw,46px); font-weight:800; margin:0 0 12px; line-height:1.06; }
-  #fc-home-{{ section.id }} .fc-express h2 .hl { color: var(--fc-accent); }
-  #fc-home-{{ section.id }} .fc-express-lead { color: rgba(255,255,255,.84); font:400 17px/1.55 var(--font-body-family, sans-serif); margin:0 0 8px; max-width: 50ch; }
-  #fc-home-{{ section.id }} .fc-express-lead b { color:#fff; font-weight:800; }
-  #fc-home-{{ section.id }} .fc-express-cities-label { display:block; font:700 12px/1 var(--font-body-family, sans-serif); letter-spacing:.1em; text-transform:uppercase; color: rgba(255,255,255,.55); margin: 22px 0 12px; }
-  #fc-home-{{ section.id }} .fc-express-cities { display:flex; flex-wrap:wrap; gap:12px; }
-  #fc-home-{{ section.id }} .fc-city { background: rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.16); border-radius:13px; padding:13px 18px; min-width:118px; }
-  #fc-home-{{ section.id }} .fc-city-name { display:block; font:700 17px/1 var(--font-body-family, sans-serif); }
-  #fc-home-{{ section.id }} .fc-city-badge { display:block; font:800 11px/1 var(--font-body-family, sans-serif); letter-spacing:.1em; text-transform:uppercase; margin-top:6px; color: rgba(255,255,255,.55); }
-  #fc-home-{{ section.id }} .fc-city.is-live { background: rgba(25,195,125,.16); border-color: var(--fc-accent); }
-  #fc-home-{{ section.id }} .fc-city.is-live .fc-city-badge { color: var(--fc-accent); }
-  #fc-home-{{ section.id }} .fc-express-note { color: rgba(255,255,255,.62); font:400 13.5px/1.5 var(--font-body-family, sans-serif); margin:16px 0 0; max-width: 52ch; }
-  #fc-home-{{ section.id }} .fc-express-visual { display:flex; }
-  #fc-home-{{ section.id }} .fc-express-highlights { width:100%; display:grid; gap:14px; }
-  #fc-home-{{ section.id }} .fc-hl { display:flex; align-items:center; gap:16px; background: rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.16); border-radius:16px; padding:18px 20px; }
-  #fc-home-{{ section.id }} .fc-hl.is-accent { background: rgba(25,195,125,.14); border-color: rgba(25,195,125,.45); animation: fc-pulse 2.8s ease-in-out infinite; }
-  #fc-home-{{ section.id }} .fc-hl-ic { flex:0 0 auto; width:54px; height:54px; border-radius:13px; display:grid; place-items:center; background: rgba(255,255,255,.10); }
-  #fc-home-{{ section.id }} .fc-hl.is-accent .fc-hl-ic { background: rgba(25,195,125,.22); }
-  #fc-home-{{ section.id }} .fc-hl-ic svg { width:27px; height:27px; color:#fff; }
-  #fc-home-{{ section.id }} .fc-hl.is-accent .fc-hl-ic svg { color: var(--fc-accent); }
-  #fc-home-{{ section.id }} .fc-hl b { display:block; font:800 18px/1.1 var(--font-body-family, sans-serif); }
-  #fc-home-{{ section.id }} .fc-hl span { display:block; font:400 13.5px/1.35 var(--font-body-family, sans-serif); color: rgba(255,255,255,.72); margin-top:3px; }
-  @keyframes fc-pulse { 0%,100%{ box-shadow: 0 0 0 0 rgba(25,195,125,.28); } 50%{ box-shadow: 0 0 0 16px rgba(25,195,125,0); } }
 
   /* PREGUNTAS Y RESPUESTAS */
   #fc-home-{{ section.id }} .fc-faq { background:#fff; padding: 82px 0; }
@@ -234,10 +308,10 @@
   @media (max-width: 990px) {
     #fc-home-{{ section.id }} .fc-bene-grid { grid-template-columns: repeat(2,1fr); gap:20px; }
     #fc-home-{{ section.id }} .fc-cat-grid { grid-template-columns: repeat(2,1fr); }
+    #fc-home-{{ section.id }} .fc-best-grid { grid-template-columns: repeat(2,1fr); }
     #fc-home-{{ section.id }} .fc-steps-grid { grid-template-columns: repeat(2,1fr); }
     #fc-home-{{ section.id }} .fc-steps-grid::before { display:none; }
     #fc-home-{{ section.id }} .fc-info-cols { grid-template-columns: 1fr; gap:40px; }
-    #fc-home-{{ section.id }} .fc-express-inner { grid-template-columns: 1fr; gap:30px; }
     #fc-home-{{ section.id }} .fc-nap-grid { grid-template-columns: 1fr; gap:30px; }
     #fc-home-{{ section.id }} .fc-nap-map { min-height: 300px; order: 2; }
     #fc-home-{{ section.id }} .fc-nap-map iframe { min-height: 300px; }
@@ -246,31 +320,71 @@
   /* Tablet / teléfono grande: aire vertical más compacto */
   @media (max-width: 749px) {
     #fc-home-{{ section.id }} .fc-wrap { padding: 0 18px; }
-    #fc-home-{{ section.id }} .fc-hero { min-height: 0; padding: 60px 0 54px; }
+    #fc-home-{{ section.id }} .fc-marq-track img { margin:0 26px; }
+    #fc-home-{{ section.id }} .fc-cat--hide-mobile { display:none; }
+    #fc-home-{{ section.id }} .fc-stats { padding: 42px 0; }
+    #fc-home-{{ section.id }} .fc-stats h2 { margin-bottom: 30px; }
+    #fc-home-{{ section.id }} .fc-stat--hide-mobile { display:none; }
+    #fc-home-{{ section.id }} .fc-stats-row { flex-direction:row; flex-wrap:nowrap; align-items:center; justify-content:center; gap:20px; }
+    #fc-home-{{ section.id }} .fc-stat { gap:11px; }
+    #fc-home-{{ section.id }} .fc-stat-ico { width:46px; height:46px; flex-basis:46px; border-radius:13px; }
+    #fc-home-{{ section.id }} .fc-stat-ico svg { width:25px; height:25px; }
+    #fc-home-{{ section.id }} .fc-stat-n { font-size:20px; }
+    #fc-home-{{ section.id }} .fc-stat-l { font-size:11.5px; margin-top:4px; }
+    #fc-home-{{ section.id }} .fc-cat-bg { object-position: 72% center; }
+    #fc-home-{{ section.id }} .fc-hero {
+      min-height: 0; padding: 0 0 44px; align-items: flex-start;
+      background:
+        linear-gradient(180deg, var(--fc-navy) 0%, #0c1738 55%, var(--fc-darker) 100%),
+        var(--fc-darker);
+    }
+    #fc-home-{{ section.id }} .fc-hero .fc-wrap { display: flex; flex-direction: column; }
+    #fc-home-{{ section.id }} .fc-hero .fc-wrap .fc-hero-photo {
+      order: -1; display: block; width: calc(100% + 36px); max-width: calc(100% + 36px); height: auto;
+      margin: 0 -18px 22px; border-radius: 0;
+      -webkit-mask-image: linear-gradient(180deg, #000 80%, transparent 100%);
+      mask-image: linear-gradient(180deg, #000 80%, transparent 100%);
+    }
     #fc-home-{{ section.id }} .fc-hero .fc-wrap { padding-left: 18px; padding-right: 18px; }
     #fc-home-{{ section.id }} .fc-hero .fc-wrap > * { max-width: 100%; }
     #fc-home-{{ section.id }} .fc-hero p { max-width: 100%; }
     #fc-home-{{ section.id }} .fc-cats,
     #fc-home-{{ section.id }} .fc-steps,
     #fc-home-{{ section.id }} .fc-info,
-    #fc-home-{{ section.id }} .fc-express,
     #fc-home-{{ section.id }} .fc-faq,
     #fc-home-{{ section.id }} .fc-nap { padding: 52px 0; }
     #fc-home-{{ section.id }} .fc-steps .fc-sub,
     #fc-home-{{ section.id }} .fc-faq .fc-sub { margin-bottom: 32px; }
-    #fc-home-{{ section.id }} .fc-hl b { font-size: 17px; }
   }
 
   /* Teléfono: una sola columna, botones y tarjetas a lo ancho */
   @media (max-width: 560px) {
-    #fc-home-{{ section.id }} .fc-cat-grid { grid-template-columns: 1fr; }
+    #fc-home-{{ section.id }} .fc-cat-grid { grid-template-columns: repeat(2,1fr); gap: 12px; }
+    #fc-home-{{ section.id }} .fc-cat h3 { font-size: 18px; }
+    #fc-home-{{ section.id }} .fc-cat span { font-size: 11px; }
+    #fc-home-{{ section.id }} .fc-best-grid { gap: 12px; }
+    /* Carrusel por categoría en móvil: 2 productos, flechas más compactas */
+    #fc-home-{{ section.id }} .fc-catrot-grid { grid-template-columns: repeat(2,1fr); gap: 12px; }
+    #fc-home-{{ section.id }} .fc-catrot-slide .fc-pc:nth-child(n+3) { display:none; }
+    #fc-home-{{ section.id }} .fc-catrot-label { font-size:16px; }
+    /* Movil: las flechas salen de la fila y suben a la esquina superior derecha,
+       asi las 2 tarjetas usan todo el ancho y quedan igual que el resto del home */
+    #fc-home-{{ section.id }} .fc-catrot-head { min-height: 34px; padding-right: 74px; }
+    #fc-home-{{ section.id }} .fc-catrot-body { gap: 0; }
+    #fc-home-{{ section.id }} .fc-catrot-arrow { position: absolute; top: -4px; width: 34px; height: 34px; }
+    #fc-home-{{ section.id }} .fc-catrot-arrow svg { width: 16px; height: 16px; }
+    #fc-home-{{ section.id }} .fc-catrot-arrow[data-catrot-prev] { right: 40px; }
+    #fc-home-{{ section.id }} .fc-catrot-arrow[data-catrot-next] { right: 0; }
+    #fc-home-{{ section.id }} .fc-pc-body { padding: 14px; }
+    #fc-home-{{ section.id }} .fc-pc-title { font-size: 13.5px; min-height: 38px; }
+    #fc-home-{{ section.id }} .fc-pc-price { font-size: 15px; }
+    #fc-home-{{ section.id }} .fc-pc-cta { padding: 10px 12px; font-size: 12px; }
     #fc-home-{{ section.id }} .fc-steps-grid { grid-template-columns: 1fr; }
     #fc-home-{{ section.id }} .fc-bene-grid { grid-template-columns: 1fr; }
-    #fc-home-{{ section.id }} .fc-cat { min-height: 150px; }
+    #fc-home-{{ section.id }} .fc-cat { min-height: 128px; }
+    #fc-home-{{ section.id }} .fc-cat h3 { font-size: 17px; }
     #fc-home-{{ section.id }} .fc-cta-row .fc-btn { flex: 1 1 100%; justify-content: center; }
     #fc-home-{{ section.id }} .fc-nap-actions .fc-btn { flex: 1 1 100%; justify-content: center; }
-    #fc-home-{{ section.id }} .fc-express-cities { gap: 10px; }
-    #fc-home-{{ section.id }} .fc-city { flex: 1 1 calc(50% - 5px); min-width: 0; }
     #fc-home-{{ section.id }} .fc-pay { flex: 1 1 calc(50% - 5px); text-align: center; }
     #fc-home-{{ section.id }} .fc-faq-item summary { font-size: 16px; padding: 17px 18px; }
     #fc-home-{{ section.id }} .fc-faq-item p { padding: 0 18px 18px; }
@@ -282,15 +396,19 @@
   {%- comment -%} ===== HERO ===== {%- endcomment -%}
   <section class="fc-hero">
     <div class="fc-wrap">
-      <h1 class="fc-h">{{ section.settings.hero_title | default: 'Suplementos Deportivos al Mejor Precio de Venezuela' }}</h1>
-      <p>{{ section.settings.hero_text | default: 'Proteínas, creatina, pre-entrenos y vitaminas importados de EE.UU. Compra online con envío a todo el país, gratis en Valera desde $30, o retira en nuestra tienda en Valera.' }}</p>
+      {%- if section.settings.eyebrow != blank -%}
+      <span class="fc-hero-eyebrow">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l7.1-1.01L12 2z"/></svg>
+        {{ section.settings.eyebrow }}
+      </span>
+      {%- endif -%}
+      <h1 class="fc-h">{{ section.settings.hero_title | default: 'La tienda de suplementos que el interior del país estaba esperando' }}</h1>
+      <p>{{ section.settings.hero_text | default: '<span class="fc-hl-g">Marcas Top Mundiales 100% originales</span>, a precios irresistibles sin que tengas que viajar o importar tú mismo. Compra online en minutos y recíbela <span class="fc-hl-a">el mismo día en Trujillo</span> o en todo el país <span class="fc-hl-a">en 1 a 2 días</span>.' }}</p>
+      <img class="fc-hero-photo" src="{{ 'fitcore-hero-mobile.jpg' | asset_url }}" alt="Suplementos originales en Fitcore Store" loading="eager" fetchpriority="high" decoding="async" width="766" height="550">
       <div class="fc-cta-row">
         <a class="fc-btn fc-btn--primary" href="{{ section.settings.hero_cta_url | default: '/collections/all' }}">
-          {{ section.settings.hero_cta_label | default: 'Ver catálogo' }}
-        </a>
-        <a class="fc-btn fc-btn--wa" href="https://wa.me/{{ wa }}?text={{ wa_msg_enc }}" target="_blank" rel="noopener">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.82 11.82 0 018.413 3.488 11.82 11.82 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 001.51 5.26l-.999 3.648 3.477-.911z"/></svg>
-          Pedir por WhatsApp
+          {{ section.settings.hero_cta_label | default: 'Comprar ahora' }}
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
         </a>
       </div>
     </div>
@@ -320,15 +438,115 @@
 
   {%- comment -%} ===== MARQUEE MARCAS ===== {%- endcomment -%}
   <section class="fc-marq">
-    <p class="fc-marq-title">{{ section.settings.marq_title | default: 'Las marcas que encuentras en FitCore Store' }}</p>
+    <p class="fc-marq-title">{{ section.settings.marq_title | default: 'Las marcas que encuentras en Fitcore Store' }}</p>
     <div class="fc-marq-mask">
       <div class="fc-marq-track">
-        {%- assign brand_logos = 'brand-optimum-nutrition.png,brand-dymatize.png,brand-muscletech.png,brand-c4-energy.png,brand-bucked-up.webp,brand-redcon1.png,brand-sascha.webp' | split: ',' -%}
+        {%- assign brand_pairs = "brand-optimum-nutrition.png|Optimum Nutrition,brand-dymatize.png|Dymatize,brand-muscletech.png|MuscleTech,brand-c4-energy.png|C4,brand-xtend.png|XTEND|/collections/aminoacidos,brand-forfit.png|Forfit,brand-ghost.png|Ghost,brand-bsn.png|BSN,brand-nutrex.png|Nutrex,brand-natures-bounty.png|Nature's Bounty" | split: ',' -%}
         {%- for i in (1..2) -%}
-          {%- for logo in brand_logos -%}
-            <img src="{{ logo | asset_url }}" alt="Marca aliada" loading="lazy">
+          {%- for pair in brand_pairs -%}
+            {%- assign pp = pair | split: '|' -%}
+            {%- assign logo = pp[0] -%}
+            {%- assign vend = pp[1] -%}
+            {%- assign base = pp[2] | default: routes.all_products_collection_url -%}
+            {%- assign logo_cls = '' -%}
+            {%- if logo contains 'brand-bsn' -%}{%- assign logo_cls = 'fc-emblem' -%}{%- endif -%}
+            <a class="fc-marq-link" href="{{ base }}?marca={{ vend | url_encode }}" aria-label="Ver productos {{ vend | escape }}">
+              <img class="{{ logo_cls }}" src="{{ logo | asset_url }}" alt="{{ vend | escape }}" loading="lazy">
+            </a>
           {%- endfor -%}
         {%- endfor -%}
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} ===== MAS VENDIDOS ===== {%- endcomment -%}
+  <section class="fc-best">
+    <div class="fc-wrap">
+      <div class="fc-best-head fc-reveal">
+        <h2>{{ section.settings.best_title | default: 'Los más vendidos' }}</h2>
+        <p>{{ section.settings.best_sub | default: 'Los favoritos que más se mueven: proteínas, creatina, pre-entrenos y más. Todos 100% originales y listos para despacho el mismo día.' }}</p>
+      </div>
+      <div class="fc-best-grid">
+        {%- assign fc_best_default = 'optimum-nutrition-gold-standard-100-whey,dymatize-iso100-whey-protein-isolate,optimum-nutrition-micronized-creatine-powder,c4-original-pre-entreno' -%}
+        {%- assign fc_best_str = section.settings.best_handles | default: fc_best_default -%}
+        {%- assign fc_best_handles = fc_best_str | split: ',' -%}
+        {%- for fc_h in fc_best_handles -%}
+          {%- assign fc_handle = fc_h | strip -%}
+          {%- assign fc_prod = all_products[fc_handle] -%}
+          {%- if fc_prod != blank and fc_prod.id -%}
+            {%- assign fc_delay = forloop.index0 | times: 60 -%}
+            {%- assign fc_var = fc_prod.selected_or_first_available_variant -%}
+            <div class="fc-pc fc-reveal" style="--fc-d:{{ fc_delay }}ms">
+              <a class="fc-pc-media" href="{{ fc_prod.url }}">
+                <span class="fc-pc-rank"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 6.9H22l-6 4.6 2.3 7L12 16.9 5.7 20.5 8 13.5 2 8.9h7.6z"/></svg>Top ventas</span>
+                {%- if fc_prod.featured_image -%}
+                  <img src="{{ fc_prod.featured_image | image_url: width: 600 }}" alt="{{ fc_prod.title | escape }}" loading="lazy" width="600" height="600">
+                {%- endif -%}
+              </a>
+              <div class="fc-pc-body">
+                {%- if fc_prod.vendor != blank -%}<span class="fc-pc-vendor">{{ fc_prod.vendor }}</span>{%- endif -%}
+                <a class="fc-pc-title" href="{{ fc_prod.url }}">{{ fc_prod.title }}</a>
+                <div class="fc-pc-foot">
+                  {%- assign fc_divisa = fc_prod.price | times: 100 | divided_by: 115 -%}
+                  <div class="fc-pc-prices">
+                    <span class="fc-pc-price fc-pc-price--divisa">{{ fc_divisa | money }}<span class="fc-pc-cur">Divisa</span></span>
+                    <span class="fc-pc-price">{{ fc_prod.price | money }}<span class="fc-pc-cur">BCV</span></span>
+                  </div>
+                  {%- if fc_var and fc_var.available -%}
+                    <form method="post" action="{{ routes.cart_add_url }}" class="fc-pc-form" data-fc-add>
+                      <input type="hidden" name="form_type" value="product">
+                      <input type="hidden" name="utf8" value="✓">
+                      <input type="hidden" name="id" value="{{ fc_var.id }}">
+                      <button type="submit" class="fc-pc-cart" aria-label="Agregar {{ fc_prod.title | escape }} al carrito">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                      </button>
+                    </form>
+                  {%- else -%}
+                    <a class="fc-pc-cart fc-pc-cart--out" href="{{ fc_prod.url }}" aria-label="Ver {{ fc_prod.title | escape }}">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 5l7 7-7 7"/></svg>
+                    </a>
+                  {%- endif -%}
+                </div>
+              </div>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+      <div class="fc-best-foot fc-reveal">
+        <a class="fc-best-all" href="{{ routes.all_products_collection_url | default: '/collections/all' }}">
+          Ver todos los productos
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} ===== FRANJA ENTREGA ===== {%- endcomment -%}
+  <section class="fc-stats">
+    <div class="fc-wrap">
+      <h2 class="fc-reveal">{{ section.settings.stats_title | default: 'Compra hoy y recíbelo rápido en toda Venezuela' }}</h2>
+      <div class="fc-stats-row">
+        <div class="fc-stat fc-reveal fc-stat--hide-mobile" style="--fc-d:0ms">
+          <span class="fc-stat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.27 6.96 12 12.01l8.73-5.05"/><path d="M12 22.08V12"/></svg></span>
+          <div>
+            <span class="fc-stat-n" data-fc-count="20" data-fc-suffix="+">20+</span>
+            <span class="fc-stat-l">Marcas internacionales originales</span>
+          </div>
+        </div>
+        <div class="fc-stat fc-reveal" style="--fc-d:120ms">
+          <span class="fc-stat-ico fc-stat-ico--bolt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg></span>
+          <div>
+            <span class="fc-stat-n">Express</span>
+            <span class="fc-stat-l">Entrega el mismo día en Trujillo</span>
+          </div>
+        </div>
+        <div class="fc-stat fc-reveal" style="--fc-d:240ms">
+          <span class="fc-stat-ico fc-stat-ico--truck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h11v9H3z"/><path d="M14 9h4l3 3v3h-7z"/><circle cx="7" cy="18" r="1.7"/><circle cx="17.5" cy="18" r="1.7"/></svg></span>
+          <div>
+            <span class="fc-stat-n">1 a 2 días</span>
+            <span class="fc-stat-l">Entrega a nivel nacional</span>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -336,15 +554,64 @@
   {%- comment -%} ===== CATEGORIAS ===== {%- endcomment -%}
   <section class="fc-cats">
     <div class="fc-wrap">
-      <h2 class="fc-h fc-reveal">Compra suplementos por categoría</h2>
-      <p class="fc-sub fc-reveal" style="--fc-d:80ms">Proteínas, creatina, pre y post entreno, ganadores, quemadores y más para tu entrenamiento.</p>
+      <h2 class="fc-h fc-reveal">Encuentra lo que necesites, sea cual sea tu objetivo</h2>
+      <p class="fc-sub fc-reveal" style="--fc-d:80ms">Ganar músculo, definir, rendir más o cuidar tu salud. Elige tu categoría y arma tu pedido en minutos.</p>
+
+      {%- comment -%} Carrusel: destacados por categoría (rota cada 3s, flechas manuales) {%- endcomment -%}
+      {%- assign fc_rot_cats = "vitaminas,aminoacidos,quemadores-de-grasa,proteinas,creatina,pre-post-entreno" | split: "," -%}
+      <div class="fc-catrot fc-reveal" data-catrot style="--fc-d:120ms">
+        <div class="fc-catrot-head">
+          <span class="fc-catrot-eyebrow">Destacados en</span>
+          <span class="fc-catrot-label" data-catrot-label></span>
+        </div>
+        <div class="fc-catrot-body">
+          <button type="button" class="fc-catrot-arrow" data-catrot-prev aria-label="Categoría anterior">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+          </button>
+          <div class="fc-catrot-slides">
+            {%- for fc_rc in fc_rot_cats -%}
+              {%- assign fc_rcol = collections[fc_rc] -%}
+              {%- comment -%} Orden fijo por categoría (handles). Si no hay override, usa el orden de la colección. {%- endcomment -%}
+              {%- assign fc_override = '' -%}
+              {%- case fc_rc -%}
+                {%- when 'vitaminas' -%}
+                  {%- assign fc_override = 'natures-bounty-hair-skin-nails-60-caplets,natures-bounty-vitamina-d3-2000-iu-tamano-familiar-350-softgels,optimum-nutrition-opti-women,optimum-nutrition-opti-men' -%}
+              {%- endcase -%}
+              {%- if fc_rcol != blank and fc_rcol.products.size > 0 -%}
+                <div class="fc-catrot-slide" data-cat-name="{{ fc_rcol.title | escape }}">
+                  <div class="fc-catrot-grid">
+                    {%- if fc_override != blank -%}
+                      {%- assign fc_ov_handles = fc_override | split: ',' -%}
+                      {%- for fc_ovh in fc_ov_handles -%}
+                        {%- assign fc_ovh_clean = fc_ovh | strip -%}
+                        {%- assign fc_ovp = all_products[fc_ovh_clean] -%}
+                        {%- if fc_ovp != blank and fc_ovp.id -%}
+                          {%- render 'fitcore-product-card', product: fc_ovp, lazy: true -%}
+                        {%- endif -%}
+                      {%- endfor -%}
+                    {%- else -%}
+                      {%- for fc_rp in fc_rcol.products limit: 4 -%}
+                        {%- render 'fitcore-product-card', product: fc_rp, lazy: true -%}
+                      {%- endfor -%}
+                    {%- endif -%}
+                  </div>
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+          <button type="button" class="fc-catrot-arrow" data-catrot-next aria-label="Categoría siguiente">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+          </button>
+        </div>
+      </div>
+
       <div class="fc-cat-grid">
         {%- assign fc_cat_handles = "proteinas,creatina,pre-post-entreno,ganadores-de-masa,quemadores-de-grasa,aminoacidos,vitaminas,snacks,accesorios" | split: "," -%}
         {%- for fc_h in fc_cat_handles -%}
           {%- assign fc_col = collections[fc_h] -%}
           {%- assign fc_fallback = '/collections/' | append: fc_h -%}
           {%- assign fc_delay = forloop.index0 | times: 70 -%}
-          <a class="fc-cat fc-reveal{% unless fc_col.image %} is-plain{% endunless %}" style="--fc-d:{{ fc_delay }}ms" href="{{ fc_col.url | default: fc_fallback }}">
+          <a class="fc-cat fc-reveal{% unless fc_col.image %} is-plain{% endunless %}{% if fc_h == 'snacks' %} fc-cat--hide-mobile{% endif %}" style="--fc-d:{{ fc_delay }}ms" href="{{ fc_col.url | default: fc_fallback }}">
             {%- if fc_col.image -%}
               <img class="fc-cat-bg" src="{{ fc_col.image | image_url: width: 600 }}" alt="{{ fc_col.title | escape }}" loading="lazy" width="600" height="336">
             {%- endif -%}
@@ -356,44 +623,34 @@
     </div>
   </section>
 
-  {%- comment -%} ===== ENVIO EXPRESS ===== {%- endcomment -%}
-  <section class="fc-express">
-    <div class="fc-wrap fc-express-inner">
-      <div class="fc-express-copy fc-reveal">
-        <span class="fc-express-tag">
-          <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>
-          Envíos
-        </span>
-        <h2 class="fc-h">Recíbelo rápido en <span class="hl">Valera y todo el país</span></h2>
-        <p class="fc-express-lead">Envío <b>gratis en Valera y sus alrededores</b> desde <b>$30</b>. Entrega el mismo día en todo el Edo. Trujillo, y envío a todo el país por MRW o Tealca.</p>
-        <span class="fc-express-cities-label">Entrega el mismo día en:</span>
-        <div class="fc-express-cities">
-          <span class="fc-city is-live"><span class="fc-city-name">Trujillo</span><span class="fc-city-badge">Ya disponible</span></span>
-          <span class="fc-city"><span class="fc-city-name">Maracaibo</span><span class="fc-city-badge">Pronto</span></span>
-          <span class="fc-city"><span class="fc-city-name">Barquisimeto</span><span class="fc-city-badge">Pronto</span></span>
-          <span class="fc-city"><span class="fc-city-name">Mérida</span><span class="fc-city-badge">Pronto</span></span>
-        </div>
-        <p class="fc-express-note">Ya disponible en Trujillo. Pronto, Maracaibo, Barquisimeto y Mérida también reciben con entrega el mismo día.</p>
-      </div>
-      <div class="fc-express-visual fc-reveal" style="--fc-d:120ms">
-        <div class="fc-express-highlights">
-          <div class="fc-hl is-accent">
-            <span class="fc-hl-ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg></span>
-            <div><b>Mismo día</b><span>Entrega express en Trujillo</span></div>
-          </div>
-          <div class="fc-hl">
-            <span class="fc-hl-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 3h15v13H1z"/><path d="M16 8h4l3 3v5h-7z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></span>
-            <div><b>Envío gratis</b><span>En Valera y alrededores desde $30</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+  {%- comment -%} ===== COMPRA POR OBJETIVO ===== {%- endcomment -%}
+  {%- render 'fitcore-goal-row',
+    eyebrow: 'Compra por objetivo',
+    title: 'Ciclistas y Runners',
+    sub: 'Hidratación, electrolitos y energía para aguantar cada kilómetro.',
+    badge: 'Resistencia',
+    handles: 'ghost-hydration-electrolitos-sonic-cherry-limeade-8-sticks,nutrex-eaa-hydration-blood-orange,xtend-eaa,optimum-nutrition-essential-amino-energy'
+  -%}
+  {%- render 'fitcore-goal-row',
+    eyebrow: 'Compra por objetivo',
+    title: 'Definición',
+    sub: 'Proteína magra, quemadores y carnitina para tu etapa de definición.',
+    badge: 'Definición',
+    alt: true,
+    handles: 'dymatize-iso100-whey-protein-isolate,nutrex-lipo-6-black-ultra-concentrate-60-capsulas,nutrex-liquid-carnitine-3000,bsn-aminox-435-g'
+  -%}
+  {%- render 'fitcore-goal-row',
+    eyebrow: 'Compra por objetivo',
+    title: 'Aumento de masa',
+    sub: 'Ganadores, creatina y proteína para sumar masa y fuerza.',
+    badge: 'Volumen',
+    handles: 'optimum-nutrition-serious-mass,dymatize-super-mass-gainer,muscletech-cell-tech-creatina-carbohidratos,bsn-syntha-6-2-91-lb'
+  -%}
 
   {%- comment -%} ===== COMO COMPRAR ===== {%- endcomment -%}
   <section class="fc-steps">
     <div class="fc-wrap">
-      <h2 class="fc-h fc-reveal">¿Cómo comprar en FitCore Store?</h2>
+      <h2 class="fc-h fc-reveal">¿Cómo comprar en Fitcore Store?</h2>
       <p class="fc-sub fc-reveal" style="--fc-d:80ms">En 4 pasos simples recibes tus suplementos deportivos donde estés.</p>
       <div class="fc-steps-grid">
         <div class="fc-step fc-reveal" style="--fc-d:0ms">
@@ -410,11 +667,107 @@
         </div>
         <div class="fc-step fc-reveal" style="--fc-d:360ms">
           <div class="fc-step-num" data-n="4"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><path d="M9 22V12h6v10"/></svg></div>
-          <h3>Recíbelo donde estés</h3><p>Mismo día en Valera y el Edo. Trujillo, o envío nacional por MRW y Tealca.</p>
+          <h3>Recíbelo donde estés</h3><p>Mismo día en Valera y sus alrededores. Al resto del país, por MRW o Tealca en 1 a 2 días hábiles.</p>
         </div>
       </div>
     </div>
   </section>
+
+  {%- comment -%} ===== KIT IA (LEAD MAGNET) ===== {%- endcomment -%}
+  <style>
+    #fc-home-{{ section.id }} .fc-aikit { position:relative; overflow:hidden; background:linear-gradient(120deg,#0B1840 0%,#15173f 54%,#2a1456 100%); }
+    #fc-home-{{ section.id }} .fc-aikit:before { content:""; position:absolute; top:-30%; right:-6%; width:52%; height:180%; background:radial-gradient(circle, rgba(123,74,201,.5), transparent 62%); pointer-events:none; }
+    #fc-home-{{ section.id }} .fc-aikit-inner { position:relative; z-index:2; max-width:1180px; margin:0 auto; padding:clamp(56px,7vw,96px) clamp(22px,5vw,48px); display:grid; grid-template-columns:1fr 1fr; gap:clamp(32px,5vw,64px); align-items:center; }
+    #fc-home-{{ section.id }} .fc-aikit-eyebrow { display:inline-flex; align-items:center; gap:8px; font:700 12px/1 var(--font-body-family, sans-serif); letter-spacing:.18em; text-transform:uppercase; color:#b789ff; margin:0 0 18px; }
+    #fc-home-{{ section.id }} .fc-aikit-eyebrow svg { width:15px; height:15px; }
+    #fc-home-{{ section.id }} .fc-aikit-h { font-family:var(--font-heading-family, sans-serif); font-weight:800; font-size:clamp(28px,3.6vw,46px); line-height:1.04; letter-spacing:-.02em; color:#fff; margin:0 0 16px; }
+    #fc-home-{{ section.id }} .fc-aikit-h span { color:#19C37D; }
+    #fc-home-{{ section.id }} .fc-aikit-sub { font:400 clamp(15px,1.6vw,18px)/1.55 var(--font-body-family, sans-serif); color:#d0d8f0; margin:0 0 26px; max-width:480px; }
+    #fc-home-{{ section.id }} .fc-aikit-bullets { list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:12px; }
+    #fc-home-{{ section.id }} .fc-aikit-bullets li { display:flex; align-items:flex-start; gap:12px; font:500 15px/1.45 var(--font-body-family, sans-serif); color:#bcc4e0; }
+    #fc-home-{{ section.id }} .fc-aikit-bullets li:before { content:"✓"; flex-shrink:0; margin-top:1px; width:22px; height:22px; border-radius:50%; background:rgba(25,195,125,.18); border:1px solid rgba(25,195,125,.45); display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:#19C37D; line-height:22px; }
+    #fc-home-{{ section.id }} .fc-aikit-disc { margin:20px 0 0; padding-left:14px; border-left:2px solid rgba(183,137,255,.4); font:400 12.5px/1.45 var(--font-body-family, sans-serif); color:#9aa3c4; font-style:italic; max-width:460px; }
+    #fc-home-{{ section.id }} .fc-aikit-card { position:relative; background:linear-gradient(180deg,#fbfaff 0%,#f4f1fb 100%); border:1px solid #e7e2f4; border-radius:22px; padding:clamp(28px,4vw,44px); box-shadow:0 30px 70px rgba(11,24,64,.35); overflow:hidden; }
+    #fc-home-{{ section.id }} .fc-aikit-card:before { content:""; position:absolute; top:0; left:0; right:0; height:5px; background:linear-gradient(90deg,#3B1F6B,#19C37D); }
+    #fc-home-{{ section.id }} .fc-aikit-card-tag { display:inline-flex; align-items:center; gap:8px; font:700 11.5px/1 var(--font-body-family, sans-serif); letter-spacing:.14em; text-transform:uppercase; color:#3B1F6B; background:rgba(59,31,107,.08); padding:6px 12px; border-radius:999px; margin:0 0 16px; }
+    #fc-home-{{ section.id }} .fc-aikit-card-h { font-family:var(--font-heading-family, sans-serif); font-weight:800; font-size:clamp(21px,2.6vw,28px); color:#0B1840; margin:0 0 8px; }
+    #fc-home-{{ section.id }} .fc-aikit-card-sub { font:400 14.5px/1.55 var(--font-body-family, sans-serif); color:#65708a; margin:0 0 24px; }
+    #fc-home-{{ section.id }} .fc-aikit-embed .formkit-fields { display:flex; flex-direction:column; gap:12px; margin:0; }
+    #fc-home-{{ section.id }} .fc-aikit-embed .formkit-input { width:100%; font:400 15px/1.2 var(--font-body-family, sans-serif); color:#11182f; padding:14px 16px; border:1.5px solid #e3ddf2; border-radius:12px; background:#fff; box-shadow:0 1px 2px rgba(11,24,64,.04); }
+    #fc-home-{{ section.id }} .fc-aikit-embed .formkit-input::placeholder { color:#9aa3bd; }
+    #fc-home-{{ section.id }} .fc-aikit-embed .formkit-input:focus { outline:none; border-color:#3B1F6B; box-shadow:0 0 0 4px rgba(59,31,107,.12); }
+    #fc-home-{{ section.id }} .fc-aikit-embed .formkit-submit { position:relative; width:100%; border:0; cursor:pointer; background:#3B1F6B; color:#fff; font:700 15px/1 var(--font-body-family, sans-serif); padding:17px; border-radius:12px; transition:transform .18s ease, box-shadow .18s ease, background .18s ease; box-shadow:0 14px 32px rgba(59,31,107,.28); display:flex; align-items:center; justify-content:center; gap:8px; overflow:hidden; }
+    #fc-home-{{ section.id }} .fc-aikit-embed .formkit-submit:hover { transform:translateY(-2px); background:#4a2785; box-shadow:0 20px 42px rgba(59,31,107,.4); }
+    #fc-home-{{ section.id }} .fc-aikit-embed .formkit-spinner { display:flex; position:absolute; height:0; width:0; margin:0 auto; top:0; left:0; right:0; overflow:hidden; text-align:center; transition:all 300ms ease-in-out; }
+    #fc-home-{{ section.id }} .fc-aikit-embed .formkit-spinner > div { margin:auto; width:12px; height:12px; background:#fff; opacity:.3; border-radius:100%; display:inline-block; animation:fcaikit-bounce 1.4s infinite ease-in-out both; }
+    #fc-home-{{ section.id }} .fc-aikit-embed .formkit-spinner > div:nth-child(1){ animation-delay:-.32s; }
+    #fc-home-{{ section.id }} .fc-aikit-embed .formkit-spinner > div:nth-child(2){ animation-delay:-.16s; }
+    #fc-home-{{ section.id }} .fc-aikit-embed .formkit-submit[data-active] .formkit-spinner { opacity:1; height:100%; width:50px; }
+    #fc-home-{{ section.id }} .fc-aikit-embed .formkit-submit[data-active] .formkit-spinner ~ span { opacity:0; }
+    #fc-home-{{ section.id }} .fc-aikit-embed .formkit-alert { background:#fde8e2; border:1px solid #f2643b; color:#ea4110; border-radius:8px; padding:10px 14px; margin-bottom:12px; list-style:none; font-size:14px; }
+    #fc-home-{{ section.id }} .fc-aikit-embed .formkit-alert:empty { display:none; }
+    #fc-home-{{ section.id }} .fc-aikit-embed .formkit-powered-by-convertkit-container { display:none; }
+    @keyframes fcaikit-bounce { 0%,80%,100%{ transform:scale(0); } 40%{ transform:scale(1); } }
+    #fc-home-{{ section.id }} .fc-aikit-note { display:flex; align-items:center; justify-content:center; gap:10px; flex-wrap:wrap; margin-top:16px; font:500 12.5px/1.3 var(--font-body-family, sans-serif); color:#9aa3bd; }
+    #fc-home-{{ section.id }} .fc-aikit-note span.dot { color:#ccc; }
+    @media (max-width:860px){
+      #fc-home-{{ section.id }} .fc-aikit-inner { grid-template-columns:1fr; }
+      #fc-home-{{ section.id }} .fc-aikit-copy { order:2; }
+      #fc-home-{{ section.id }} .fc-aikit-card { order:1; max-width:520px; width:100%; }
+      #fc-home-{{ section.id }} .fc-aikit { background:var(--fc-navy); }
+      #fc-home-{{ section.id }} .fc-aikit:before { display:none; }
+    }
+  </style>
+  <section class="fc-aikit">
+    <div class="fc-aikit-inner">
+      <div class="fc-aikit-copy fc-reveal">
+        <span class="fc-aikit-eyebrow">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 6.9L21 9.3l-5.4 4.2 1.9 6.9L12 16.9 6.5 20.4l1.9-6.9L3 9.3l6.6-.4L12 2z"/></svg>
+          Kit gratuito de IA para fitness
+        </span>
+        <h2 class="fc-aikit-h">¿No sabes por dónde empezar o <span>qué comprar</span>?</h2>
+        <p class="fc-aikit-sub">Calcula tus macros y encuentra tu objetivo con nuestro asistente de inteligencia artificial. Recibe gratis el prompt y la skill para saber exactamente cuánto comer según tu meta: déficit, keto o volumen.</p>
+        <ul class="fc-aikit-bullets">
+          <li>Prompt listo para Gemini, ChatGPT, Claude y cualquier IA</li>
+          <li>Cálculo avanzado de macros: proteínas, carbohidratos y grasas</li>
+          <li>Recomendaciones para déficit calórico, keto o volumen muscular</li>
+          <li>Guía de 3 pasos para empezar hoy mismo</li>
+        </ul>
+        <p class="fc-aikit-disc">Este kit es una guía informativa y no sustituye la asesoría de un profesional de la salud o la nutrición.</p>
+      </div>
+      <div class="fc-aikit-card fc-reveal" style="--fc-d:120ms">
+        <span class="fc-aikit-card-tag">100% gratis · Sin tarjeta</span>
+        <h3 class="fc-aikit-card-h">Recibe tu kit gratis ahora</h3>
+        <p class="fc-aikit-card-sub">Déjanos tu email y accede al instante al prompt, la skill y la guía.</p>
+        <div class="fc-aikit-embed">
+          <form action="https://app.kit.com/forms/9576032/subscriptions"
+                class="seva-form formkit-form"
+                method="post"
+                data-sv-form="9576032"
+                data-uid="83d646edb1"
+                data-format="inline"
+                data-version="5"
+                data-options='{"settings":{"after_subscribe":{"action":"message","success_message":"¡Listo! Revisa tu correo: te enviamos el kit de IA.","redirect_url":""},"analytics":{"google":null,"fathom":null,"facebook":null,"segment":null,"pinterest":null,"sparkloop":null,"googletagmanager":null},"modal":{"trigger":"timer","scroll_percentage":null,"timer":5,"devices":"all","show_once_every":15},"powered_by":{"show":false,"url":""},"recaptcha":{"enabled":false},"return_visitor":{"action":"show","custom_content":""},"slide_in":{"display_in":"bottom_right","trigger":"timer","scroll_percentage":null,"timer":5,"devices":"all","show_once_every":15},"sticky_bar":{"display_in":"top","trigger":"timer","scroll_percentage":null,"timer":5,"devices":"all","show_once_every":15}},"version":"5"}'>
+            <ul class="formkit-alert formkit-alert-error" data-element="errors" data-group="alert"></ul>
+            <div data-element="fields" data-stacked="true" class="seva-fields formkit-fields">
+              <div class="formkit-field">
+                <input class="formkit-input" name="email_address" aria-label="Email" placeholder="tu@email.com" required type="email">
+              </div>
+              <button data-element="submit" class="formkit-submit formkit-submit">
+                <div class="formkit-spinner"><div></div><div></div><div></div></div>
+                <span>Quiero mi kit gratis →</span>
+              </button>
+            </div>
+          </form>
+        </div>
+        <div class="fc-aikit-note">
+          <span>Sin spam</span><span class="dot">·</span><span>Cancela cuando quieras</span><span class="dot">·</span><span>Fitcore te respalda</span>
+        </div>
+      </div>
+    </div>
+  </section>
+  <script src="https://f.convertkit.com/ckjs/ck.5.js"></script>
+
 
   {%- comment -%} ===== NAP / CONTACTO TIENDA ===== {%- endcomment -%}
   <section class="fc-nap">
@@ -438,7 +791,7 @@
           </li>
         </ul>
         <div class="fc-nap-actions">
-          <a class="fc-btn fc-btn--map" href="https://www.google.com/maps?q=9.297655,-70.617916" target="_blank" rel="noopener">
+          <a class="fc-btn fc-btn--map" href="https://maps.app.goo.gl/qANKT3VGwkeNcpJT6" target="_blank" rel="noopener">
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
             Cómo llegar
           </a>
@@ -449,7 +802,7 @@
         </div>
       </div>
       <div class="fc-nap-map fc-reveal" style="--fc-d:130ms">
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3937.401401659396!2d-70.61791602497794!3d9.297655090774825!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e63289b55caf539%3A0x29216434ce78857f!2sC.C.%20Plaza%20Valera!5e0!3m2!1ses!2sus!4v1782975236675!5m2!1ses!2sus" width="600" height="450" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" title="Ubicación FitCore Store en el CC Plaza, Valera"></iframe>
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3937.401401659396!2d-70.6153411!3d9.2976551!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e63289b55caf539%3A0x29216434ce78857f!2sC.C.%20Plaza%20Valera!5e0!3m2!1ses!2sus!4v1782975236675!5m2!1ses!2sus" width="600" height="450" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" title="Ubicación Fitcore Store en el CC Plaza, Valera"></iframe>
       </div>
     </div>
   </section>
@@ -460,9 +813,9 @@
       <div class="fc-reveal">
         <h2 class="fc-h">Envíos de suplementos a toda Venezuela</h2>
         <ul class="fc-list">
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><div><b>Entrega mismo día</b><span>En Valera y todo el Edo. Trujillo.</span></div></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><div><b>Entrega mismo día</b><span>En Valera y sus alrededores.</span></div></li>
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg><div><b>Envío gratis</b><span>En Valera y sus alrededores desde $30.</span></div></li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 3h15v13H1z"/><path d="M16 8h4l3 3v5h-7z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg><div><b>Envío nacional</b><span>A todo el país por MRW o Tealca (con costo).</span></div></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 3h15v13H1z"/><path d="M16 8h4l3 3v5h-7z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg><div><b>Envío nacional</b><span>A todo el país en 1 a 2 días hábiles (MRW o Tealca).</span></div></li>
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg><div><b>Retiro en tienda</b><span>Recoge tu pedido en CC Plaza, Valera.</span></div></li>
         </ul>
       </div>
@@ -500,15 +853,15 @@
         </details>
         <details class="fc-faq-item fc-reveal" style="--fc-d:180ms">
           <summary>¿Cuánto tarda en llegar mi pedido?</summary>
-          <p>En Valera y sus alrededores la entrega es express el mismo día. En el resto del Edo. Trujillo también entregamos el mismo día (con costo de envío). Al resto del país enviamos por MRW o Tealca.</p>
+          <p>En Valera y sus alrededores la entrega es express el mismo día. Al resto del país enviamos por MRW o Tealca: tu pedido llega en 1 a 2 días hábiles.</p>
         </details>
         <details class="fc-faq-item fc-reveal" style="--fc-d:240ms">
           <summary>¿El envío es gratis?</summary>
-          <p>En Valera y sus alrededores el envío es gratis en compras desde $30, con entrega el mismo día. En el resto del Edo. Trujillo y en el resto del país el envío tiene costo (por MRW o Tealca).</p>
+          <p>En Valera y sus alrededores el envío es gratis en compras desde $30, con entrega el mismo día. Al resto del país el flete se paga a destino (al recibir), con envío por MRW o Tealca.</p>
         </details>
         <details class="fc-faq-item fc-reveal" style="--fc-d:270ms">
           <summary>¿A qué zonas hacen entregas?</summary>
-          <p>Entregamos en toda Venezuela. En Valera y sus alrededores el envío es gratis desde $30 y llega el mismo día. En el resto del Edo. Trujillo también entregamos el mismo día (con costo), y al resto del país enviamos por MRW o Tealca. También puedes retirar tu pedido en la tienda del CC Plaza, Valera.</p>
+          <p>Entregamos en toda Venezuela. En Valera y sus alrededores el envío es gratis desde $30 y llega el mismo día. Al resto del país enviamos por MRW o Tealca: llega en 1 a 2 días hábiles. También puedes retirar tu pedido en la tienda del CC Plaza, Valera.</p>
         </details>
         <details class="fc-faq-item fc-reveal" style="--fc-d:300ms">
           <summary>¿Tienen tienda física?</summary>
@@ -538,31 +891,240 @@
     }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
     items.forEach(function (el) { io.observe(el); });
   })();
+
+  (function () {
+    var root = document.getElementById('fc-home-{{ section.id }}');
+    if (!root) return;
+    var els = root.querySelectorAll('[data-fc-count]');
+    if (!els.length) return;
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function run(el) {
+      var target = parseInt(el.getAttribute('data-fc-count'), 10) || 0;
+      var suffix = el.getAttribute('data-fc-suffix') || '';
+      if (reduce) { el.textContent = target + suffix; return; }
+      var dur = 1400, start = null;
+      function tick(t) {
+        if (!start) start = t;
+        var p = Math.min((t - start) / dur, 1);
+        el.textContent = Math.floor(p * target) + suffix;
+        if (p < 1) { requestAnimationFrame(tick); } else { el.textContent = target + suffix; }
+      }
+      requestAnimationFrame(tick);
+    }
+    if (!('IntersectionObserver' in window)) { els.forEach(run); return; }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { if (e.isIntersecting) { run(e.target); io.unobserve(e.target); } });
+    }, { threshold: 0.5 });
+    els.forEach(function (el) { io.observe(el); });
+  })();
+
+  (function () {
+    var root = document.getElementById('fc-home-{{ section.id }}');
+    if (!root) return;
+    var forms = root.querySelectorAll('form[data-fc-add]');
+    if (!forms.length) return;
+    forms.forEach(function (form) {
+      form.addEventListener('submit', function (ev) {
+        if (!window.fetch) return; // fallback: native POST -> /cart
+        ev.preventDefault();
+        var btn = form.querySelector('.fc-pc-cart');
+        // Feedback instantaneo: el spinner aparece al tocar, sin esperar la red.
+        // Tambien evita el doble toque mientras la peticion esta en curso.
+        if (btn) {
+          if (btn.classList.contains('is-loading')) return;
+          btn.classList.add('is-loading');
+        }
+        var notif = document.querySelector('cart-notification, cart-drawer');
+        var body = new FormData(form);
+        body.append('sections', 'cart-notification-product,cart-notification-button,cart-icon-bubble');
+        body.append('sections_url', window.location.pathname);
+        fetch('{{ routes.cart_add_url }}.js', {
+          method: 'POST',
+          headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+          body: body
+        }).then(function (r) { return r.json(); }).then(function (res) {
+          if (res && res.status) { if (btn) btn.classList.remove('is-loading'); form.submit(); return; } // error (e.g. no disponible)
+          if (btn) {
+            btn.classList.remove('is-loading');
+            btn.classList.add('is-added');
+            var svg = btn.innerHTML;
+            btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>';
+            setTimeout(function () { btn.innerHTML = svg; btn.classList.remove('is-added'); }, 1600);
+          }
+          // Actualiza la notificación de carrito + el contador de la esquina (Dawn)
+          if (notif && typeof notif.renderContents === 'function') {
+            try { notif.renderContents(res); } catch (e) {}
+          } else if (res.sections && res.sections['cart-icon-bubble']) {
+            var b = document.getElementById('cart-icon-bubble');
+            if (b) { var t = document.createElement('div'); t.innerHTML = res.sections['cart-icon-bubble']; var s = t.querySelector('.shopify-section'); b.innerHTML = s ? s.innerHTML : t.innerHTML; }
+          }
+          document.dispatchEvent(new CustomEvent('fc:cart:added'));
+        }).catch(function () { if (btn) btn.classList.remove('is-loading'); form.submit(); });
+      });
+    });
+  })();
+
+  // Carrusel "Destacados por categoría": rota cada 3s, se pausa al pasar el mouse,
+  // y las flechas permiten avanzar/retroceder manualmente.
+  (function () {
+    var root = document.getElementById('fc-home-{{ section.id }}');
+    if (!root) return;
+    var rot = root.querySelector('[data-catrot]');
+    if (!rot) return;
+    var slides = Array.prototype.slice.call(rot.querySelectorAll('.fc-catrot-slide'));
+    if (!slides.length) return;
+    var label = rot.querySelector('[data-catrot-label]');
+    var prevBtn = rot.querySelector('[data-catrot-prev]');
+    var nextBtn = rot.querySelector('[data-catrot-next]');
+    var idx = 0, timer = null, paused = false;
+
+    function show(i) {
+      idx = (i + slides.length) % slides.length;
+      slides.forEach(function (s, k) { s.classList.toggle('is-active', k === idx); });
+      if (label) label.textContent = slides[idx].getAttribute('data-cat-name') || '';
+    }
+    var visible = false, started = false;
+    function stop() { if (timer) { clearInterval(timer); timer = null; } }
+    function start() { stop(); if (!paused && visible && slides.length > 1) { timer = setInterval(function () { show(idx + 1); }, 4000); } }
+
+    if (nextBtn) nextBtn.addEventListener('click', function () { show(idx + 1); start(); });
+    if (prevBtn) prevBtn.addEventListener('click', function () { show(idx - 1); start(); });
+    rot.addEventListener('mouseenter', function () { paused = true; stop(); });
+    rot.addEventListener('mouseleave', function () { paused = false; start(); });
+
+    // Si solo hay una categoría, ocultamos las flechas
+    if (slides.length < 2) {
+      if (prevBtn) prevBtn.style.display = 'none';
+      if (nextBtn) nextBtn.style.display = 'none';
+    }
+
+    show(0);
+
+    // La rotación automática arranca solo cuando la sección entra en pantalla,
+    // así el visitante siempre llega a Vitaminas (la primera) antes de que cambie.
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) {
+            visible = true;
+            if (!started) { started = true; show(0); }
+            start();
+          } else {
+            visible = false;
+            stop();
+          }
+        });
+      }, { threshold: 0.35 });
+      io.observe(rot);
+    } else {
+      visible = true;
+      start();
+    }
+  })();
+
+  (function () {
+    var root = document.getElementById('fc-home-{{ section.id }}');
+    if (!root) return;
+    var mask = root.querySelector('.fc-marq-mask');
+    var track = mask && mask.querySelector('.fc-marq-track');
+    if (!mask || !track) return;
+
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var speed = 0.9;            // px por frame (auto-scroll)
+    var paused = false;         // pausado por hover/toque
+    var dragging = false;       // arrastre activo con mouse
+    var moved = false;          // se movió lo suficiente para bloquear el click
+    var startX = 0, startScroll = 0;
+    var pos = 0;                // acumulador decimal (scrollLeft redondea a entero)
+
+    // El track está duplicado 2x: media anchura = un ciclo completo
+    function half() { return track.scrollWidth / 2; }
+
+    function normalize() {
+      var h = half();
+      if (h <= 0) return;
+      if (pos >= h) { pos -= h; }
+      else if (pos < 0) { pos += h; }
+    }
+
+    function frame() {
+      if (!paused && !dragging) {
+        pos += speed;
+        normalize();
+        mask.scrollLeft = pos;
+      }
+      requestAnimationFrame(frame);
+    }
+
+    // Pausa al pasar el mouse / tocar
+    mask.addEventListener('mouseenter', function () { paused = true; });
+    mask.addEventListener('mouseleave', function () { paused = false; });
+    mask.addEventListener('touchstart', function () { paused = true; }, { passive: true });
+    mask.addEventListener('touchend', function () { paused = false; pos = mask.scrollLeft; }, { passive: true });
+
+    // Arrastre con mouse (desktop)
+    mask.addEventListener('pointerdown', function (e) {
+      if (e.pointerType === 'touch') return; // el touch usa scroll nativo
+      dragging = true; moved = false;
+      startX = e.clientX; startScroll = mask.scrollLeft;
+      mask.classList.add('is-grabbing');
+      // NO usar setPointerCapture: redirige el click al contenedor y rompe el enlace del logo
+    });
+    window.addEventListener('pointermove', function (e) {
+      if (!dragging) return;
+      var dx = e.clientX - startX;
+      if (Math.abs(dx) > 4) moved = true;
+      pos = startScroll - dx;
+      normalize();
+      mask.scrollLeft = pos;
+    });
+    function endDrag(e) {
+      if (!dragging) return;
+      dragging = false;
+      pos = mask.scrollLeft;
+      mask.classList.remove('is-grabbing');
+    }
+    window.addEventListener('pointerup', endDrag);
+    window.addEventListener('pointercancel', endDrag);
+    // Evita que un arrastre dispare el enlace del logo
+    mask.addEventListener('click', function (e) {
+      if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; }
+    }, true);
+
+    // Arranque: esperar a que las imágenes midan el ancho
+    function start() { if (!reduce) requestAnimationFrame(frame); }
+    if (document.readyState === 'complete') { start(); }
+    else { window.addEventListener('load', start); }
+  })();
 </script>
 
 {% schema %}
 {
-  "name": "FitCore Inicio",
+  "name": "Fitcore Inicio",
   "tag": "section",
   "class": "fitcore-home-section",
   "settings": [
     { "type": "header", "content": "Hero" },
-    { "type": "text", "id": "hero_title", "label": "Título principal", "default": "Suplementos Deportivos al Mejor Precio de Venezuela" },
-    { "type": "textarea", "id": "hero_text", "label": "Texto del hero", "default": "Proteínas, creatina, pre-entrenos y vitaminas importados de EE.UU. Compra online con envío a todo el país, gratis en Valera desde $30, o retira en nuestra tienda en Valera." },
-    { "type": "text", "id": "hero_cta_label", "label": "Texto del botón", "default": "Ver catálogo" },
+    { "type": "text", "id": "hero_title", "label": "Título principal", "default": "La tienda de suplementos que el interior del país estaba esperando" },
+    { "type": "textarea", "id": "hero_text", "label": "Texto del hero", "default": "Marcas 100% originales importadas de EE.UU., a precios irresistibles y sin que tengas que viajar o importar tú mismo. Compra online en minutos y recíbela el mismo día en Trujillo o en todo el país en 1 a 2 días." },
+    { "type": "text", "id": "hero_cta_label", "label": "Texto del botón", "default": "Comprar ahora" },
     { "type": "url", "id": "hero_cta_url", "label": "Enlace del botón", "default": "/collections/all" },
     { "type": "header", "content": "Marcas (marquee)" },
-    { "type": "text", "id": "marq_title", "label": "Título del marquee", "default": "Las marcas que encuentras en FitCore Store" },
+    { "type": "text", "id": "marq_title", "label": "Título del marquee", "default": "Las marcas que encuentras en Fitcore Store" },
+    { "type": "header", "content": "Los más vendidos" },
+    { "type": "text", "id": "best_title", "label": "Título", "default": "Los más vendidos" },
+    { "type": "textarea", "id": "best_sub", "label": "Subtítulo", "default": "Los favoritos que más se mueven: proteínas, creatina, pre-entrenos y más. Todos 100% originales y listos para despacho el mismo día." },
+    { "type": "textarea", "id": "best_handles", "label": "Handles de productos (separados por coma)", "default": "optimum-nutrition-gold-standard-100-whey,dymatize-iso100-whey-protein-isolate,optimum-nutrition-micronized-creatine-powder,c4-original-pre-entreno" },
     { "type": "header", "content": "WhatsApp" },
     { "type": "text", "id": "whatsapp", "label": "Número (solo dígitos, con país)", "default": "584246218863" },
-    { "type": "text", "id": "whatsapp_msg", "label": "Mensaje precargado", "default": "Hola FitCore Store, quiero hacer un pedido" },
+    { "type": "text", "id": "whatsapp_msg", "label": "Mensaje precargado", "default": "Hola Fitcore Store, quiero hacer un pedido" },
     { "type": "header", "content": "Colores de marca" },
     { "type": "color", "id": "color_navy", "label": "Navy", "default": "#0B1840" },
     { "type": "color", "id": "color_purple", "label": "Morado", "default": "#3B1F6B" },
     { "type": "color", "id": "color_accent", "label": "Acento", "default": "#19C37D" }
   ],
   "presets": [
-    { "name": "FitCore Inicio" }
+    { "name": "Fitcore Inicio" }
   ]
 }
 {% endschema %}

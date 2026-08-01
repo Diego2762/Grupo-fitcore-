@@ -1,0 +1,104 @@
+{%- comment -%}
+  Fitcore Store — barra de navegación inferior (solo móvil).
+  Items: Inicio · Tienda (mini menú de categorías) · Carrito · Usuario.
+{%- endcomment -%}
+{%- assign pt = request.page_type -%}
+<nav class="fc-tabbar" aria-label="Navegación inferior">
+  <a href="{{ routes.root_url }}" class="fc-tab{% if pt == 'index' %} is-active{% endif %}">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>
+    <span>Inicio</span>
+  </a>
+  <button type="button" class="fc-tab fc-tab--btn{% if pt == 'collection' or pt == 'product' %} is-active{% endif %}" data-fc-shop-toggle aria-expanded="false" aria-controls="fc-shop-sheet">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l-1 13H7L6 7Z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>
+    <span>Tienda</span>
+  </button>
+  <a href="{{ routes.cart_url }}" class="fc-tab{% if pt == 'cart' %} is-active{% endif %}">
+    <span class="fc-tab-ico">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2l2.2 12.2a1.5 1.5 0 0 0 1.5 1.3h8.6a1.5 1.5 0 0 0 1.5-1.2L21 8H6"/><circle cx="9.5" cy="20" r="1.2"/><circle cx="17.5" cy="20" r="1.2"/></svg>
+      <span class="fc-tab-badge{% if cart.item_count == 0 %} is-empty{% endif %}" data-cart-count>{{ cart.item_count }}</span>
+    </span>
+    <span>Carrito</span>
+  </a>
+  {%- if customer -%}
+    {%- assign user_url = routes.account_url -%}
+  {%- else -%}
+    {%- assign user_url = routes.account_login_url -%}
+  {%- endif -%}
+  <a href="{{ user_url }}" class="fc-tab{% if pt == 'customers/account' or pt == 'customers/login' or pt == 'customers/register' or pt == 'customers/order' or pt == 'customers/addresses' %} is-active{% endif %}">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c0-3.6 3.1-6 7-6s7 2.4 7 6"/></svg>
+    <span>Perfil</span>
+  </a>
+</nav>
+
+{%- comment -%} Mini menú de la pestaña Tienda {%- endcomment -%}
+<div class="fc-shop-overlay" data-fc-shop-overlay hidden></div>
+<div class="fc-shop-sheet" id="fc-shop-sheet" data-fc-shop-sheet role="dialog" aria-label="Menú Tienda" aria-modal="true" hidden>
+  <div class="fc-shop-sheet__head">
+    <button type="button" class="fc-shop-sheet__back" data-fc-shop-close aria-label="Cerrar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <span class="fc-shop-sheet__title">Tienda</span>
+  </div>
+  <ul class="fc-shop-sheet__list">
+    <li><a href="{{ routes.all_products_collection_url }}">Todos los productos</a></li>
+    <li><a href="{{ routes.root_url }}collections/proteinas">Proteínas</a></li>
+    <li><a href="{{ routes.root_url }}collections/creatina">Creatina</a></li>
+    <li><a href="{{ routes.root_url }}collections/pre-post-entreno">Pre y Post Entreno</a></li>
+    <li><a href="{{ routes.root_url }}collections/ganadores-de-masa">Ganadores de Masa</a></li>
+    <li><a href="{{ routes.root_url }}collections/quemadores-de-grasa">Hidratación y Quemadores de Grasa</a></li>
+    <li><a href="{{ routes.root_url }}collections/aminoacidos">Aminoácidos</a></li>
+    <li><a href="{{ routes.root_url }}collections/vitaminas">Vitaminas y Salud y Bienestar</a></li>
+    <li><a href="{{ routes.root_url }}collections/snacks">Snacks</a></li>
+    <li><a href="{{ routes.root_url }}collections/accesorios">Accesorios</a></li>
+  </ul>
+</div>
+
+<script>
+(function(){
+  var btn     = document.querySelector('[data-fc-shop-toggle]');
+  var sheet   = document.querySelector('[data-fc-shop-sheet]');
+  var overlay = document.querySelector('[data-fc-shop-overlay]');
+  var closeEl = document.querySelector('[data-fc-shop-close]');
+  if(!btn || !sheet || !overlay) return;
+
+  function open(){
+    sheet.hidden = false; overlay.hidden = false;
+    requestAnimationFrame(function(){
+      sheet.classList.add('is-open'); overlay.classList.add('is-open');
+    });
+    btn.setAttribute('aria-expanded','true');
+    document.body.classList.add('fc-shop-lock');
+  }
+  function close(){
+    sheet.classList.remove('is-open'); overlay.classList.remove('is-open');
+    btn.setAttribute('aria-expanded','false');
+    document.body.classList.remove('fc-shop-lock');
+    setTimeout(function(){ sheet.hidden = true; overlay.hidden = true; }, 260);
+  }
+  function toggle(){ sheet.hidden ? open() : close(); }
+
+  btn.addEventListener('click', toggle);
+  overlay.addEventListener('click', close);
+  if(closeEl) closeEl.addEventListener('click', close);
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape' && !sheet.hidden) close(); });
+})();
+
+/* El contador del carrito (barra inferior) sigue al de la esquina superior.
+   Cuando Dawn o el home actualizan #cart-icon-bubble, replicamos la cifra aquí. */
+(function(){
+  var badges = document.querySelectorAll('[data-cart-count]');
+  if(!badges.length) return;
+  var bubble = document.getElementById('cart-icon-bubble');
+  function readCount(){
+    if(!bubble) return 0;
+    var el = bubble.querySelector('.cart-count-bubble span[aria-hidden="true"]');
+    return el ? (parseInt(el.textContent.trim(), 10) || 0) : 0;
+  }
+  function sync(){
+    var c = readCount();
+    badges.forEach(function(b){ b.textContent = c; b.classList.toggle('is-empty', c === 0); });
+  }
+  if(bubble){ new MutationObserver(sync).observe(bubble, { subtree:true, childList:true, characterData:true }); }
+  document.addEventListener('fc:cart:added', function(){ setTimeout(sync, 60); });
+})();
+</script>
