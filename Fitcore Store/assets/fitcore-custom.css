@@ -625,3 +625,14 @@ main#MainContent { background: var(--fc-bg) !important; }
 .fc-shop-sheet__list li:last-child a { border-bottom: 0; }
 .fc-shop-sheet__list a:active { background: #f3f0fb; }
 body.fc-shop-lock { overflow: hidden; }
+
+/* Fix: en la notificacion del carrito el titulo/marca del producto heredaba
+   el color de heading del esquema (blanco), quedando invisible sobre el fondo
+   blanco. Forzamos color de texto legible (navy de marca). */
+.cart-notification-product,
+.cart-notification-product__name,
+.cart-notification-product .caption-with-letter-spacing,
+.cart-notification-product dl,
+.cart-notification-product dt,
+.cart-notification-product dd { color: var(--fc-navy, #0B1840) !important; }
+.cart-notification-product .caption-with-letter-spacing { opacity: .7; }
