@@ -79,18 +79,15 @@
   #fc-pay-{{ section.id }} .fc-pay-opt.is-on { border-color:var(--fc-accent); background:#f2fbf6; }
   #fc-pay-{{ section.id }} .fc-pay-opt .fc-pay-lbl { color:var(--fc-navy); font-weight:700; font-size:14.5px; line-height:1.2; }
   #fc-pay-{{ section.id }} .fc-pay-opt .fc-pay-hint { color:var(--fc-muted); font-size:12.5px; margin-top:2px; }
-  #fc-pay-{{ section.id }} .fc-pay-badge { margin-left:auto; background:var(--fc-accent); color:#071631; font-weight:700; font-size:12px; padding:5px 9px; border-radius:8px; white-space:nowrap; }
+  #fc-pay-{{ section.id }} .fc-pay-opt-main { flex:1 1 auto; min-width:0; display:flex; flex-direction:column; }
+  #fc-pay-{{ section.id }} .fc-pay-opt-side { margin-left:auto; flex:0 0 auto; display:flex; flex-direction:column; align-items:flex-end; gap:2px; text-align:right; }
+  #fc-pay-{{ section.id }} .fc-pay-badge { background:var(--fc-accent); color:#071631; font-weight:700; font-size:12px; padding:5px 9px; border-radius:8px; white-space:nowrap; }
+  #fc-pay-{{ section.id }} .fc-recv-opts .fc-pay-badge { margin-left:auto; }
   #fc-pay-{{ section.id }} .fc-pay-badge--up { background:#fff3e0; color:#9a5b00; border:1px solid #ffd8a1; }
   #fc-pay-{{ section.id }} .fc-pay-badge--info { background:#eef1fb; color:#3b3f6b; border:1px solid #d8ddf5; }
-  #fc-pay-{{ section.id }} .fc-pay-totals { margin-top:14px; padding-top:14px; border-top:1px dashed var(--fc-line); display:grid; gap:9px; }
-  #fc-pay-{{ section.id }} .fc-pay-trow { display:flex; align-items:baseline; justify-content:space-between; gap:12px; padding:11px 14px; border:1.5px solid var(--fc-line); border-radius:12px; transition:border-color .15s, background .15s; }
-  #fc-pay-{{ section.id }} .fc-pay-trow.is-sel { border-color:var(--fc-accent); background:#f2fbf6; }
-  #fc-pay-{{ section.id }} .fc-pay-trow-lbl { color:var(--fc-muted); font-size:13.5px; line-height:1.25; }
-  #fc-pay-{{ section.id }} .fc-pay-trow-lbl small { display:block; font-size:11.5px; opacity:.85; }
-  #fc-pay-{{ section.id }} .fc-pay-trow b { color:var(--fc-navy); font-size:19px; font-weight:700; white-space:nowrap; }
-  #fc-pay-{{ section.id }} .fc-pay-trow.is-sel .fc-pay-trow-lbl { color:var(--fc-navy); }
-  #fc-pay-{{ section.id }} .fc-pay-trow.is-sel b { color:#0a7d3f; }
-  #fc-pay-{{ section.id }} .fc-pay-trow-pill { margin-left:auto; margin-right:10px; background:var(--fc-accent); color:#062b1a; font-weight:800; font-size:11px; padding:3px 8px; border-radius:99px; white-space:nowrap; }
+  #fc-pay-{{ section.id }} .fc-pay-price { color:var(--fc-navy); font-size:20px; font-weight:800; white-space:nowrap; line-height:1.1; margin-top:2px; }
+  #fc-pay-{{ section.id }} .fc-pay-price--best { color:#0a7d3f; }
+  #fc-pay-{{ section.id }} .fc-pay-price-cap { color:var(--fc-muted); font-size:11px; line-height:1.2; }
   #fc-pay-{{ section.id }} .fc-pay-note { color:var(--fc-muted); font-size:12px; margin:10px 0 0; }
   #fc-pay-{{ section.id }} .fc-pay-note[hidden] { display:none; }
   #fc-pay-{{ section.id }} .fc-pay-note b { color:var(--fc-navy); }
@@ -154,32 +151,28 @@
     <div class="fc-pay-opts" data-pay-opts>
       <label class="fc-pay-opt{% unless is_bs %} is-on{% endunless %}" data-method="divisa">
         <input type="radio" name="fc-pay-{{ section.id }}" value="divisa"{% unless is_bs %} checked{% endunless %}>
-        <span>
+        <span class="fc-pay-opt-main">
           <span class="fc-pay-lbl">Divisa: Zelle, efectivo o tarjeta</span>
           <span class="fc-pay-hint">El mejor precio. El descuento se aplica <b>solo al pagar</b>.</span>
         </span>
-        <span class="fc-pay-badge">Mejor precio</span>
+        <span class="fc-pay-opt-side">
+          <span class="fc-pay-badge">Mejor precio</span>
+          <span class="fc-pay-price fc-pay-price--best" data-price="divisa">{{ divisa_total | money }}</span>
+          <span class="fc-pay-price-cap">descuento ya incluido</span>
+        </span>
       </label>
 
       <label class="fc-pay-opt{% if is_bs %} is-on{% endif %}" data-method="bs">
         <input type="radio" name="fc-pay-{{ section.id }}" value="bs"{% if is_bs %} checked{% endif %}>
-        <span>
+        <span class="fc-pay-opt-main">
           <span class="fc-pay-lbl">Bolívares BCV: Pago Móvil o Transferencia</span>
           <span class="fc-pay-hint">A la tasa BCV del día al confirmar.</span>
         </span>
+        <span class="fc-pay-opt-side">
+          <span class="fc-pay-price" data-price="bs">{{ base | money }}</span>
+          <span class="fc-pay-price-cap">tasa BCV del día</span>
+        </span>
       </label>
-    </div>
-
-    <div class="fc-pay-totals">
-      <div class="fc-pay-trow{% unless is_bs %} is-sel{% endunless %}" data-trow="divisa">
-        <span class="fc-pay-trow-lbl">Total en divisa <small>descuento ya incluido</small></span>
-        <span class="fc-pay-trow-pill">Mejor precio</span>
-        <b>{{ divisa_total | money }}</b>
-      </div>
-      <div class="fc-pay-trow{% if is_bs %} is-sel{% endif %}" data-trow="bs">
-        <span class="fc-pay-trow-lbl">Total en bolívares <small>BCV, tasa del día</small></span>
-        <b>{{ base | money }}</b>
-      </div>
     </div>
 
     <p class="fc-pay-note">El total en bolívares BCV es el que se factura, a la <b>tasa BCV del día</b>. Si pagas en divisa, el <b>descuento se aplica automáticamente</b> al pasar a pagar. Tu forma de pago queda anotada en el pedido para el personal de la tienda.</p>
@@ -286,7 +279,6 @@
     var payOpts = root.querySelectorAll('[data-pay-opts] .fc-pay-opt');
     var recvOpts = root.querySelectorAll('.fc-recv-opts .fc-pay-opt');
     var natWrap = root.querySelector('[data-nat-wrap]');
-    var trows = root.querySelectorAll('[data-trow]');
     var methodLabel = {
       divisa: 'Divisa (Zelle, efectivo o tarjeta)',
       bs: 'Bolívares BCV (Pago Móvil / Transferencia)'
@@ -307,7 +299,6 @@
 
     function paint(m) {
       payOpts.forEach(function (o) { o.classList.toggle('is-on', o.getAttribute('data-method') === m); });
-      trows.forEach(function (t) { t.classList.toggle('is-sel', t.getAttribute('data-trow') === m); });
     }
 
     payOpts.forEach(function (opt) {
@@ -546,8 +537,8 @@
     var ship = root.querySelector('.fc-pay-ship');
     var thc = parseInt(root.getAttribute('data-threshold-cents'), 10) || 3000;
     var discount = parseInt(root.getAttribute('data-discount'), 10) || 0;
-    var trowDivisa = root.querySelector('[data-trow="divisa"] b');
-    var trowBs = root.querySelector('[data-trow="bs"] b');
+    var trowDivisa = root.querySelector('[data-price="divisa"]');
+    var trowBs = root.querySelector('[data-price="bs"]');
 
     function money(cents) {
       return '$' + (cents / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
