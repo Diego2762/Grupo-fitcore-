@@ -24,6 +24,8 @@
   assign current_cedula = cart.attributes['Cédula']
   assign current_phone = cart.attributes['Teléfono / WhatsApp']
   assign current_company = cart.attributes['Empresa de envío']
+  assign current_ref = cart.attributes['Referencia de entrega']
+  assign current_location = cart.attributes['Ubicación (mapa)']
   assign is_bs = false
   if current_method == 'Bolívares BCV (Pago Móvil / Transferencia)'
     assign is_bs = true
@@ -31,6 +33,10 @@
   assign is_nac = false
   if current_delivery == 'Envío nacional (fuera de Trujillo)'
     assign is_nac = true
+  endif
+  assign is_local = false
+  if current_delivery == 'Entrega local (Valera y Trujillo)'
+    assign is_local = true
   endif
 -%}
 
@@ -112,6 +118,19 @@
   #fc-pay-{{ section.id }} .fc-nat-wrap.is-off { display:none; }
   #fc-pay-{{ section.id }} .fc-ship-saved { color:#0a7d3f; font-size:12px; font-weight:700; margin:12px 0 0; opacity:0; transition:opacity .2s; }
   #fc-pay-{{ section.id }} .fc-ship-saved.is-on { opacity:1; }
+  #fc-pay-{{ section.id }} .fc-local-wrap { margin-top:16px; }
+  #fc-pay-{{ section.id }} .fc-local-wrap.is-off { display:none; }
+  #fc-pay-{{ section.id }} .fc-map-head { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:10px; }
+  #fc-pay-{{ section.id }} .fc-map-title { color:var(--fc-navy); font-weight:700; font-size:14px; }
+  #fc-pay-{{ section.id }} .fc-map-title .fc-req { color:#d4380d; }
+  #fc-pay-{{ section.id }} .fc-map-geo { display:inline-flex; align-items:center; gap:7px; background:var(--fc-navy); color:#fff; border:0; border-radius:10px; padding:9px 14px; font-size:13px; font-weight:700; cursor:pointer; transition:background .15s; }
+  #fc-pay-{{ section.id }} .fc-map-geo:hover { background:var(--fc-purple); }
+  #fc-pay-{{ section.id }} .fc-map-geo svg { width:16px; height:16px; }
+  #fc-pay-{{ section.id }} .fc-map { width:100%; height:240px; border-radius:14px; border:1.5px solid var(--fc-line); overflow:hidden; background:#eef1f6; z-index:0; }
+  #fc-pay-{{ section.id }} .fc-map .leaflet-control-attribution { font-size:9px; }
+  #fc-pay-{{ section.id }} .fc-map-hint { color:var(--fc-muted); font-size:12.5px; margin:8px 0 12px; }
+  #fc-pay-{{ section.id }} .fc-map-hint.is-warn { color:#d4380d; font-weight:700; }
+  #fc-pay-{{ section.id }} .fc-map-hint.is-ok { color:#0a7d3f; font-weight:700; }
   @media (max-width:780px){ #fc-pay-{{ section.id }} { padding:4px 16px 8px; } }
 </style>
 
@@ -239,6 +258,22 @@
       </div>
     </div>
 
+    <div class="fc-local-wrap{% unless is_local %} is-off{% endunless %}" data-local-wrap>
+      <div class="fc-map-head">
+        <span class="fc-map-title">¿Dónde te llevamos el pedido? <b class="fc-req">*</b></span>
+        <button type="button" class="fc-map-geo" data-map-geo>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
+          Usar mi ubicación
+        </button>
+      </div>
+      <div id="fc-map-{{ section.id }}" class="fc-map" data-map data-lat="{{ current_location | split: ',' | first | strip }}" data-lng="{{ current_location | split: ',' | last | strip }}"></div>
+      <p class="fc-map-hint" data-map-hint>Toca el mapa o arrastra el pin hasta tu casa. Así llegamos más rápido y sin llamadas.</p>
+      <div class="fc-ship-field fc-span2">
+        <label for="fc-ref-{{ section.id }}">Punto de referencia</label>
+        <input type="text" id="fc-ref-{{ section.id }}" data-attr="Referencia de entrega" placeholder="Ej. Casa de portón negro, al lado de la panadería" value="{{ current_ref | escape }}">
+      </div>
+    </div>
+
     <p class="fc-ship-saved" data-ship-saved>Datos guardados ✓</p>
   </div>
 </div>
@@ -296,11 +331,22 @@
       var checked = root.querySelector('.fc-pay-box input[type="radio"]:checked');
       return checked ? checked.value : 'divisa';
     }
+    function selectedDelivery() {
+      var checked = root.querySelector('.fc-recv-opts input[type="radio"]:checked');
+      return checked ? checked.value : '';
+    }
     document.addEventListener('click', function (e) {
       var trigger = e.target && e.target.closest
         ? e.target.closest('button[name="checkout"], #checkout, .cart__checkout-button')
         : null;
       if (!trigger || goingToCheckout) return;
+      // Entrega local exige ubicacion en el mapa antes de pagar.
+      if (selectedDelivery() === 'local' && !hasLocation) {
+        e.preventDefault();
+        e.stopPropagation();
+        requireLocation();
+        return;
+      }
       goingToCheckout = true;
       e.preventDefault();
       e.stopPropagation();
@@ -341,6 +387,7 @@
       savedTimer = setTimeout(function () { savedMsg.classList.remove('is-on'); }, 2200);
     }
 
+    var localWrap = root.querySelector('[data-local-wrap]');
     recvOpts.forEach(function (opt) {
       opt.addEventListener('click', function () {
         var r = opt.getAttribute('data-recv');
@@ -348,10 +395,121 @@
         if (input) input.checked = true;
         recvOpts.forEach(function (o) { o.classList.toggle('is-on', o === opt); });
         if (natWrap) natWrap.classList.toggle('is-off', r !== 'nacional');
+        if (localWrap) localWrap.classList.toggle('is-off', r !== 'local');
         post({ attributes: { 'Método de entrega': recvLabel[r] } });
         flashSaved();
+        if (r === 'local') initMap();
       });
     });
+
+    // ---- Mapa de entrega local (Leaflet + OpenStreetMap) ----
+    // Se carga la libreria solo cuando el cliente elige entrega local. El pin
+    // guarda las coordenadas como atributos del carrito, visibles para el
+    // personal en el pedido (con link directo a Google Maps para navegar).
+    var VALERA = [9.297655, -70.617916]; // C.C. Plaza, centro de referencia
+    var mapEl = root.querySelector('[data-map]');
+    var mapHint = root.querySelector('[data-map-hint]');
+    var geoBtn = root.querySelector('[data-map-geo]');
+    var hasLocation = false;
+    var map = null, marker = null, mapReady = false, leafletLoading = false;
+
+    var startLat = parseFloat(mapEl && mapEl.getAttribute('data-lat'));
+    var startLng = parseFloat(mapEl && mapEl.getAttribute('data-lng'));
+    if (!isNaN(startLat) && !isNaN(startLng)) hasLocation = true;
+
+    function saveLocation(lat, lng) {
+      hasLocation = true;
+      var pretty = lat.toFixed(6) + ', ' + lng.toFixed(6);
+      var gmaps = 'https://www.google.com/maps?q=' + lat.toFixed(6) + ',' + lng.toFixed(6);
+      if (mapHint) {
+        mapHint.textContent = 'Ubicación marcada ✓ Puedes ajustar el pin si hace falta.';
+        mapHint.classList.remove('is-warn'); mapHint.classList.add('is-ok');
+      }
+      post({ attributes: { 'Ubicación (mapa)': pretty, 'Ver en mapa': gmaps } }).then(function () { flashSaved(); });
+    }
+
+    function requireLocation() {
+      var recv = root.querySelector('.fc-recv-opts .fc-pay-opt[data-recv="local"]');
+      if (recv) { recv.classList.add('is-on'); }
+      if (localWrap) localWrap.classList.remove('is-off');
+      initMap();
+      if (mapHint) {
+        mapHint.textContent = 'Marca tu ubicación en el mapa para continuar con la entrega local.';
+        mapHint.classList.add('is-warn'); mapHint.classList.remove('is-ok');
+      }
+      if (mapEl && mapEl.scrollIntoView) mapEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function placeMarker(lat, lng, save) {
+      if (!mapReady) return;
+      if (!marker) {
+        marker = L.marker([lat, lng], { draggable: true }).addTo(map);
+        marker.on('dragend', function () {
+          var p = marker.getLatLng();
+          saveLocation(p.lat, p.lng);
+        });
+      } else {
+        marker.setLatLng([lat, lng]);
+      }
+      if (save) saveLocation(lat, lng);
+    }
+
+    function buildMap() {
+      if (mapReady || !mapEl || typeof L === 'undefined') return;
+      var center = hasLocation ? [startLat, startLng] : VALERA;
+      map = L.map(mapEl, { scrollWheelZoom: false }).setView(center, hasLocation ? 16 : 14);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; OpenStreetMap'
+      }).addTo(map);
+      map.on('click', function (e) { placeMarker(e.latlng.lat, e.latlng.lng, true); });
+      if (hasLocation) placeMarker(startLat, startLng, false);
+      mapReady = true;
+      // Corrige el render de tiles cuando el contenedor estaba oculto.
+      setTimeout(function () { if (map) map.invalidateSize(); }, 200);
+    }
+
+    function initMap() {
+      if (mapReady) { setTimeout(function () { if (map) map.invalidateSize(); }, 100); return; }
+      if (typeof L !== 'undefined') { buildMap(); return; }
+      if (leafletLoading) return;
+      leafletLoading = true;
+      var css = document.createElement('link');
+      css.rel = 'stylesheet';
+      css.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+      document.head.appendChild(css);
+      var js = document.createElement('script');
+      js.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+      js.onload = function () { buildMap(); };
+      document.head.appendChild(js);
+    }
+
+    if (geoBtn) {
+      geoBtn.addEventListener('click', function () {
+        if (!navigator.geolocation) return;
+        geoBtn.disabled = true;
+        var prev = geoBtn.innerHTML;
+        geoBtn.textContent = 'Buscando...';
+        navigator.geolocation.getCurrentPosition(function (pos) {
+          var lat = pos.coords.latitude, lng = pos.coords.longitude;
+          initMap();
+          var tryPlace = setInterval(function () {
+            if (mapReady) {
+              clearInterval(tryPlace);
+              map.setView([lat, lng], 17);
+              placeMarker(lat, lng, true);
+            }
+          }, 150);
+          geoBtn.disabled = false; geoBtn.innerHTML = prev;
+        }, function () {
+          geoBtn.disabled = false; geoBtn.innerHTML = prev;
+          if (mapHint) { mapHint.textContent = 'No pudimos obtener tu ubicación. Toca el mapa para marcarla a mano.'; mapHint.classList.add('is-warn'); }
+        }, { enableHighAccuracy: true, timeout: 10000 });
+      });
+    }
+
+    // Si el carrito carga ya con entrega local elegida, prepara el mapa.
+    if (localWrap && !localWrap.classList.contains('is-off')) initMap();
 
     var fields = root.querySelectorAll('[data-attr]');
     fields.forEach(function (el) {
