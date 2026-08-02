@@ -95,6 +95,9 @@
   #fc-pay-{{ section.id }} .fc-coupon-copy:active { transform:scale(.96); }
   #fc-pay-{{ section.id }} .fc-coupon-copy svg { width:17px; height:17px; }
   #fc-pay-{{ section.id }} .fc-coupon-copy.is-done { background:var(--fc-navy); color:#fff; box-shadow:none; }
+  #fc-pay-{{ section.id }} .fc-coupon-benefit { color:var(--fc-navy); font-weight:800; font-size:16px; line-height:1.15; }
+  #fc-pay-{{ section.id }} .fc-coupon-applied { display:inline-flex; align-items:center; gap:8px; background:var(--fc-accent); color:#062b1a; font-weight:800; font-size:14.5px; border-radius:11px; padding:12px 18px; white-space:nowrap; box-shadow:0 2px 8px rgba(25,195,125,.35); }
+  #fc-pay-{{ section.id }} .fc-coupon-applied svg { width:17px; height:17px; }
   #fc-pay-{{ section.id }} .fc-coupon.is-hidden { display:none; }
   #fc-pay-{{ section.id }} .fc-ship-box { background:#fff; border:1px solid var(--fc-line); border-radius:16px; padding:20px; margin-top:16px; }
   #fc-pay-{{ section.id }} .fc-ship-grid { display:grid; grid-template-columns:1fr 1fr; gap:13px; margin-top:16px; }
@@ -136,7 +139,7 @@
         <input type="radio" name="fc-pay-{{ section.id }}" value="divisa"{% unless is_bs %} checked{% endunless %}>
         <span>
           <span class="fc-pay-lbl">Divisa: Zelle, efectivo o tarjeta</span>
-          <span class="fc-pay-hint">El mejor precio. Aplica el cupón <b>MEJORPRECIO</b> en el checkout.</span>
+          <span class="fc-pay-hint">El mejor precio. El descuento se aplica <b>solo al pagar</b>.</span>
         </span>
         <span class="fc-pay-badge">Mejor precio</span>
       </label>
@@ -152,7 +155,7 @@
 
     <div class="fc-pay-totals">
       <div class="fc-pay-trow{% unless is_bs %} is-sel{% endunless %}" data-trow="divisa">
-        <span class="fc-pay-trow-lbl">Total en divisa <small>con cupón MEJORPRECIO</small></span>
+        <span class="fc-pay-trow-lbl">Total en divisa <small>descuento ya incluido</small></span>
         <span class="fc-pay-trow-pill">Mejor precio</span>
         <b>{{ divisa_total | money }}</b>
       </div>
@@ -164,16 +167,16 @@
 
     <div class="fc-coupon{% if is_bs %} is-hidden{% endif %}" data-coupon>
       <div class="fc-coupon-txt">
-        <span class="fc-coupon-cap">Tu cupón para pagar en divisa</span>
-        <span class="fc-coupon-code" data-coupon-code>MEJORPRECIO</span>
+        <span class="fc-coupon-cap">Pagando en divisa</span>
+        <span class="fc-coupon-benefit">{{ discount }}% de descuento ya incluido</span>
       </div>
-      <button type="button" class="fc-coupon-copy" data-coupon-copy aria-label="Copiar cupón MEJORPRECIO">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-        <span data-coupon-label>Copiar</span>
-      </button>
+      <span class="fc-coupon-applied">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+        Se aplica solo
+      </span>
     </div>
 
-    <p class="fc-pay-note">El total en bolívares BCV es el que se factura, a la <b>tasa BCV del día</b>. Si pagas en divisa, aplica el cupón <b>MEJORPRECIO</b> en el checkout. Tu forma de pago queda anotada en el pedido para el personal de la tienda.</p>
+    <p class="fc-pay-note">El total en bolívares BCV es el que se factura, a la <b>tasa BCV del día</b>. Si pagas en divisa, el <b>descuento se aplica automáticamente</b> al pasar a pagar. Tu forma de pago queda anotada en el pedido para el personal de la tienda.</p>
   </div>
 
   <div class="fc-ship-box">
@@ -328,35 +331,6 @@
         }).catch(function () {});
       } catch (e) {}
     })();
-
-    var couponBtn = root.querySelector('[data-coupon-copy]');
-    if (couponBtn) {
-      var couponLabel = couponBtn.querySelector('[data-coupon-label]');
-      var couponReset;
-      couponBtn.addEventListener('click', function () {
-        var code = (root.querySelector('[data-coupon-code]') || {}).textContent || 'MEJORPRECIO';
-        code = code.trim();
-        function fallback(t) {
-          var ta = document.createElement('textarea');
-          ta.value = t; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0';
-          document.body.appendChild(ta); ta.select();
-          try { document.execCommand('copy'); } catch (e) {}
-          document.body.removeChild(ta);
-        }
-        function done() {
-          couponBtn.classList.add('is-done');
-          if (couponLabel) couponLabel.textContent = '¡Copiado!';
-          clearTimeout(couponReset);
-          couponReset = setTimeout(function () {
-            couponBtn.classList.remove('is-done');
-            if (couponLabel) couponLabel.textContent = 'Copiar';
-          }, 1900);
-        }
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(code).then(done).catch(function () { fallback(code); done(); });
-        } else { fallback(code); done(); }
-      });
-    }
 
     var savedMsg = root.querySelector('[data-ship-saved]');
     var savedTimer;
