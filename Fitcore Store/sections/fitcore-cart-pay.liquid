@@ -25,6 +25,8 @@
   assign current_phone = cart.attributes['Teléfono / WhatsApp']
   assign current_company = cart.attributes['Empresa de envío']
   assign current_ref = cart.attributes['Referencia de entrega']
+  assign current_apt = cart.attributes['Casa/Apto N°']
+  assign current_urb = cart.attributes['Urbanización / Sector']
   assign current_location = cart.attributes['Ubicación (mapa)']
   assign is_bs = false
   if current_method == 'Bolívares BCV (Pago Móvil / Transferencia)'
@@ -126,11 +128,20 @@
   #fc-pay-{{ section.id }} .fc-map-geo { display:inline-flex; align-items:center; gap:7px; background:var(--fc-navy); color:#fff; border:0; border-radius:10px; padding:9px 14px; font-size:13px; font-weight:700; cursor:pointer; transition:background .15s; }
   #fc-pay-{{ section.id }} .fc-map-geo:hover { background:var(--fc-purple); }
   #fc-pay-{{ section.id }} .fc-map-geo svg { width:16px; height:16px; }
+  #fc-pay-{{ section.id }} .fc-map-box { position:relative; }
   #fc-pay-{{ section.id }} .fc-map { width:100%; height:240px; border-radius:14px; border:1.5px solid var(--fc-line); overflow:hidden; background:#eef1f6; z-index:0; }
   #fc-pay-{{ section.id }} .fc-map .leaflet-control-attribution { font-size:9px; }
-  #fc-pay-{{ section.id }} .fc-map-hint { color:var(--fc-muted); font-size:12.5px; margin:8px 0 12px; }
+  #fc-pay-{{ section.id }} .fc-map-pin { position:absolute; left:50%; top:50%; transform:translate(-50%,-100%); z-index:500; pointer-events:none; color:#d4380d; width:40px; height:40px; filter:drop-shadow(0 3px 4px rgba(0,0,0,.35)); transition:transform .12s ease; }
+  #fc-pay-{{ section.id }} .fc-map-pin svg { width:100%; height:100%; display:block; }
+  #fc-pay-{{ section.id }} .fc-map-box.is-moving .fc-map-pin { transform:translate(-50%,-115%); }
+  #fc-pay-{{ section.id }} .fc-map-hint { color:var(--fc-muted); font-size:12.5px; margin:8px 0 10px; }
   #fc-pay-{{ section.id }} .fc-map-hint.is-warn { color:#d4380d; font-weight:700; }
   #fc-pay-{{ section.id }} .fc-map-hint.is-ok { color:#0a7d3f; font-weight:700; }
+  #fc-pay-{{ section.id }} .fc-map-confirm { width:100%; border:0; border-radius:11px; padding:14px; font-size:15px; font-weight:800; cursor:pointer; background:var(--fc-navy); color:#fff; transition:background .15s,transform .08s; margin-bottom:14px; }
+  #fc-pay-{{ section.id }} .fc-map-confirm:hover { background:var(--fc-purple); }
+  #fc-pay-{{ section.id }} .fc-map-confirm:active { transform:scale(.99); }
+  #fc-pay-{{ section.id }} .fc-map-confirm.is-done { background:var(--fc-accent); color:#062b1a; }
+  #fc-pay-{{ section.id }} .fc-local-grid { margin-top:0; }
   @media (max-width:780px){ #fc-pay-{{ section.id }} { padding:4px 16px 8px; } }
 </style>
 
@@ -266,11 +277,27 @@
           Usar mi ubicación
         </button>
       </div>
-      <div id="fc-map-{{ section.id }}" class="fc-map" data-map data-lat="{{ current_location | split: ',' | first | strip }}" data-lng="{{ current_location | split: ',' | last | strip }}"></div>
-      <p class="fc-map-hint" data-map-hint>Toca el mapa o arrastra el pin hasta tu casa. Así llegamos más rápido y sin llamadas.</p>
-      <div class="fc-ship-field fc-span2">
-        <label for="fc-ref-{{ section.id }}">Punto de referencia</label>
-        <input type="text" id="fc-ref-{{ section.id }}" data-attr="Referencia de entrega" placeholder="Ej. Casa de portón negro, al lado de la panadería" value="{{ current_ref | escape }}">
+      <div class="fc-map-box">
+        <div id="fc-map-{{ section.id }}" class="fc-map" data-map data-lat="{{ current_location | split: ',' | first | strip }}" data-lng="{{ current_location | split: ',' | last | strip }}"></div>
+        <div class="fc-map-pin" data-map-pin aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5" fill="#fff"/></svg>
+        </div>
+      </div>
+      <p class="fc-map-hint" data-map-hint>Mueve el mapa hasta que el pin quede sobre tu casa y toca “Confirmar dirección”.</p>
+      <button type="button" class="fc-map-confirm" data-map-confirm>Confirmar dirección</button>
+      <div class="fc-ship-grid fc-local-grid">
+        <div class="fc-ship-field">
+          <label for="fc-apt-{{ section.id }}">Casa o Apartamento N°</label>
+          <input type="text" id="fc-apt-{{ section.id }}" data-attr="Casa/Apto N°" placeholder="Ej. Apto 4-B / Casa 12" value="{{ current_apt | escape }}">
+        </div>
+        <div class="fc-ship-field">
+          <label for="fc-urb-{{ section.id }}">Urbanización / Sector</label>
+          <input type="text" id="fc-urb-{{ section.id }}" data-attr="Urbanización / Sector" placeholder="Ej. Urb. La Beatriz" value="{{ current_urb | escape }}">
+        </div>
+        <div class="fc-ship-field fc-span2">
+          <label for="fc-ref-{{ section.id }}">Punto de referencia</label>
+          <input type="text" id="fc-ref-{{ section.id }}" data-attr="Referencia de entrega" placeholder="Ej. Casa de portón negro, al lado de la panadería" value="{{ current_ref | escape }}">
+        </div>
       </div>
     </div>
 
@@ -403,28 +430,47 @@
     });
 
     // ---- Mapa de entrega local (Leaflet + OpenStreetMap) ----
-    // Se carga la libreria solo cuando el cliente elige entrega local. El pin
-    // guarda las coordenadas como atributos del carrito, visibles para el
-    // personal en el pedido (con link directo a Google Maps para navegar).
+    // Patron de pin fijo al centro (como apps de delivery): el cliente mueve el
+    // mapa y el pin central marca el punto. Al tocar "Confirmar direccion" se
+    // guardan las coordenadas + link a Google Maps como atributos del pedido.
+    // La libreria se carga solo cuando el cliente elige entrega local.
     var VALERA = [9.297655, -70.617916]; // C.C. Plaza, centro de referencia
     var mapEl = root.querySelector('[data-map]');
+    var mapBox = root.querySelector('.fc-map-box');
     var mapHint = root.querySelector('[data-map-hint]');
     var geoBtn = root.querySelector('[data-map-geo]');
+    var confirmBtn = root.querySelector('[data-map-confirm]');
     var hasLocation = false;
-    var map = null, marker = null, mapReady = false, leafletLoading = false;
+    var map = null, mapReady = false, leafletLoading = false;
 
     var startLat = parseFloat(mapEl && mapEl.getAttribute('data-lat'));
     var startLng = parseFloat(mapEl && mapEl.getAttribute('data-lng'));
-    if (!isNaN(startLat) && !isNaN(startLng)) hasLocation = true;
+    var hadSaved = (!isNaN(startLat) && !isNaN(startLng));
+    if (hadSaved) hasLocation = true; // ya venia confirmada de una sesion previa
 
-    function saveLocation(lat, lng) {
-      hasLocation = true;
-      var pretty = lat.toFixed(6) + ', ' + lng.toFixed(6);
-      var gmaps = 'https://www.google.com/maps?q=' + lat.toFixed(6) + ',' + lng.toFixed(6);
-      if (mapHint) {
-        mapHint.textContent = 'Ubicación marcada ✓ Puedes ajustar el pin si hace falta.';
-        mapHint.classList.remove('is-warn'); mapHint.classList.add('is-ok');
+    function setConfirmed(on) {
+      hasLocation = on;
+      if (confirmBtn) {
+        confirmBtn.classList.toggle('is-done', on);
+        confirmBtn.textContent = on ? 'Dirección confirmada ✓' : 'Confirmar dirección';
       }
+      if (mapHint) {
+        if (on) {
+          mapHint.textContent = 'Dirección confirmada ✓ Si te equivocaste, mueve el mapa y confirma de nuevo.';
+          mapHint.classList.add('is-ok'); mapHint.classList.remove('is-warn');
+        } else {
+          mapHint.textContent = 'Mueve el mapa hasta que el pin quede sobre tu casa y toca “Confirmar dirección”.';
+          mapHint.classList.remove('is-ok');
+        }
+      }
+    }
+
+    function confirmLocation() {
+      if (!mapReady || !map) { initMap(); return; }
+      var c = map.getCenter();
+      var pretty = c.lat.toFixed(6) + ', ' + c.lng.toFixed(6);
+      var gmaps = 'https://www.google.com/maps?q=' + c.lat.toFixed(6) + ',' + c.lng.toFixed(6);
+      setConfirmed(true);
       post({ attributes: { 'Ubicación (mapa)': pretty, 'Ver en mapa': gmaps } }).then(function () { flashSaved(); });
     }
 
@@ -434,39 +480,34 @@
       if (localWrap) localWrap.classList.remove('is-off');
       initMap();
       if (mapHint) {
-        mapHint.textContent = 'Marca tu ubicación en el mapa para continuar con la entrega local.';
+        mapHint.textContent = 'Confirma tu dirección en el mapa para continuar con la entrega local.';
         mapHint.classList.add('is-warn'); mapHint.classList.remove('is-ok');
       }
-      if (mapEl && mapEl.scrollIntoView) mapEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-
-    function placeMarker(lat, lng, save) {
-      if (!mapReady) return;
-      if (!marker) {
-        marker = L.marker([lat, lng], { draggable: true }).addTo(map);
-        marker.on('dragend', function () {
-          var p = marker.getLatLng();
-          saveLocation(p.lat, p.lng);
-        });
-      } else {
-        marker.setLatLng([lat, lng]);
-      }
-      if (save) saveLocation(lat, lng);
+      if (confirmBtn && confirmBtn.scrollIntoView) confirmBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 
     function buildMap() {
       if (mapReady || !mapEl || typeof L === 'undefined') return;
-      var center = hasLocation ? [startLat, startLng] : VALERA;
-      map = L.map(mapEl, { scrollWheelZoom: false }).setView(center, hasLocation ? 16 : 14);
+      var center = hadSaved ? [startLat, startLng] : VALERA;
+      map = L.map(mapEl, { scrollWheelZoom: false }).setView(center, hadSaved ? 16 : 14);
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
         attribution: '&copy; OpenStreetMap'
       }).addTo(map);
-      map.on('click', function (e) { placeMarker(e.latlng.lat, e.latlng.lng, true); });
-      if (hasLocation) placeMarker(startLat, startLng, false);
+      // El pin vive fijo al centro (HTML). Cuando el cliente arrastra o hace
+      // zoom, se "levanta" y la direccion queda sin confirmar hasta que toque
+      // el boton. Solo dragstart/zoomstart (interaccion real), no movimientos
+      // programaticos como invalidateSize.
+      map.on('dragstart zoomstart', function () {
+        if (mapBox) mapBox.classList.add('is-moving');
+        if (hasLocation) setConfirmed(false);
+      });
+      map.on('moveend zoomend', function () {
+        if (mapBox) mapBox.classList.remove('is-moving');
+      });
       mapReady = true;
-      // Corrige el render de tiles cuando el contenedor estaba oculto.
       setTimeout(function () { if (map) map.invalidateSize(); }, 200);
+      setConfirmed(hadSaved); // estado inicial del boton/hint
     }
 
     function initMap() {
@@ -484,6 +525,8 @@
       document.head.appendChild(js);
     }
 
+    if (confirmBtn) confirmBtn.addEventListener('click', confirmLocation);
+
     if (geoBtn) {
       geoBtn.addEventListener('click', function () {
         if (!navigator.geolocation) return;
@@ -493,17 +536,21 @@
         navigator.geolocation.getCurrentPosition(function (pos) {
           var lat = pos.coords.latitude, lng = pos.coords.longitude;
           initMap();
-          var tryPlace = setInterval(function () {
-            if (mapReady) {
-              clearInterval(tryPlace);
+          var tries = 0;
+          var tryCenter = setInterval(function () {
+            tries++;
+            if (mapReady && map) {
+              clearInterval(tryCenter);
               map.setView([lat, lng], 17);
-              placeMarker(lat, lng, true);
+              setConfirmed(false); // centro el mapa; el cliente confirma
+            } else if (tries > 40) {
+              clearInterval(tryCenter);
             }
           }, 150);
           geoBtn.disabled = false; geoBtn.innerHTML = prev;
         }, function () {
           geoBtn.disabled = false; geoBtn.innerHTML = prev;
-          if (mapHint) { mapHint.textContent = 'No pudimos obtener tu ubicación. Toca el mapa para marcarla a mano.'; mapHint.classList.add('is-warn'); }
+          if (mapHint) { mapHint.textContent = 'No pudimos obtener tu ubicación. Mueve el mapa a mano y confirma.'; mapHint.classList.add('is-warn'); }
         }, { enableHighAccuracy: true, timeout: 10000 });
       });
     }
