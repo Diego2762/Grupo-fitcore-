@@ -94,7 +94,7 @@
   #fc-pay-{{ section.id }} .fc-pay-note { color:var(--fc-muted); font-size:12px; margin:10px 0 0; }
   #fc-pay-{{ section.id }} .fc-pay-note[hidden] { display:none; }
   #fc-pay-{{ section.id }} .fc-pay-note b { color:var(--fc-navy); }
-  #fc-pay-{{ section.id }} .fc-ship-box { background:#fff; border:1px solid var(--fc-line); border-radius:16px; padding:20px; margin-top:16px; }
+  #fc-pay-{{ section.id }} .fc-pay-title--sep { border-top:1px solid var(--fc-line); margin-top:24px; padding-top:22px; }
   #fc-pay-{{ section.id }} .fc-ship-grid { display:grid; grid-template-columns:1fr 1fr; gap:13px; margin-top:16px; }
   #fc-pay-{{ section.id }} .fc-ship-field { display:flex; flex-direction:column; }
   #fc-pay-{{ section.id }} .fc-ship-field.fc-span2 { grid-column:1 / -1; }
@@ -151,7 +151,7 @@
     <p class="fc-pay-title">¿Con qué vas a pagar?</p>
     <p class="fc-pay-sub">Elige tu forma de pago para ver el total. Aquí abajo puedes comparar ambos precios de una vez.</p>
 
-    <div class="fc-pay-opts">
+    <div class="fc-pay-opts" data-pay-opts>
       <label class="fc-pay-opt{% unless is_bs %} is-on{% endunless %}" data-method="divisa">
         <input type="radio" name="fc-pay-{{ section.id }}" value="divisa"{% unless is_bs %} checked{% endunless %}>
         <span>
@@ -183,10 +183,8 @@
     </div>
 
     <p class="fc-pay-note">El total en bolívares BCV es el que se factura, a la <b>tasa BCV del día</b>. Si pagas en divisa, el <b>descuento se aplica automáticamente</b> al pasar a pagar. Tu forma de pago queda anotada en el pedido para el personal de la tienda.</p>
-  </div>
 
-  <div class="fc-ship-box">
-    <p class="fc-pay-title">¿Cómo quieres recibir tu pedido?</p>
+    <p class="fc-pay-title fc-pay-title--sep">¿Cómo quieres recibir tu pedido?</p>
     <p class="fc-pay-sub">Elige una opción y déjanos tus datos. La dirección y el pago los confirmas en el siguiente paso.</p>
 
     <div class="fc-pay-opts fc-recv-opts">
@@ -285,7 +283,7 @@
   (function () {
     var root = document.getElementById('fc-pay-{{ section.id }}');
     if (!root) return;
-    var payOpts = root.querySelectorAll('.fc-pay-box .fc-pay-opt');
+    var payOpts = root.querySelectorAll('[data-pay-opts] .fc-pay-opt');
     var recvOpts = root.querySelectorAll('.fc-recv-opts .fc-pay-opt');
     var natWrap = root.querySelector('[data-nat-wrap]');
     var trows = root.querySelectorAll('[data-trow]');
@@ -329,7 +327,7 @@
     // de pagar (nativo /cart/update.js, parametro discount).
     var goingToCheckout = false;
     function selectedMethod() {
-      var checked = root.querySelector('.fc-pay-box input[type="radio"]:checked');
+      var checked = root.querySelector('[data-pay-opts] input[type="radio"]:checked');
       return checked ? checked.value : 'divisa';
     }
     function selectedDelivery() {
