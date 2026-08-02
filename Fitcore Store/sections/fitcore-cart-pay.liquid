@@ -165,17 +165,17 @@
       <label class="fc-pay-opt{% if is_bs %} is-on{% endif %}" data-method="bs">
         <input type="radio" name="fc-pay-{{ section.id }}" value="bs"{% if is_bs %} checked{% endif %}>
         <span class="fc-pay-opt-main">
-          <span class="fc-pay-lbl">Bolívares BCV: Pago Móvil o Transferencia</span>
-          <span class="fc-pay-hint">A la tasa BCV del día al confirmar.</span>
+          <span class="fc-pay-lbl">Bolívares (BCV $): Pago Móvil o Transferencia</span>
+          <span class="fc-pay-hint">A la tasa BCV $ del día al confirmar.</span>
         </span>
         <span class="fc-pay-opt-side">
           <span class="fc-pay-price" data-price="bs">{{ base | money }}</span>
-          <span class="fc-pay-price-cap">tasa BCV del día</span>
+          <span class="fc-pay-price-cap">tasa BCV $ del día</span>
         </span>
       </label>
     </div>
 
-    <p class="fc-pay-note">El total en bolívares BCV es el que se factura, a la <b>tasa BCV del día</b>. Si pagas en divisa, el <b>descuento se aplica automáticamente</b> al pasar a pagar. Tu forma de pago queda anotada en el pedido para el personal de la tienda.</p>
+    <p class="fc-pay-note">El total en bolívares (BCV $) es el que se factura, a la <b>tasa BCV $ del día</b>. Si pagas en divisa, el <b>descuento se aplica automáticamente</b> al pasar a pagar. Tu forma de pago queda anotada en el pedido para el personal de la tienda.</p>
 
     <p class="fc-pay-title fc-pay-title--sep">¿Cómo quieres recibir tu pedido?</p>
     <p class="fc-pay-sub">Elige una opción y déjanos tus datos. La dirección y el pago los confirmas en el siguiente paso.</p>
