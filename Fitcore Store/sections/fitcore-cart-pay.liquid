@@ -283,6 +283,52 @@
       });
     });
 
+    // Auto-aplicar el descuento de divisa al pasar al checkout, segun la forma
+    // de pago elegida arriba. Divisa => se aplica MEJORPRECIO; Bolivares => se
+    // limpia cualquier descuento para facturar el precio BCV completo. El
+    // carrito en pantalla NO cambia: el descuento solo se fija en el instante
+    // de pagar (nativo /cart/update.js, parametro discount).
+    var goingToCheckout = false;
+    function selectedMethod() {
+      var checked = root.querySelector('.fc-pay-box input[type="radio"]:checked');
+      return checked ? checked.value : 'divisa';
+    }
+    document.addEventListener('click', function (e) {
+      var trigger = e.target && e.target.closest
+        ? e.target.closest('button[name="checkout"], #checkout, .cart__checkout-button')
+        : null;
+      if (!trigger || goingToCheckout) return;
+      goingToCheckout = true;
+      e.preventDefault();
+      e.stopPropagation();
+      var code = selectedMethod() === 'bs' ? '' : 'MEJORPRECIO';
+      var root_path = (window.Shopify && Shopify.routes && Shopify.routes.root) ? Shopify.routes.root : '/';
+      function go() { window.location.href = root_path + 'checkout'; }
+      post({ discount: code }).then(go).catch(go);
+    }, true);
+
+    // Mantener SIEMPRE el carrito en pantalla en precio BCV completo (sin
+    // descuento visible), aunque haya quedado MEJORPRECIO de un intento de pago
+    // anterior (checkout abandonado). Se limpia al cargar y, si el total ya se
+    // habia pintado con descuento, se recarga una sola vez (guarda en
+    // sessionStorage evita bucles). El metodo de pago elegido se conserva como
+    // atributo, y el descuento se vuelve a fijar al pulsar Pagar.
+    (function keepCartClean() {
+      try {
+        fetch('/cart.js').then(function (r) { return r.json(); }).then(function (c) {
+          var hasDisc = c && c.cart_level_discount_applications && c.cart_level_discount_applications.length;
+          if (hasDisc) {
+            if (sessionStorage.getItem('fcDiscCleared')) return;
+            sessionStorage.setItem('fcDiscCleared', '1');
+            post({ discount: '' }).then(function () { location.reload(); })
+              .catch(function () { sessionStorage.removeItem('fcDiscCleared'); });
+          } else {
+            sessionStorage.removeItem('fcDiscCleared');
+          }
+        }).catch(function () {});
+      } catch (e) {}
+    })();
+
     var couponBtn = root.querySelector('[data-coupon-copy]');
     if (couponBtn) {
       var couponLabel = couponBtn.querySelector('[data-coupon-label]');
