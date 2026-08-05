@@ -23,6 +23,31 @@
     <div class="fc-pc-body">
       {%- if product.vendor != blank -%}<span class="fc-pc-vendor">{{ product.vendor }}</span>{%- endif -%}
       <a class="fc-pc-title" href="{{ product.url }}">{{ product.title }}</a>
+      {%- comment -%} Indicador sutil de variantes: colores (Forfit) o sabores/tamaños, para que se vean sin entrar al listing {%- endcomment -%}
+      {%- assign fc_var_label = '' -%}
+      {%- for opt in product.options_with_values -%}
+        {%- assign fc_ocount = opt.values | size -%}
+        {%- if fc_ocount > 1 -%}
+          {%- assign fc_oname = opt.name | downcase -%}
+          {%- if fc_oname contains 'sabor' or fc_oname contains 'flavor' -%}
+            {%- assign fc_seg = fc_ocount | append: ' sabores' -%}
+          {%- elsif fc_oname contains 'color' -%}
+            {%- assign fc_seg = fc_ocount | append: ' colores' -%}
+          {%- elsif fc_oname contains 'tama' or fc_oname contains 'size' -%}
+            {%- assign fc_seg = fc_ocount | append: ' tamaños' -%}
+          {%- else -%}
+            {%- assign fc_seg = fc_ocount | append: ' opciones' -%}
+          {%- endif -%}
+          {%- if fc_var_label == blank -%}
+            {%- assign fc_var_label = fc_seg -%}
+          {%- else -%}
+            {%- assign fc_var_label = fc_var_label | append: ' · ' | append: fc_seg -%}
+          {%- endif -%}
+        {%- endif -%}
+      {%- endfor -%}
+      {%- if fc_var_label != blank -%}
+        <span class="fc-pc-variants">{{ fc_var_label }}</span>
+      {%- endif -%}
       <div class="fc-pc-foot">
         {%- assign fc_divisa = product.price | times: 100 | divided_by: 115 -%}
         <div class="fc-pc-prices">
