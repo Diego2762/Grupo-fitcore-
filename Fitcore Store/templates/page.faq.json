@@ -20,14 +20,14 @@
           "type": "faq",
           "settings": {
             "question": "¿Cómo hago un pedido?",
-            "answer": "<p>Explora el catálogo por categoría, agrega al carrito lo que quieras y completa tu pedido con tus datos y ciudad de entrega. Luego te contactamos para coordinar el pago y el envío.</p>"
+            "answer": "<p>Explora el catálogo por categoría, agrega al carrito lo que quieras y completa tu pedido con tus datos y ciudad de entrega. Pagas al instante en el checkout con el método que prefieras, sin tener que escribirle a nadie.</p>"
           }
         },
         "q2": {
           "type": "faq",
           "settings": {
             "question": "¿Qué métodos de pago aceptan?",
-            "answer": "<p>Aceptamos Zelle y transferencias en divisas, USDT, Pago Móvil y transferencia en bolívares, y efectivo en la tienda. Coordinamos el método contigo al confirmar el pedido.</p>"
+            "answer": "<p>Aceptamos tarjeta internacional Visa y Mastercard, Shop Pay y Apple Pay, Zelle y transferencias en divisas, USDT, Pago Móvil y transferencia en bolívares, y efectivo en la tienda. Eliges y pagas directo en el checkout.</p>"
           }
         },
         "q3": {
@@ -48,7 +48,7 @@
           "type": "faq",
           "settings": {
             "question": "¿Puedo pagar en bolívares?",
-            "answer": "<p>Sí. Aceptamos Pago Móvil y transferencias en bolívares, además de divisas. Te indicamos el monto al confirmar tu pedido.</p>"
+            "answer": "<p>Sí. Aceptamos Pago Móvil y transferencias en bolívares, además de divisas. Verás los datos para pagar directamente en el checkout.</p>"
           }
         },
         "q6": {
