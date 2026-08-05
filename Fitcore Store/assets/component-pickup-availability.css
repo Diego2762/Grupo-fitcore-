@@ -221,31 +221,37 @@ pickup-availability-drawer[open] {
 
 .product__pickup-availabilities .pickup-availability-button:hover { color: #19c37d; }
 
-/* Línea sutil de entrega debajo de la ficha de retiro */
+/* Opciones de entrega (sutiles) debajo de la ficha de retiro */
 .fc-delivery-note {
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0 0.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.fc-delivery-note li {
   display: flex;
   align-items: flex-start;
   gap: 0.7rem;
-  margin: 0.9rem 0 0;
-  padding: 0 0.2rem;
   font-size: 1.15rem;
-  line-height: 1.45;
+  line-height: 1.4;
   font-weight: 500;
   color: #6b7488;
 }
 
 .fc-delivery-note__ico {
-  width: 1.6rem;
-  height: 1.6rem;
+  width: 1.5rem;
+  height: 1.5rem;
   flex-shrink: 0;
-  margin-top: 0.1rem;
+  margin-top: 0.15rem;
   color: #19c37d;
 }
 
 .fc-delivery-note b {
-  color: #c3c9d6;
+  color: #0b1840;
   font-weight: 700;
-  margin: 0 0.2rem;
 }
 
 @keyframes animateDrawerOpen {
