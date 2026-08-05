@@ -1,0 +1,71 @@
+{%- comment -%}
+  Fitcore Store · Tabla nutricional por servicio (estilo Dymatize ISO100 .gf-nfacts)
+  Gateada por handle: aparece SOLO en la Nitro Tech 100% Whey Gold.
+  Lee los metafields del namespace fitcore (datos reales cargados en el producto).
+{%- endcomment -%}
+
+{%- liquid
+  assign allowed = 'muscletech-nitro-tech-100-whey-gold'
+  assign show_table = false
+  if product.handle == allowed
+    assign show_table = true
+  endif
+
+  assign cal = product.metafields.fitcore.calorias.value
+  assign prot = product.metafields.fitcore.proteina.value
+  assign carb = product.metafields.fitcore.carbohidratos.value
+  assign sug = product.metafields.fitcore.azucar.value
+  assign fat = product.metafields.fitcore.grasa.value
+  assign porcion = product.metafields.fitcore.porcion.value
+
+  assign lang = 'es'
+  if request.locale.iso_code contains 'en'
+    assign lang = 'en'
+  endif
+-%}
+
+{%- if show_table and cal != blank -%}
+<style>
+  #fc-nfacts-{{ section.id }} {
+    --fc-navy:#0B1840; --fc-line:#e7eaf2; --fc-soft:#f6f7fa; --fc-acc:#19C37D;
+    max-width:1300px; margin:0 auto; padding:8px 22px 20px;
+  }
+  #fc-nfacts-{{ section.id }} .gf-nfacts { max-width:520px; background:#fff; border:1px solid var(--fc-line); border-radius:18px; overflow:hidden; box-shadow:0 18px 50px rgba(11,24,64,.08); }
+  #fc-nfacts-{{ section.id }} .gf-nfacts__head { background:var(--fc-navy); color:#fff; padding:16px 20px; }
+  #fc-nfacts-{{ section.id }} .gf-nfacts__head h3 { margin:0; font-size:16px; font-weight:900; letter-spacing:.01em; }
+  #fc-nfacts-{{ section.id }} .gf-nfacts__head span { font-size:12px; color:#b6bed8; }
+  #fc-nfacts-{{ section.id }} .gf-nfacts__row { display:flex; justify-content:space-between; align-items:baseline; padding:13px 20px; border-bottom:1px solid var(--fc-line); }
+  #fc-nfacts-{{ section.id }} .gf-nfacts__row:last-child { border-bottom:0; }
+  #fc-nfacts-{{ section.id }} .gf-nfacts__row span { font-size:14.5px; color:#3a4258; }
+  #fc-nfacts-{{ section.id }} .gf-nfacts__row b { font-size:15px; font-weight:800; color:var(--fc-navy); }
+  #fc-nfacts-{{ section.id }} .gf-nfacts__row--hi { background:var(--fc-soft); }
+</style>
+
+<div id="fc-nfacts-{{ section.id }}">
+  <div class="gf-nfacts">
+    <div class="gf-nfacts__head">
+      <h3>{% if lang == 'en' %}Nutrition{% else %}Información nutricional{% endif %}</h3>
+      <span>{% if lang == 'en' %}Per serving{% else %}Por servicio{% endif %}{% if porcion != blank %} ({{ porcion }}){% endif %}</span>
+    </div>
+    <div class="gf-nfacts__row gf-nfacts__row--hi"><span>{% if lang == 'en' %}Calories{% else %}Calorías{% endif %}</span><b>{{ cal }}</b></div>
+    {%- if prot != blank -%}<div class="gf-nfacts__row"><span>{% if lang == 'en' %}Protein{% else %}Proteína{% endif %}</span><b>{{ prot }} g</b></div>{%- endif -%}
+    {%- if carb != blank -%}<div class="gf-nfacts__row"><span>{% if lang == 'en' %}Carbohydrates{% else %}Carbohidratos{% endif %}</span><b>{{ carb }} g</b></div>{%- endif -%}
+    {%- if sug != blank -%}<div class="gf-nfacts__row"><span>{% if lang == 'en' %}Sugar{% else %}Azúcar{% endif %}</span><b>{{ sug }} g</b></div>{%- endif -%}
+    {%- if fat != blank -%}<div class="gf-nfacts__row"><span>{% if lang == 'en' %}Fat{% else %}Grasa{% endif %}</span><b>{{ fat }} g</b></div>{%- endif -%}
+  </div>
+</div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Fitcore Tabla Nutricional",
+  "tag": "section",
+  "class": "fitcore-nutrition-facts",
+  "settings": [
+    { "type": "paragraph", "content": "Muestra la tabla nutricional por servicio (estilo Dymatize). Solo aparece en la Nitro Tech 100% Whey Gold y requiere los metafields de macros (namespace fitcore)." }
+  ],
+  "presets": [
+    { "name": "Fitcore Tabla Nutricional" }
+  ]
+}
+{% endschema %}

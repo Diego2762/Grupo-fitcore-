@@ -36,6 +36,7 @@
         "padding_bottom": 12
       }
     },
+    "fitcore_nutrition": { "type": "fitcore-nutrition-facts", "settings": {} },
     "fitcore_fit": { "type": "fitcore-product-fit", "settings": {} },
     "fitcore_highlights": { "type": "fitcore-product-highlights", "settings": {} },
     "related": {
@@ -50,5 +51,5 @@
       }
     }
   },
-  "order": ["main","fitcore_fit","fitcore_highlights","related"]
+  "order": ["main","fitcore_nutrition","fitcore_fit","fitcore_highlights","related"]
 }
