@@ -1495,12 +1495,17 @@ a.product__text {
 
 /* ============================================================
    Fitcore · Fix del lightbox de producto (ampliar foto)
-   Antes: fondo navy (franjas azules) y la imagen se estiraba a
-   ~1700px, mas grande que la pantalla, lo que causaba "zoom" y
-   scroll. Ahora: fondo neutro claro y la imagen cabe completa.
+   Dos problemas resueltos:
+   1) "Fondo azul": los PNG con fondo transparente dejaban ver el
+      navy (--color-background del color-scheme del modal). Ahora
+      el modal y cada imagen van sobre blanco limpio.
+   2) "Zoom loco": la imagen se estiraba a ~1700px (mas que la
+      pantalla). Ahora cabe completa (max 90vh) y se centra.
+   Aplica a TODAS las fotos de TODOS los productos.
    ============================================================ */
-.product-media-modal {
-  background-color: #f6f7fa;
+.product-media-modal,
+.product-media-modal .product-media-modal__content {
+  background: #ffffff;
 }
 
 .product-media-modal__dialog {
@@ -1509,8 +1514,14 @@ a.product__text {
 }
 
 .product-media-modal .product-media-modal__content {
-  background: transparent;
   padding: 0;
+}
+
+/* Cada media: cabe en pantalla, centrada y sobre blanco (para PNG transparentes) */
+.product-media-modal .product-media-modal__content > *,
+.product-media-modal .product-media-modal__content > * img,
+.product-media-modal .product-media-modal__content .media {
+  background-color: #ffffff;
 }
 
 .product-media-modal .product-media-modal__content > * {
@@ -1519,13 +1530,15 @@ a.product__text {
   max-height: 90vh;
   margin: 0 auto;
   border-radius: 14px;
+  border: 1px solid #e7eaf2;
+  overflow: hidden;
 }
 
 .product-media-modal .product-media-modal__content > * + * {
   margin-top: 2rem;
 }
 
-/* Boton de cerrar visible sobre el fondo claro */
+/* Boton de cerrar visible sobre el fondo blanco */
 .product-media-modal__toggle {
   background-color: #ffffff;
   border: 1px solid #e7eaf2;
