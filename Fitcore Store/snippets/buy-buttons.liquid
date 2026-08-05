@@ -146,6 +146,16 @@
       </template>
     </pickup-availability>
 
+    <p class="fc-delivery-note">
+      <svg class="fc-delivery-note__ico" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+        <path d="M3 7a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v8H3V7Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+        <path d="M14 9h3.6a1 1 0 0 1 .82.43L21 13v2h-7V9Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+        <circle cx="7" cy="17" r="1.8" stroke="currentColor" stroke-width="1.6"/>
+        <circle cx="17" cy="17" r="1.8" stroke="currentColor" stroke-width="1.6"/>
+      </svg>
+      <span>{% if request.locale.iso_code contains 'en' %}Same-day delivery in Valera and nearby areas <b>·</b> Nationwide shipping in 1 to 2 days{% else %}Entrega el mismo día en Valera y cercanías <b>·</b> Envío a todo el país en 1 a 2 días{% endif %}</span>
+    </p>
+
     <script src="{{ 'pickup-availability.js' | asset_url }}" defer="defer"></script>
   {%- endif -%}
 </div>
