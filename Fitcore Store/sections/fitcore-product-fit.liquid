@@ -41,16 +41,6 @@
   #fc-fit-{{ section.id }} .gf-fit__seg { height:9px; flex:1; border-radius:5px; background:#eceef4; }
   #fc-fit-{{ section.id }} .gf-fit__why { font-size:12.5px; line-height:1.45; color:#4a5366; margin:0; }
   #fc-fit-{{ section.id }} .gf-fit__note { margin:18px 0 0; font-size:11.5px; color:#9aa3b6; line-height:1.5; border-top:1px solid var(--fc-line); padding-top:14px; }
-  #fc-fit-{{ section.id }} .gf-nut { margin:0 0 22px; border:1px solid var(--fc-line); border-radius:14px; overflow:hidden; }
-  #fc-fit-{{ section.id }} .gf-nut__title { display:flex; flex-wrap:wrap; align-items:baseline; gap:8px; background:#f6f7fa; padding:12px 16px; font-size:14px; font-weight:800; color:var(--fc-navy); border-bottom:1px solid var(--fc-line); }
-  #fc-fit-{{ section.id }} .gf-nut__title span { font-size:12px; font-weight:600; color:var(--fc-muted); }
-  #fc-fit-{{ section.id }} .gf-nut__table { width:100%; border-collapse:collapse; }
-  #fc-fit-{{ section.id }} .gf-nut__table th { text-align:left; font-weight:600; color:#4a5366; font-size:13.5px; padding:11px 16px; border-bottom:1px solid var(--fc-line); }
-  #fc-fit-{{ section.id }} .gf-nut__table td { text-align:right; font-weight:800; color:var(--fc-navy); font-size:13.5px; padding:11px 16px; border-bottom:1px solid var(--fc-line); white-space:nowrap; }
-  #fc-fit-{{ section.id }} .gf-nut__table tr:last-child th, #fc-fit-{{ section.id }} .gf-nut__table tr:last-child td { border-bottom:0; }
-  #fc-fit-{{ section.id }} .gf-nut__hl td { color:var(--fc-acc); }
-  #fc-fit-{{ section.id }} .gf-nut__sub th { padding-left:30px; font-size:12.5px; color:var(--fc-muted); }
-  #fc-fit-{{ section.id }} .gf-nut__sub td { font-weight:700; color:var(--fc-muted); }
   @media (max-width:680px){ #fc-fit-{{ section.id }} .gf-fit__grid{ grid-template-columns:1fr; } }
 </style>
 
@@ -61,28 +51,6 @@
       <p class="gf-fit__best">{% if lang == 'en' %}Best for:{% else %}Mejor para:{% endif %} <b class="gf-fit__bestv"></b></p>
     </div>
     <p class="gf-fit__sub">{% if lang == 'en' %}Calculated from the nutrition facts per serving.{% else %}Calculado según la tabla nutricional por servicio{% if porcion != blank %} ({{ porcion }}){% endif %}.{% endif %}</p>
-    <div class="gf-nut">
-      <div class="gf-nut__title">{% if lang == 'en' %}Nutrition facts{% else %}Información nutricional{% endif %}<span>{% if lang == 'en' %}per serving{% else %}por servicio{% endif %}{% if porcion != blank %} · {{ porcion }}{% endif %}</span></div>
-      <table class="gf-nut__table">
-        <tbody>
-          {%- if product.metafields.fitcore.calorias != blank -%}
-          <tr class="gf-nut__hl"><th>{% if lang == 'en' %}Calories{% else %}Calorías{% endif %}</th><td>{{ cal }} kcal</td></tr>
-          {%- endif -%}
-          {%- if product.metafields.fitcore.proteina != blank -%}
-          <tr><th>{% if lang == 'en' %}Protein{% else %}Proteína{% endif %}</th><td>{{ prot }} g</td></tr>
-          {%- endif -%}
-          {%- if product.metafields.fitcore.carbohidratos != blank -%}
-          <tr><th>{% if lang == 'en' %}Carbohydrates{% else %}Carbohidratos{% endif %}</th><td>{{ carb }} g</td></tr>
-          {%- endif -%}
-          {%- if product.metafields.fitcore.azucar != blank -%}
-          <tr class="gf-nut__sub"><th>{% if lang == 'en' %}of which sugars{% else %}de los cuales azúcares{% endif %}</th><td>{{ sug }} g</td></tr>
-          {%- endif -%}
-          {%- if product.metafields.fitcore.grasa != blank -%}
-          <tr><th>{% if lang == 'en' %}Fat{% else %}Grasa{% endif %}</th><td>{{ fat }} g</td></tr>
-          {%- endif -%}
-        </tbody>
-      </table>
-    </div>
     <div class="gf-fit__grid"></div>
     <p class="gf-fit__note">{% if lang == 'en' %}Indicative score based on macros per serving. It does not replace personalized nutrition advice.{% else %}Puntaje orientativo basado en los macros por servicio. No sustituye la asesoría nutricional personalizada.{% endif %}</p>
   </div>
