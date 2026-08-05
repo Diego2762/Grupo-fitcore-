@@ -1492,3 +1492,47 @@ a.product__text {
     border: none;
   }
 }
+
+/* ============================================================
+   Fitcore · Fix del lightbox de producto (ampliar foto)
+   Antes: fondo navy (franjas azules) y la imagen se estiraba a
+   ~1700px, mas grande que la pantalla, lo que causaba "zoom" y
+   scroll. Ahora: fondo neutro claro y la imagen cabe completa.
+   ============================================================ */
+.product-media-modal {
+  background-color: #f6f7fa;
+}
+
+.product-media-modal__dialog {
+  padding: 2rem;
+  box-sizing: border-box;
+}
+
+.product-media-modal .product-media-modal__content {
+  background: transparent;
+  padding: 0;
+}
+
+.product-media-modal .product-media-modal__content > * {
+  width: auto;
+  max-width: 100%;
+  max-height: 90vh;
+  margin: 0 auto;
+  border-radius: 14px;
+}
+
+.product-media-modal .product-media-modal__content > * + * {
+  margin-top: 2rem;
+}
+
+/* Boton de cerrar visible sobre el fondo claro */
+.product-media-modal__toggle {
+  background-color: #ffffff;
+  border: 1px solid #e7eaf2;
+  color: #0b1840;
+  box-shadow: 0 6px 18px rgba(11, 24, 64, 0.12);
+}
+
+.product-media-modal__toggle:hover {
+  color: #19c37d;
+}
