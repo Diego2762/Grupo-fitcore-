@@ -148,6 +148,79 @@ pickup-availability-drawer[open] {
   margin: 0;
 }
 
+/* ============================================================
+   Fitcore · Rediseño de la ficha "Retiro disponible en tienda"
+   Corrige el nombre invisible (era blanco sobre blanco por
+   .color-foreground) y le da una tarjeta con marca Fitcore.
+   ============================================================ */
+.product__pickup-availabilities[available] { min-height: 0; margin-top: 1.6rem; }
+
+.product__pickup-availabilities .pickup-availability-preview {
+  align-items: center;
+  gap: 1.2rem;
+  padding: 1.4rem 1.6rem;
+  background: #f6f7fa;
+  border: 1px solid #e7eaf2;
+  border-radius: 14px;
+}
+
+/* Icono del check dentro de un badge verde suave */
+.product__pickup-availabilities .pickup-availability-preview > .svg-wrapper {
+  flex-shrink: 0;
+  width: 3.4rem;
+  height: 3.4rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(25, 195, 125, 0.14);
+  border-radius: 50%;
+  margin-top: 0;
+}
+
+.product__pickup-availabilities .pickup-availability-preview > .svg-wrapper .icon {
+  width: 1.9rem;
+  height: 1.9rem;
+}
+
+.product__pickup-availabilities .pickup-availability-info { display: flex; flex-direction: column; }
+.product__pickup-availabilities .pickup-availability-info * { margin: 0; }
+
+/* Línea "Retiro disponible en ..." */
+.product__pickup-availabilities .pickup-availability-info .caption-large {
+  font-size: 1.4rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: #56607a;
+  letter-spacing: 0;
+}
+
+/* Nombre de la tienda: antes salía blanco (invisible). Ahora navy y visible. */
+.product__pickup-availabilities .pickup-availability-info .caption-large .color-foreground {
+  color: #0b1840;
+  font-weight: 800;
+}
+
+/* "Normalmente está listo en 2 horas" */
+.product__pickup-availabilities .pickup-availability-info .caption {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #12994f;
+  margin-top: 0.4rem;
+  letter-spacing: 0;
+}
+
+/* Botón "Ver información de la tienda" */
+.product__pickup-availabilities .pickup-availability-button {
+  color: #3b1f6b;
+  font-weight: 700;
+  font-size: 1.25rem;
+  margin-top: 0.7rem;
+  letter-spacing: 0;
+  text-decoration-color: rgba(59, 31, 107, 0.35);
+}
+
+.product__pickup-availabilities .pickup-availability-button:hover { color: #19c37d; }
+
 @keyframes animateDrawerOpen {
   @media screen and (max-width: 749px) {
     0% {
