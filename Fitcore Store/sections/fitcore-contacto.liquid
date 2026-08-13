@@ -3,10 +3,10 @@
 {%- endcomment -%}
 
 {%- liquid
-  assign wa = section.settings.whatsapp | default: '584246218863'
+  assign wa = section.settings.whatsapp | default: '584220384328'
   assign wa_msg = section.settings.whatsapp_msg | default: 'Hola Fitcore Store, quiero hacer una consulta'
   assign wa_msg_enc = wa_msg | url_encode
-  assign phone_display = section.settings.phone_display | default: '+58 424-621-8863'
+  assign phone_display = section.settings.phone_display | default: '+58 422-038-4328'
   assign email = section.settings.email | default: 'info@fitcore.com'
   assign address = section.settings.address | default: 'C.C. Plaza, Puente Nivel Comercio, Avenida 6 entre Calles 25 y 25A. Valera, Edo. Trujillo.'
   assign map_link = section.settings.map_link | default: 'https://maps.app.goo.gl/qANKT3VGwkeNcpJT6'
@@ -236,13 +236,13 @@
     { "type": "text", "id": "info_title", "label": "Título del bloque", "default": "Visítanos en el CC Plaza, Valera" },
     { "type": "textarea", "id": "info_text", "label": "Texto del bloque", "default": "Estamos en el corazón de Valera, Edo. Trujillo. Pásate por la tienda, retira tu pedido o escríbenos y te atendemos al instante." },
     { "type": "textarea", "id": "address", "label": "Dirección", "default": "C.C. Plaza, Puente Nivel Comercio, Avenida 6 entre Calles 25 y 25A. Valera, Edo. Trujillo." },
-    { "type": "text", "id": "phone_display", "label": "Teléfono (visible)", "default": "+58 424-621-8863" },
+    { "type": "text", "id": "phone_display", "label": "Teléfono (visible)", "default": "+58 422-038-4328" },
     { "type": "text", "id": "email", "label": "Correo", "default": "info@fitcore.com" },
     { "type": "text", "id": "hours", "label": "Horario (opcional)", "info": "Se muestra solo si lo completas." },
     { "type": "text", "id": "map_link", "label": "Enlace 'Cómo llegar'", "default": "https://maps.app.goo.gl/qANKT3VGwkeNcpJT6" },
     { "type": "html", "id": "map_embed", "label": "Mapa (iframe embed de Google Maps)", "default": "<iframe src=\"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3937.401401659396!2d-70.6153411!3d9.2976551!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e63289b55caf539%3A0x29216434ce78857f!2sC.C.%20Plaza%20Valera!5e0!3m2!1ses!2sus!4v1782975236675!5m2!1ses!2sus\" width=\"600\" height=\"450\" allowfullscreen=\"\" loading=\"lazy\" referrerpolicy=\"strict-origin-when-cross-origin\" title=\"Ubicación Fitcore Store en el CC Plaza, Valera\"></iframe>" },
     { "type": "header", "content": "WhatsApp" },
-    { "type": "text", "id": "whatsapp", "label": "Número (solo dígitos, con país)", "default": "584246218863" },
+    { "type": "text", "id": "whatsapp", "label": "Número (solo dígitos, con país)", "default": "584220384328" },
     { "type": "text", "id": "whatsapp_msg", "label": "Mensaje precargado", "default": "Hola Fitcore Store, quiero hacer una consulta" }
   ],
   "presets": [

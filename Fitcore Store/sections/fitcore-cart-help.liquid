@@ -3,7 +3,7 @@
 {%- endcomment -%}
 
 {%- liquid
-  assign wa = section.settings.whatsapp | default: '584246218863'
+  assign wa = section.settings.whatsapp | default: '584220384328'
   assign wa_msg = section.settings.whatsapp_msg | default: 'Hola Fitcore Store, tengo una duda con mi pedido'
   assign wa_msg_enc = wa_msg | url_encode
 -%}
@@ -61,7 +61,7 @@
   "tag": "section",
   "class": "fitcore-cart-help",
   "settings": [
-    { "type": "text", "id": "whatsapp", "label": "Número de WhatsApp (solo dígitos)", "default": "584246218863" },
+    { "type": "text", "id": "whatsapp", "label": "Número de WhatsApp (solo dígitos)", "default": "584220384328" },
     { "type": "text", "id": "whatsapp_msg", "label": "Mensaje precargado", "default": "Hola Fitcore Store, tengo una duda con mi pedido" }
   ],
   "presets": [

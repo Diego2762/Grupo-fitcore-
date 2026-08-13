@@ -3,7 +3,7 @@
 {%- endcomment -%}
 
 {%- liquid
-  assign wa = section.settings.whatsapp | default: '584246218863'
+  assign wa = section.settings.whatsapp | default: '584220384328'
   assign wa_msg = section.settings.whatsapp_msg | default: 'Hola Fitcore Store, quiero hacer un pedido'
   assign wa_msg_enc = wa_msg | url_encode
   assign catalog_url = section.settings.catalog_url | default: '/collections/all'
@@ -387,7 +387,7 @@
     { "type": "text", "id": "title", "label": "Título (hero)", "default": "¿Cómo comprar suplementos en Fitcore Store?" },
     { "type": "textarea", "id": "subtitle", "label": "Subtítulo (hero)", "default": "Comprar tus suplementos deportivos es rápido y seguro. Te explicamos paso a paso." },
     { "type": "url", "id": "catalog_url", "label": "Enlace al catálogo" },
-    { "type": "text", "id": "whatsapp", "label": "WhatsApp (solo dígitos)", "default": "584246218863" },
+    { "type": "text", "id": "whatsapp", "label": "WhatsApp (solo dígitos)", "default": "584220384328" },
     { "type": "text", "id": "whatsapp_msg", "label": "Mensaje precargado", "default": "Hola Fitcore Store, quiero hacer un pedido" }
   ],
   "presets": [ { "name": "Fitcore Cómo comprar" } ]
