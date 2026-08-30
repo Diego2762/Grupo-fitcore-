@@ -43,31 +43,27 @@
     overflow:hidden;
   }
   .fc-head{
-    background:radial-gradient(130% 130% at 0% 0%,var(--fc-navy-2) 0%,var(--fc-navy) 55%,var(--fc-navy-deep) 100%);
-    color:#fff;
-    padding:30px 28px 28px;
+    background:#fff;
+    color:var(--fc-ink);
+    padding:30px 28px 26px;
     text-align:center;
     position:relative;
+    border-bottom:1px solid var(--fc-line);
   }
-  .fc-head::after{
-    content:"";position:absolute;left:0;right:0;bottom:0;height:3px;
-    background:linear-gradient(90deg,var(--fc-purple) 0%,var(--fc-purple-2) 100%);
+  .fc-head::before{
+    content:"";position:absolute;left:0;right:0;top:0;height:5px;
+    background:linear-gradient(90deg,var(--fc-navy) 0%,var(--fc-purple) 100%);
   }
-  .fc-logo-pill{
-    display:inline-flex;align-items:center;justify-content:center;
-    background:#fff;border-radius:14px;padding:12px 20px;margin:0 auto 18px;
-    box-shadow:0 8px 22px rgba(0,0,0,.28);
-  }
-  .fc-logo{height:44px;width:auto;display:block}
+  .fc-logo{height:62px;width:auto;margin:2px auto 18px;display:block}
   .fc-check{
     width:56px;height:56px;border-radius:50%;
-    background:rgba(91,52,160,.35);
+    background:var(--fc-purple);
     display:flex;align-items:center;justify-content:center;
-    margin:0 auto 14px;border:2px solid rgba(167,139,250,.55);
+    margin:0 auto 14px;box-shadow:0 8px 20px rgba(59,31,107,.35);
   }
   .fc-check svg{width:30px;height:30px;stroke:#fff;stroke-width:3;fill:none}
-  .fc-head h1{font-size:22px;font-weight:800;line-height:1.25;margin-bottom:8px}
-  .fc-head p{font-size:14px;opacity:.9;line-height:1.5}
+  .fc-head h1{font-size:22px;font-weight:800;line-height:1.25;margin-bottom:8px;color:var(--fc-navy)}
+  .fc-head p{font-size:14px;color:var(--fc-muted);line-height:1.5}
   .fc-body{padding:26px 28px 30px}
   .fc-note{
     background:var(--fc-purple-soft);
@@ -140,7 +136,7 @@
 <body>
   <div class="fc-card">
     <div class="fc-head">
-      <span class="fc-logo-pill"><img class="fc-logo" src="assets/img/fitcore-store-logo.png" alt="FitCore Store" width="1710" height="690"></span>
+      <img class="fc-logo" src="assets/img/fitcore-store-logo.png" alt="FitCore Store" width="1710" height="690">
       <div class="fc-check">
         <svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg>
       </div>
