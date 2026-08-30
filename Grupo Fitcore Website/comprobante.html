@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Subir comprobante de pago | FitCore Store</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --fc-purple:#6d28d9;
+    --fc-purple-2:#7c3aed;
+    --fc-lilac:#a78bfa;
+    --fc-lilac-soft:#ede9fe;
+    --fc-green:#22c55e;
+    --fc-ink:#1f2937;
+    --fc-muted:#6b7280;
+    --fc-line:#e5e7eb;
+    --fc-danger:#dc2626;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:'Poppins',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    color:var(--fc-ink);
+    background:linear-gradient(160deg,#4c1d95 0%,#6d28d9 45%,#a78bfa 100%);
+    min-height:100vh;
+    display:flex;
+    align-items:flex-start;
+    justify-content:center;
+    padding:32px 16px 64px;
+  }
+  .fc-card{
+    width:100%;
+    max-width:560px;
+    background:#fff;
+    border-radius:22px;
+    box-shadow:0 24px 60px rgba(30,10,60,.35);
+    overflow:hidden;
+  }
+  .fc-head{
+    background:radial-gradient(120% 120% at 0% 0%,var(--fc-purple-2) 0%,var(--fc-purple) 60%,#4c1d95 100%);
+    color:#fff;
+    padding:30px 28px 26px;
+    text-align:center;
+  }
+  .fc-brand{
+    font-weight:800;letter-spacing:.5px;font-size:15px;text-transform:uppercase;
+    opacity:.9;margin-bottom:14px;
+  }
+  .fc-brand span{color:#e9d5ff}
+  .fc-check{
+    width:56px;height:56px;border-radius:50%;
+    background:rgba(255,255,255,.15);
+    display:flex;align-items:center;justify-content:center;
+    margin:0 auto 14px;border:2px solid rgba(255,255,255,.5);
+  }
+  .fc-check svg{width:30px;height:30px;stroke:#fff;stroke-width:3;fill:none}
+  .fc-head h1{font-size:22px;font-weight:800;line-height:1.25;margin-bottom:8px}
+  .fc-head p{font-size:14px;opacity:.92;line-height:1.5}
+  .fc-body{padding:26px 28px 30px}
+  .fc-note{
+    background:var(--fc-lilac-soft);
+    border-left:4px solid var(--fc-lilac);
+    color:#4c1d95;
+    font-size:13px;line-height:1.5;
+    padding:12px 14px;border-radius:10px;margin-bottom:22px;
+  }
+  .fc-note b{font-weight:700}
+  .fc-field{margin-bottom:16px}
+  .fc-field label{
+    display:block;font-size:13px;font-weight:600;color:var(--fc-ink);
+    margin-bottom:6px;
+  }
+  .fc-field label .req{color:var(--fc-danger)}
+  .fc-field input,.fc-field select{
+    width:100%;font-family:inherit;font-size:15px;color:var(--fc-ink);
+    padding:12px 14px;border:1.5px solid var(--fc-line);border-radius:11px;
+    background:#fff;transition:border-color .15s,box-shadow .15s;
+  }
+  .fc-field input:focus,.fc-field select:focus{
+    outline:none;border-color:var(--fc-purple-2);
+    box-shadow:0 0 0 3px rgba(124,58,237,.15);
+  }
+  .fc-field input[readonly]{
+    background:#f5f3ff;color:#4c1d95;font-weight:700;cursor:not-allowed;
+    border-style:dashed;
+  }
+  .fc-hint{font-size:11.5px;color:var(--fc-muted);margin-top:5px}
+  .fc-file{
+    border:2px dashed var(--fc-lilac);border-radius:14px;
+    background:#faf5ff;padding:22px 16px;text-align:center;cursor:pointer;
+    transition:background .15s,border-color .15s;
+  }
+  .fc-file:hover{background:#f3ebff;border-color:var(--fc-purple-2)}
+  .fc-file svg{width:34px;height:34px;stroke:var(--fc-purple-2);stroke-width:2;fill:none;margin-bottom:8px}
+  .fc-file strong{display:block;color:var(--fc-purple);font-size:14px;font-weight:700}
+  .fc-file small{display:block;color:var(--fc-muted);font-size:12px;margin-top:4px}
+  .fc-file input[type=file]{display:none}
+  .fc-file.has-file{border-style:solid;border-color:var(--fc-green);background:#f0fdf4}
+  .fc-file.has-file strong{color:#15803d}
+  .fc-hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+  .fc-btn{
+    width:100%;font-family:inherit;font-size:16px;font-weight:700;color:#fff;
+    background:linear-gradient(135deg,var(--fc-purple-2),var(--fc-purple));
+    border:none;border-radius:13px;padding:15px;cursor:pointer;margin-top:8px;
+    transition:transform .12s,box-shadow .15s,opacity .15s;
+    box-shadow:0 10px 24px rgba(109,40,217,.35);
+  }
+  .fc-btn:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 14px 30px rgba(109,40,217,.45)}
+  .fc-btn:disabled{opacity:.6;cursor:not-allowed}
+  .fc-msg{margin-top:16px;font-size:14px;line-height:1.5;border-radius:11px;padding:12px 14px;display:none}
+  .fc-msg.err{display:block;background:#fef2f2;color:var(--fc-danger);border:1px solid #fecaca}
+  .fc-foot{text-align:center;font-size:12px;color:var(--fc-muted);margin-top:18px;line-height:1.5}
+  .fc-foot a{color:var(--fc-purple-2);text-decoration:none;font-weight:600}
+  /* success */
+  .fc-success{display:none;text-align:center;padding:10px 4px 6px}
+  .fc-success.show{display:block}
+  .fc-success .ok{
+    width:74px;height:74px;border-radius:50%;background:#f0fdf4;
+    display:flex;align-items:center;justify-content:center;margin:0 auto 18px;
+    border:3px solid var(--fc-green);
+  }
+  .fc-success .ok svg{width:40px;height:40px;stroke:var(--fc-green);stroke-width:3.5;fill:none}
+  .fc-success h2{font-size:21px;font-weight:800;margin-bottom:10px;color:var(--fc-ink)}
+  .fc-success p{font-size:14.5px;color:var(--fc-muted);line-height:1.6}
+  .fc-success b{color:var(--fc-ink)}
+</style>
+</head>
+<body>
+  <div class="fc-card">
+    <div class="fc-head">
+      <div class="fc-brand">FITCORE <span>STORE</span></div>
+      <div class="fc-check">
+        <svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg>
+      </div>
+      <h1>¡Tu orden ya está en marcha!</h1>
+      <p>Sube tu comprobante de pago para confirmar y despachar tu pedido lo antes posible.</p>
+    </div>
+
+    <div class="fc-body">
+      <div id="fcFormWrap">
+        <div class="fc-note">
+          <b>Pagos en bolívares:</b> el monto se calcula a la tasa <b>BCV del día</b> del pago.
+        </div>
+
+        <form id="fcForm" novalidate>
+          <div class="fc-field">
+            <label for="fcPedido">Número de pedido <span class="req">*</span></label>
+            <input type="text" id="fcPedido" name="pedido" placeholder="Ej: 1234" autocomplete="off">
+            <div class="fc-hint" id="fcPedidoHint">Se completa automático desde tu pedido.</div>
+          </div>
+
+          <div class="fc-field">
+            <label for="fcNombre">Nombre y apellido <span class="req">*</span></label>
+            <input type="text" id="fcNombre" name="nombre" placeholder="Tu nombre completo" autocomplete="name">
+          </div>
+
+          <div class="fc-field">
+            <label for="fcMetodo">Método de pago <span class="req">*</span></label>
+            <select id="fcMetodo" name="metodo_pago">
+              <option value="">Selecciona…</option>
+              <option value="Pago Movil">Pago Móvil (Bs)</option>
+              <option value="Transferencia">Transferencia (Bs)</option>
+              <option value="Zelle">Zelle (USD)</option>
+              <option value="Efectivo">Efectivo en tienda</option>
+            </select>
+          </div>
+
+          <div class="fc-field">
+            <label for="fcMonto">Monto pagado <span class="req">*</span></label>
+            <input type="text" id="fcMonto" name="monto" placeholder="Ej: 25 USD o 900 Bs" autocomplete="off">
+          </div>
+
+          <div class="fc-field">
+            <label for="fcRef">Referencia / confirmación (opcional)</label>
+            <input type="text" id="fcRef" name="referencia" placeholder="N° de referencia de la transacción" autocomplete="off">
+          </div>
+
+          <div class="fc-field">
+            <label>Comprobante (foto o PDF) <span class="req">*</span></label>
+            <label class="fc-file" id="fcFileLabel" for="fcFile">
+              <svg viewBox="0 0 24 24"><path d="M12 16V4m0 0L7 9m5-5l5 5M5 20h14"/></svg>
+              <strong id="fcFileText">Toca para subir tu comprobante</strong>
+              <small>JPG, PNG o PDF · máximo 10 MB</small>
+              <input type="file" id="fcFile" name="archivo" accept="image/*,application/pdf">
+            </label>
+          </div>
+
+          <input type="text" class="fc-hp" id="fcWebsite" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+          <button type="submit" class="fc-btn" id="fcSubmit">Enviar comprobante</button>
+          <div class="fc-msg err" id="fcError"></div>
+        </form>
+
+        <div class="fc-foot">
+          ¿Problemas para subirlo? Escríbenos por WhatsApp al
+          <a id="fcWa" href="https://wa.me/584220384328" target="_blank" rel="noopener">0422-038-4328</a>
+        </div>
+      </div>
+
+      <div class="fc-success" id="fcSuccess">
+        <div class="ok"><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg></div>
+        <h2>¡Comprobante recibido!</h2>
+        <p>Gracias, <b id="fcSuccName">crack</b>. Ya tenemos tu comprobante del pedido <b id="fcSuccPed">#—</b>.<br>
+        Lo revisamos y despachamos tu orden lo antes posible.</p>
+      </div>
+    </div>
+  </div>
+
+<script>
+(function(){
+  var SUPABASE_URL = "https://kmkqcfyqtaqpgyyynpno.supabase.co";
+  var SUPABASE_KEY = "sb_publishable_awyKB8lLYSBNvgI2AZfkrQ_W5IUeSOx";
+  var BUCKET = "comprobantes";
+
+  var qs = new URLSearchParams(location.search);
+  var pedidoParam = (qs.get("pedido") || qs.get("order") || "").trim();
+  var nombreParam = (qs.get("nombre") || qs.get("name") || "").trim();
+
+  var elPedido = document.getElementById("fcPedido");
+  var elPedidoHint = document.getElementById("fcPedidoHint");
+  var elNombre = document.getElementById("fcNombre");
+  var elMetodo = document.getElementById("fcMetodo");
+  var elMonto = document.getElementById("fcMonto");
+  var elRef = document.getElementById("fcRef");
+  var elFile = document.getElementById("fcFile");
+  var elFileLabel = document.getElementById("fcFileLabel");
+  var elFileText = document.getElementById("fcFileText");
+  var elForm = document.getElementById("fcForm");
+  var elSubmit = document.getElementById("fcSubmit");
+  var elError = document.getElementById("fcError");
+  var elHp = document.getElementById("fcWebsite");
+
+  // Prefill desde la URL (pedido bloqueado si viene de Shopify)
+  if (pedidoParam) {
+    elPedido.value = pedidoParam;
+    elPedido.setAttribute("readonly", "readonly");
+    elPedidoHint.textContent = "Tomado de tu pedido automáticamente.";
+  }
+  if (nombreParam) { elNombre.value = nombreParam; }
+
+  // Feedback visual del archivo
+  elFile.addEventListener("change", function(){
+    if (elFile.files && elFile.files.length) {
+      var f = elFile.files[0];
+      elFileText.textContent = f.name.length > 34 ? f.name.slice(0,31) + "…" : f.name;
+      elFileLabel.classList.add("has-file");
+    } else {
+      elFileText.textContent = "Toca para subir tu comprobante";
+      elFileLabel.classList.remove("has-file");
+    }
+  });
+
+  function showError(msg){
+    elError.textContent = msg;
+    elError.classList.add("err");
+    elError.style.display = "block";
+  }
+  function clearError(){ elError.style.display = "none"; }
+
+  function slug(s){
+    return (s || "archivo").toLowerCase()
+      .normalize("NFD").replace(/[̀-ͯ]/g,"")
+      .replace(/[^a-z0-9.]+/g,"-").replace(/^-+|-+$/g,"").slice(0,40);
+  }
+
+  elForm.addEventListener("submit", function(e){
+    e.preventDefault();
+    clearError();
+
+    if (elHp.value) { return; } // honeypot: bot
+
+    var pedido = elPedido.value.trim();
+    var nombre = elNombre.value.trim();
+    var metodo = elMetodo.value;
+    var monto = elMonto.value.trim();
+    var file = elFile.files && elFile.files[0];
+
+    if (!pedido) { return showError("Falta el número de pedido."); }
+    if (!nombre) { return showError("Escribe tu nombre y apellido."); }
+    if (!metodo) { return showError("Selecciona el método de pago."); }
+    if (!monto) { return showError("Indica el monto que pagaste."); }
+    if (!file) { return showError("Adjunta la foto o PDF de tu comprobante."); }
+    if (file.size > 10 * 1024 * 1024) { return showError("El archivo supera los 10 MB. Comprime la imagen e intenta de nuevo."); }
+
+    elSubmit.disabled = true;
+    elSubmit.textContent = "Enviando…";
+
+    var ext = (file.name.split(".").pop() || "dat").toLowerCase().replace(/[^a-z0-9]/g,"");
+    var path = slug(pedido) + "/" + Date.now() + "-" + slug(file.name.replace(/\.[^.]+$/,"")) + "." + ext;
+
+    // 1) Subir archivo a Supabase Storage
+    fetch(SUPABASE_URL + "/storage/v1/object/" + BUCKET + "/" + encodeURI(path), {
+      method: "POST",
+      headers: {
+        "apikey": SUPABASE_KEY,
+        "Authorization": "Bearer " + SUPABASE_KEY,
+        "Content-Type": file.type || "application/octet-stream",
+        "x-upsert": "true"
+      },
+      body: file
+    })
+    .then(function(r){
+      if (!r.ok) { return r.text().then(function(t){ throw new Error("upload:" + r.status + ":" + t); }); }
+      // 2) Insertar registro en la tabla
+      return fetch(SUPABASE_URL + "/rest/v1/fitcore_comprobantes", {
+        method: "POST",
+        headers: {
+          "apikey": SUPABASE_KEY,
+          "Authorization": "Bearer " + SUPABASE_KEY,
+          "Content-Type": "application/json",
+          "Prefer": "return=minimal"
+        },
+        body: JSON.stringify({
+          pedido: pedido,
+          nombre: nombre,
+          metodo_pago: metodo,
+          monto: monto,
+          referencia: elRef.value.trim() || null,
+          archivo_path: BUCKET + "/" + path,
+          campana: "fitcore-store",
+          source: "web-comprobante",
+          user_agent: navigator.userAgent
+        })
+      });
+    })
+    .then(function(r){
+      if (!r.ok) { return r.text().then(function(t){ throw new Error("insert:" + r.status + ":" + t); }); }
+      // Exito
+      document.getElementById("fcFormWrap").style.display = "none";
+      document.getElementById("fcSuccName").textContent = nombre.split(" ")[0] || "crack";
+      document.getElementById("fcSuccPed").textContent = "#" + pedido;
+      document.getElementById("fcSuccess").classList.add("show");
+    })
+    .catch(function(err){
+      elSubmit.disabled = false;
+      elSubmit.textContent = "Enviar comprobante";
+      showError("No pudimos subir tu comprobante. Revisa tu conexión e intenta otra vez, o envíalo por WhatsApp.");
+      if (window.console) { console.error(err); }
+    });
+  });
+})();
+</script>
+</body>
+</html>
