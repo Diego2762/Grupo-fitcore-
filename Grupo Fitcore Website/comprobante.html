@@ -189,7 +189,7 @@
               <svg viewBox="0 0 24 24"><path d="M12 16V4m0 0L7 9m5-5l5 5M5 20h14"/></svg>
               <strong id="fcFileText">Toca para subir tu comprobante</strong>
               <small>JPG, PNG o PDF · máximo 10 MB</small>
-              <input type="file" id="fcFile" name="archivo" accept="image/*,application/pdf">
+              <input type="file" id="fcFile" name="archivo" accept="image/jpeg,image/png,image/webp,image/heic,image/heif,application/pdf">
             </label>
           </div>
 
@@ -289,6 +289,8 @@
     if (!monto) { return showError("Indica el monto que pagaste."); }
     if (!file) { return showError("Adjunta la foto o PDF de tu comprobante."); }
     if (file.size > 10 * 1024 * 1024) { return showError("El archivo supera los 10 MB. Comprime la imagen e intenta de nuevo."); }
+    var tiposOk = ["image/jpeg","image/png","image/webp","image/heic","image/heif","application/pdf"];
+    if (file.type && tiposOk.indexOf(file.type) === -1) { return showError("Formato no válido. Sube una foto (JPG, PNG, WebP, HEIC) o un PDF."); }
 
     elSubmit.disabled = true;
     elSubmit.textContent = "Enviando…";
