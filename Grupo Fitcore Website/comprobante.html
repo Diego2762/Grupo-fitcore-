@@ -7,63 +7,72 @@
 <title>Subir comprobante de pago | FitCore Store</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --fc-purple:#6d28d9;
-    --fc-purple-2:#7c3aed;
-    --fc-lilac:#a78bfa;
-    --fc-lilac-soft:#ede9fe;
+    --fc-navy:#0B1840;
+    --fc-navy-2:#111D3E;
+    --fc-navy-deep:#071631;
+    --fc-purple:#3B1F6B;
+    --fc-purple-2:#5a34a0;
+    --fc-purple-soft:#eee9f7;
     --fc-green:#22c55e;
-    --fc-ink:#1f2937;
+    --fc-ink:#0B1840;
     --fc-muted:#6b7280;
-    --fc-line:#e5e7eb;
+    --fc-line:#e2e5ee;
     --fc-danger:#dc2626;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   body{
-    font-family:'Poppins',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    font-family:'Open Sans',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
     color:var(--fc-ink);
-    background:linear-gradient(160deg,#4c1d95 0%,#6d28d9 45%,#a78bfa 100%);
+    background:linear-gradient(165deg,var(--fc-navy-deep) 0%,var(--fc-navy) 55%,var(--fc-navy-2) 100%);
     min-height:100vh;
     display:flex;
     align-items:flex-start;
     justify-content:center;
     padding:32px 16px 64px;
   }
+  h1,h2,.fc-file strong,.fc-btn{font-family:'Inter',system-ui,sans-serif}
   .fc-card{
     width:100%;
     max-width:560px;
     background:#fff;
     border-radius:22px;
-    box-shadow:0 24px 60px rgba(30,10,60,.35);
+    box-shadow:0 24px 60px rgba(7,22,49,.45);
     overflow:hidden;
   }
   .fc-head{
-    background:radial-gradient(120% 120% at 0% 0%,var(--fc-purple-2) 0%,var(--fc-purple) 60%,#4c1d95 100%);
+    background:radial-gradient(130% 130% at 0% 0%,var(--fc-navy-2) 0%,var(--fc-navy) 55%,var(--fc-navy-deep) 100%);
     color:#fff;
-    padding:30px 28px 26px;
+    padding:30px 28px 28px;
     text-align:center;
+    position:relative;
   }
-  .fc-brand{
-    font-weight:800;letter-spacing:.5px;font-size:15px;text-transform:uppercase;
-    opacity:.9;margin-bottom:14px;
+  .fc-head::after{
+    content:"";position:absolute;left:0;right:0;bottom:0;height:3px;
+    background:linear-gradient(90deg,var(--fc-purple) 0%,var(--fc-purple-2) 100%);
   }
-  .fc-brand span{color:#e9d5ff}
+  .fc-logo-pill{
+    display:inline-flex;align-items:center;justify-content:center;
+    background:#fff;border-radius:14px;padding:12px 20px;margin:0 auto 18px;
+    box-shadow:0 8px 22px rgba(0,0,0,.28);
+  }
+  .fc-logo{height:44px;width:auto;display:block}
   .fc-check{
     width:56px;height:56px;border-radius:50%;
-    background:rgba(255,255,255,.15);
+    background:rgba(91,52,160,.35);
     display:flex;align-items:center;justify-content:center;
-    margin:0 auto 14px;border:2px solid rgba(255,255,255,.5);
+    margin:0 auto 14px;border:2px solid rgba(167,139,250,.55);
   }
   .fc-check svg{width:30px;height:30px;stroke:#fff;stroke-width:3;fill:none}
   .fc-head h1{font-size:22px;font-weight:800;line-height:1.25;margin-bottom:8px}
-  .fc-head p{font-size:14px;opacity:.92;line-height:1.5}
+  .fc-head p{font-size:14px;opacity:.9;line-height:1.5}
   .fc-body{padding:26px 28px 30px}
   .fc-note{
-    background:var(--fc-lilac-soft);
-    border-left:4px solid var(--fc-lilac);
-    color:#4c1d95;
+    background:var(--fc-purple-soft);
+    border-left:4px solid var(--fc-purple);
+    color:var(--fc-purple);
     font-size:13px;line-height:1.5;
     padding:12px 14px;border-radius:10px;margin-bottom:22px;
   }
@@ -80,21 +89,21 @@
     background:#fff;transition:border-color .15s,box-shadow .15s;
   }
   .fc-field input:focus,.fc-field select:focus{
-    outline:none;border-color:var(--fc-purple-2);
-    box-shadow:0 0 0 3px rgba(124,58,237,.15);
+    outline:none;border-color:var(--fc-purple);
+    box-shadow:0 0 0 3px rgba(59,31,107,.15);
   }
   .fc-field input[readonly]{
-    background:#f5f3ff;color:#4c1d95;font-weight:700;cursor:not-allowed;
+    background:var(--fc-purple-soft);color:var(--fc-purple);font-weight:700;cursor:not-allowed;
     border-style:dashed;
   }
   .fc-hint{font-size:11.5px;color:var(--fc-muted);margin-top:5px}
   .fc-file{
-    border:2px dashed var(--fc-lilac);border-radius:14px;
-    background:#faf5ff;padding:22px 16px;text-align:center;cursor:pointer;
+    border:2px dashed var(--fc-purple-2);border-radius:14px;
+    background:#f7f5fb;padding:22px 16px;text-align:center;cursor:pointer;
     transition:background .15s,border-color .15s;
   }
-  .fc-file:hover{background:#f3ebff;border-color:var(--fc-purple-2)}
-  .fc-file svg{width:34px;height:34px;stroke:var(--fc-purple-2);stroke-width:2;fill:none;margin-bottom:8px}
+  .fc-file:hover{background:#efeaf7;border-color:var(--fc-purple)}
+  .fc-file svg{width:34px;height:34px;stroke:var(--fc-purple);stroke-width:2;fill:none;margin-bottom:8px}
   .fc-file strong{display:block;color:var(--fc-purple);font-size:14px;font-weight:700}
   .fc-file small{display:block;color:var(--fc-muted);font-size:12px;margin-top:4px}
   .fc-file input[type=file]{display:none}
@@ -106,14 +115,14 @@
     background:linear-gradient(135deg,var(--fc-purple-2),var(--fc-purple));
     border:none;border-radius:13px;padding:15px;cursor:pointer;margin-top:8px;
     transition:transform .12s,box-shadow .15s,opacity .15s;
-    box-shadow:0 10px 24px rgba(109,40,217,.35);
+    box-shadow:0 10px 24px rgba(59,31,107,.35);
   }
-  .fc-btn:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 14px 30px rgba(109,40,217,.45)}
+  .fc-btn:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 14px 30px rgba(59,31,107,.45)}
   .fc-btn:disabled{opacity:.6;cursor:not-allowed}
   .fc-msg{margin-top:16px;font-size:14px;line-height:1.5;border-radius:11px;padding:12px 14px;display:none}
   .fc-msg.err{display:block;background:#fef2f2;color:var(--fc-danger);border:1px solid #fecaca}
   .fc-foot{text-align:center;font-size:12px;color:var(--fc-muted);margin-top:18px;line-height:1.5}
-  .fc-foot a{color:var(--fc-purple-2);text-decoration:none;font-weight:600}
+  .fc-foot a{color:var(--fc-purple);text-decoration:none;font-weight:600}
   /* success */
   .fc-success{display:none;text-align:center;padding:10px 4px 6px}
   .fc-success.show{display:block}
@@ -131,7 +140,7 @@
 <body>
   <div class="fc-card">
     <div class="fc-head">
-      <div class="fc-brand">FITCORE <span>STORE</span></div>
+      <span class="fc-logo-pill"><img class="fc-logo" src="assets/img/fitcore-store-logo.png" alt="FitCore Store" width="1710" height="690"></span>
       <div class="fc-check">
         <svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg>
       </div>
