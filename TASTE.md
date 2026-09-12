@@ -4,6 +4,7 @@ Consultar antes de redactar cualquier copy. Cada entrada nace de una corrección
 
 ## Reglas de estilo
 - **NO usar guiones largos (—) en absoluto.** El cliente los rechazó ("no uses dashes para nada"). Usar comas, puntos, dos puntos o paréntesis en su lugar. Esto sobrescribe la regla anterior de em-dashes cerrados.
+- **Marca = "Fitcore", NUNCA "FitCore" (C minúscula).** Diego lo corrigió (2026-09-10: "deja de usar Fitcore con la C mayúscula"). Aplica en todo: copy, nombres de tareas, notas, chats. Excepción: nombres propios ya fijados en sistemas externos (ej. el proyecto de Shopify "FitCore Store" o nombres de colecciones/menús ya creados) NO se reescriben retroactivamente salvo que Diego lo pida; la regla rige de aquí en adelante para texto nuevo.
 
 ## Producto / catálogo
 - Imágenes de producto: ir primero a **Amazon** (fondo blanco, bien cuadradas). Sitios oficiales de marca como segunda opción. GNC, iHerb y Walmart bloquean con CAPTCHA, no se pueden raspar.
