@@ -428,5 +428,46 @@
 
     {%- comment -%} Fitcore — barra de navegación inferior (móvil) {%- endcomment -%}
     {% render 'fitcore-mobile-nav' %}
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js" defer></script>
+ <script>
+(function(){
+  var COLORS=['#3B1F6B','#19C37D','#0B1840','#5B3AA6','#FFFFFF'];
+  function boom(){
+    if(typeof confetti!=='function') return;
+    var host=document.getElementById('smile-ui-container');
+    var cv=document.createElement('canvas');
+    cv.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;';
+    cv.style.setProperty('display','block','important');
+    cv.style.setProperty('z-index','2147483647','important');
+    (host||document.body).appendChild(cv);
+    var fire=confetti.create(cv,{resize:true,useWorker:true});
+    fire({particleCount:120,spread:95,startVelocity:42,origin:{y:0.7},colors:COLORS});
+    var end=Date.now()+1000;
+    (function f(){
+      fire({particleCount:5,angle:60,spread:70,origin:{x:0,y:0.9},colors:COLORS});
+      fire({particleCount:5,angle:120,spread:70,origin:{x:1,y:0.9},colors:COLORS});
+      if(Date.now()<end){requestAnimationFrame(f);}
+    })();
+    setTimeout(function(){ if(cv&&cv.parentNode) cv.parentNode.removeChild(cv); },3500);
+  }
+  var wasOpen=false;
+  function isOpen(){
+    var host=document.getElementById('smile-ui-container');
+    if(!host) return false;
+    var p=host.querySelector('.smile-panel-frame-container');
+    if(!p) return false;
+    var r=p.getBoundingClientRect();
+    if(r.width<40||r.height<40) return false;
+    var cs=getComputedStyle(p);
+    if(cs.display==='none'||cs.visibility==='hidden'||parseFloat(cs.opacity||'1')===0) return false;
+    return true;
+  }
+  setInterval(function(){
+    var now=isOpen();
+    if(now&&!wasOpen){ boom(); }
+    wasOpen=now;
+  },300);
+})();
+</script>
   </body>
 </html>
