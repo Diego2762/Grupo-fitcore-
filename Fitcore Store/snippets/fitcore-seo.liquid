@@ -5,8 +5,8 @@
   Render desde layout/theme.liquid <head>: {% render 'fitcore-seo' %}
 
   NOTA: datos verificados de Grupo Fitcore (NAP, horario L-S 9-17, geo, IG).
-  Google Business Profile creado (CID 911554535815498653); geo y hasMap
-  alineados al marcador oficial del GBP. Pendiente externo: confirmar redes
+  Google Business Profile creado (CID 911554535815498653); geo (9.2975443,
+  -70.6152509) y hasMap alineados al pin oficial del GBP. Pendiente externo: confirmar redes
   adicionales (FB, TikTok, YouTube) si aplican. No se inventa nada.
 {%- endcomment -%}
 
@@ -19,8 +19,8 @@
   assign biz_country = 'VE'
   assign biz_postal = '3101'
   assign biz_street = 'C.C. Plaza, Puente Nivel Comercio, Avenida 6, Calles 25'
-  assign biz_geo_lat = '9.3257339'
-  assign biz_geo_lng = '-70.5983235'
+  assign biz_geo_lat = '9.2975443'
+  assign biz_geo_lng = '-70.6152509'
   assign biz_gmaps = 'https://www.google.com/maps?cid=911554535815498653'
   assign biz_map = biz_gmaps
   assign biz_logo = 'fitcore-store-logo.png' | asset_url | prepend: 'https:'
@@ -88,6 +88,20 @@
     { "@type": "State", "name": "Trujillo" },
     { "@type": "Country", "name": "Venezuela" }
   ],
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Suplementos deportivos y vitaminas",
+    "itemListElement": [
+      {%- assign fc_cats = "Proteínas,Creatina,Pre-entrenos,Aminoácidos,Vitaminas,Accesorios" | split: ',' -%}
+      {%- for fc_c in fc_cats -%}
+      {
+        "@type": "Offer",
+        "itemOffered": { "@type": "Product", "name": {{ fc_c | json }} },
+        "availableDeliveryMethod": ["https://schema.org/OnSitePickup", "https://schema.org/ParcelService"]
+      }{% unless forloop.last %},{% endunless %}
+      {%- endfor -%}
+    ]
+  },
   "contactPoint": {
     "@type": "ContactPoint",
     "telephone": {{ biz_phone | json }},
