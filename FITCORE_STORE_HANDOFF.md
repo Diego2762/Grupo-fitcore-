@@ -1,9 +1,26 @@
-# FitCore Store · Handoff / Estado de trabajo
+# Fitcore Store · Handoff / Estado de trabajo
 
-> Documento de traspaso para retomar el trabajo de **FitCore Store** (tienda B2C en Shopify) en otra sesión / cowork.
-> Última actualización: 29 jul 2026. Autor: sesión de trabajo con Claude.
->
-> **NOTA DE VIGENCIA (jul 2026):** el modelo de precios (§4) y el de envíos (§6) fueron reestructurados. La versión vigente está en la **§11 (Actualización 29 jul 2026)** al final de este documento. Donde §4 y §6 contradigan a la §11, manda la §11.
+> Documento de traspaso para retomar el trabajo de **Fitcore Store** (tienda B2C/DTC en Shopify) en otra sesión / cowork / con otro equipo o AI.
+> Última actualización: 18 sep 2026. Autor: sesiones de trabajo con Claude.
+
+---
+
+## 0. ALCANCE — separar bien DTC de B2B (leer primero)
+
+Este repo aloja **dos negocios distintos** del holding Grupo Fitcore. No mezclarlos.
+
+| Negocio | Qué es | Dónde vive | Público |
+|---|---|---|---|
+| **Fitcore Store (DTC/B2C)** ← ESTE doc | Tienda retail al consumidor final: online (Shopify) + tienda física CC Plaza, Valera | Carpeta **`Fitcore Store/`** (tema Shopify) · dominio **fitcore.com.ve** | Atleta / cliente final |
+| **Distribuidora (B2B mayorista)** | Venta al por mayor a gimnasios, farmacias, revendedores | Carpeta **`Grupo Fitcore Website/`** (sitio estático) · dominio **grupofitcore.com** · Portal B2B en Next.js+Supabase (aparte) | Dueño de negocio / comprador |
+
+Reglas de separación:
+- **Voz:** Fitcore Store le habla al CONSUMIDOR FINAL (cercana, directa). El website B2B le habla al negocio. `brand.md` está scopeado a B2B; para la tienda, la voz B2C manda.
+- **Fuente de verdad del tema Fitcore Store = Shopify (vía MCP), NO GitHub.** La carpeta `Fitcore Store/` del repo es un espejo de referencia y puede divergir del tema live. Para cambiar la tienda se edita en Shopify (MCP) o se sube un tema staged; git NO despliega la tienda.
+- **grupofitcore.com sí se despliega desde git** (push → Vercel). Eso es B2B, no la tienda.
+- **Supabase NO es parte del storefront** de Fitcore Store. Solo lo toca el flujo de validación de pagos/comprobantes, que se maneja en un CHAT APARTE (ver §12). Para trabajar tema/catálogo/copy de la tienda, no hace falta Supabase.
+
+> **NOTA DE VIGENCIA:** el estado más reciente está en la **§12 (Estado actual · sep 2026)** al final. Donde una sección vieja contradiga a la §12, manda la §12. El modelo de precios (§4) y envíos (§6) fueron reestructurados en la §11.
 
 ---
 
@@ -147,3 +164,43 @@ Archivos que llevan este texto: `sections/fitcore-home.liquid`, `sections/fitcor
 3. Para preview de la tienda: `cd "Fitcore Store"` → `shopify theme dev` → `http://127.0.0.1:9292`.
 4. Para crear/editar productos: usar el MCP de Shopify (crear → `metafieldsSet` → `publishablePublish` en "Tienda online").
 5. Imágenes: subirlas a `Grupo Fitcore Website/assets/img/...`, hacer push (deploy Vercel), y referenciarlas con `https://www.grupofitcore.com/assets/img/...`.
+
+---
+
+## 12. Estado actual (sep 2026) — MANDA sobre lo anterior
+
+### Datos vigentes
+| Dato | Valor |
+|---|---|
+| Store Shopify | `rkytuq-2h.myshopify.com` |
+| Dominio público | **fitcore.com.ve** (con **password gate** a propósito hasta el lanzamiento; el scraper de links solo ve `/password`) |
+| Teléfono oficial | **0422-038-4328** (intl `+58 422-038-4328` · `wa.me/584220384328`) |
+| Email de contacto | **info@grupofitcore.com** |
+| Host de imágenes para Shopify | `https://www.grupofitcore.com/assets/img/...` (con **www**; el apex no sirve assets) |
+| Lanzamiento estimado | ~oct-nov 2026 (kiosco CC Plaza Valera + online) |
+
+### Pipeline de temas (CRÍTICO — el MCP NO puede escribir ni publicar el tema LIVE)
+- Flujo estándar: **editar local → commit → push → `themeDuplicate` del tema MAIN → `themeFilesUpsert` al duplicado (unpublished) → verificar `checksumMd5` → Diego publica manual en admin.** Publicar un tema NO expone la tienda (sigue tras el gate); el público entra solo cuando Diego quita la contraseña = lanzamiento.
+- Nunca editar directo el tema en vivo por MCP: la política de seguridad lo bloquea ("targets the live theme").
+- **Temas (revisar en admin por si cambian los roles):** la línea de temas va `artistic-look` → v1.7 → v1.8 (SEO local NAP+geo) → **v1.9 "OG image branded"** (staged con la imagen de link compartido). Diego publica el más nuevo cuando aprueba. Los IDs concretos cambian cada vez que se duplica; leerlos con una query de temas antes de asumir.
+
+### Catálogo
+- **~56 productos cargados** (ON, Dymatize, MuscleTech, C4/Cellucor/XTEND, Nutrex, Ghost, Forfit) ACTIVE + publicados en "Tienda online". Proceso estándar de carga obligatorio en §11 / project note (vendor=marca, tag categoría Title-Case, precio divisa base=ceil(PV/0.75), metafields fitcore, inventario `tracked:false`+`CONTINUE`).
+- **AVISO:** el filtro marca/objetivo del catálogo es client-side y `products_per_page`=50. Con 56 productos ya se pasó el umbral → pendiente migrar a **facets nativos** o carga incremental antes de seguir cargando.
+
+### SEO / compartir link (OG)
+- `snippets/fitcore-seo.liquid` = JSON-LD WebSite+Store/LocalBusiness+geo (pin real GBP `9.2975443,-70.6152509`, CID 911554535815498653), horario visible, hasOfferCatalog.
+- **Imagen OG branded** `assets/fitcore-og.png` (navy 1200x630, logo Fitcore Store) + `snippets/meta-tags.liquid` + `layout/password.liquid` con bloque OG inline → el preview del link se ve con marca y descripción aun con la tienda gateada. (Recomendado: reemplazar en Preferencias la "imagen para compartir" por la navy.)
+- **Checklist de lanzamiento** (cuando se quite el gate, ~1 mes): quitar password gate · Rich Results Test · Search Console + sitemap `fitcore.com.ve/sitemap.xml` · confirmar que el Perfil de Google Business apunta a fitcore.com.ve.
+
+### Fuera de alcance de ESTE chat (viven en otro chat/negocio)
+- **Validación de pagos / comprobantes** (comprobante → Supabase `diego-fitness-os` `kmkqcfyqtaqpgyyynpno` → match Gmail `pagos@` + Shopify + Asana). Es un flujo operativo que se lleva en un **CHAT APARTE**, no en el de código de la tienda. WhatsApp automático del link de comprobante = app Whatomation (número propio 0422-038-4328).
+- **Portal B2B / Distribuidora** (Next.js + Supabase) = otro negocio (ver §0).
+
+### Qué leer para tener contexto de Fitcore Store (para otro equipo / AI)
+1. **Este archivo** (`FITCORE_STORE_HANDOFF.md`) — estado y decisiones DTC.
+2. `FITCORE_PROJECT.md` §4 — brief técnico de la tienda.
+3. `TASTE.md` — reglas de estilo (sin guiones largos, "Fitcore" con c minúscula, no inventar datos).
+4. `brand.md` — voz (ojo: escrito para B2B; la tienda es B2C).
+5. Complementarios según tarea: `Shopify Theme/PAGOS.md` (textos de pago), `MARKET_RESEARCH.md` (mercado), `references/offer.md` (oferta).
+- **Fuente de verdad de la tienda = MCP de Shopify.** GitHub = contexto de lectura. Supabase = solo para el flujo de pagos (otro chat).
