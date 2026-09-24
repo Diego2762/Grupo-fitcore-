@@ -82,9 +82,13 @@
     glp1:'Apoyo GLP-1'
   };
 
+  var inited = false;
+
   function init(){
+    if(inited) return;
     var items = Array.prototype.slice.call(document.querySelectorAll('.grid__item[data-fc-vendor]'));
     if(!items.length) return;
+    inited = true;
 
     var marcaBox = root.querySelector('[data-fc-marca]');
     var objBox   = root.querySelector('[data-fc-objetivo]');
@@ -198,8 +202,19 @@
     apply();
   }
 
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', init);
-  else init();
+  // El grid carga las páginas 2..N vía Section Rendering API y dispara
+  // 'fc:grid:complete' cuando ya están todos los productos en el DOM. Esperamos
+  // ese evento para construir los chips sobre el catálogo completo (56 > 50 por
+  // página). Fallbacks: si el grid ya terminó, o si no llega el evento en 3 s.
+  function boot(){
+    var grid = document.getElementById('product-grid');
+    if(grid && grid.dataset.fcComplete === '1'){ init(); return; }
+    document.addEventListener('fc:grid:complete', init, { once: true });
+    setTimeout(init, 3000);
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
 })();
 </script>
 

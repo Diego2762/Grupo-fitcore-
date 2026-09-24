@@ -159,6 +159,7 @@
               <ul
                 id="product-grid"
                 data-id="{{ section.id }}"
+                data-fc-pages="{{ paginate.pages }}"
                 class="
                   grid product-grid grid--{{ section.settings.columns_mobile }}-col-tablet-down
                   grid--{{ section.settings.columns_desktop }}-col-desktop
@@ -250,6 +251,71 @@
         }
         document.dispatchEvent(new CustomEvent('fc:cart:added'));
       }).catch(function () { if (btn) btn.classList.remove('is-loading'); form.submit(); });
+    });
+  })();
+</script>
+
+<script>
+  // Fitcore · Carga completa del catálogo para el filtro branded.
+  // El filtro (fitcore-catalog-filters) trabaja client-side sobre los .grid__item del DOM.
+  // Como la coleccion pagina a 50 y hay mas productos, precargamos las paginas
+  // restantes via Section Rendering API y las fusionamos, para que el filtro
+  // vea TODO el catalogo. Sin JS, la paginacion nativa sigue funcionando.
+  (function () {
+    var grid = document.getElementById('product-grid');
+    if (!grid) return;
+
+    function complete() {
+      grid.dataset.fcComplete = '1';
+      document.dispatchEvent(new CustomEvent('fc:grid:complete'));
+    }
+
+    var pages = parseInt(grid.getAttribute('data-fc-pages'), 10) || 1;
+    if (pages <= 1 || !window.fetch || !window.DOMParser) {
+      complete();
+      return;
+    }
+
+    var baseUrl = {{ collection.url | json }};
+    var sectionId = {{ section.id | json }};
+    var reqs = [];
+    for (var p = 2; p <= pages; p++) {
+      var url = baseUrl + (baseUrl.indexOf('?') > -1 ? '&' : '?') +
+                'section_id=' + encodeURIComponent(sectionId) + '&page=' + p;
+      reqs.push(
+        fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+          .then(function (r) { return r.text(); })
+          .then(function (html) {
+            var doc = new DOMParser().parseFromString(html, 'text/html');
+            var g = doc.getElementById('product-grid');
+            return g ? Array.prototype.slice.call(g.querySelectorAll('.grid__item')) : [];
+          })
+          .catch(function () { return []; })
+      );
+    }
+
+    Promise.all(reqs).then(function (batches) {
+      var seen = {};
+      Array.prototype.forEach.call(grid.querySelectorAll('.fc-pc[data-handle]'), function (pc) {
+        seen[pc.getAttribute('data-handle')] = 1;
+      });
+      var frag = document.createDocumentFragment();
+      batches.forEach(function (items) {
+        items.forEach(function (it) {
+          var pc = it.querySelector('.fc-pc[data-handle]');
+          var h = pc ? pc.getAttribute('data-handle') : null;
+          if (h && seen[h]) return;
+          if (h) seen[h] = 1;
+          frag.appendChild(it);
+        });
+      });
+      grid.appendChild(frag);
+      var pag = document.querySelector('.pagination-wrapper');
+      if (pag) pag.style.display = 'none';
+    }).catch(function () {
+      // si algo falla, seguimos con lo que haya en el DOM
+    }).then(function () {
+      complete();
     });
   })();
 </script>
