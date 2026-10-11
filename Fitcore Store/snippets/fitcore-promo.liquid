@@ -1,7 +1,6 @@
 {%- comment -%}
   Fitcore · Promos de apertura (UN SOLO LUGAR para editar).
-  Se muestran del 11 oct al 15 nov 2026 (hora Venezuela), igual que los descuentos automaticos. Mientras el tema NO este publicado (borrador/vista previa)
-  o dentro del editor, se muestran siempre para poder revisarlas.
+  Se muestran siempre, sin limite por fecha (fc_live). Las fechas reales las controlan los descuentos automaticos de Shopify.
   El descuento real lo aplican los descuentos automaticos de Shopify; esto solo lo comunica.
 
   Uso:
@@ -21,15 +20,8 @@
 {%- liquid
   assign fc_promos = 'nutrex-creatine-monohydrate-300-g:1609,optimum-nutrition-micronized-creatine-powder:2989,cellucor-cor-performance-creatine:-10,nutrex-liquid-carnitine-3000:-10,nutrex-lipo-6-black-ultra-concentrate-60-capsulas:-10,nutrex-bcaa-6000:-10,bsn-aminox-435-g:-5,xtend-original-bcaa:-5,xtend-eaa:-5' | split: ','
   assign fc_trio_vendor = "Nature's Bounty"
-  assign fc_now = 'now' | date: '%s' | plus: 0
-  assign fc_p_start = '2026-10-11 00:00:00 -0400' | date: '%s' | plus: 0
-  assign fc_p_end = '2026-11-15 23:59:59 -0400' | date: '%s' | plus: 0
-  assign fc_live = false
-  if request.design_mode or theme.role != 'main'
-    assign fc_live = true
-  elsif fc_now >= fc_p_start and fc_now <= fc_p_end
-    assign fc_live = true
-  endif
+  # Sin limite por fecha: las promos se muestran siempre (la tienda esta bajo clave). Para apagarlas, poner false.
+  assign fc_live = true
   assign fc_out = ''
   if part == 'end'
     assign fc_out = '2026-11-15T23:59:59-04:00'
