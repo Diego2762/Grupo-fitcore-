@@ -1,0 +1,285 @@
+{%- comment -%}
+  Fitcore Store · Página "Ofertas de lanzamiento" (B2C)
+  Espejo de los descuentos automáticos de Shopify (1 al 15 nov 2026, hora Venezuela):
+  Nutrex Creatine a $13.99 divisa ($16.09 BCV) · Lleva 3 paga solo 2 en Nature's Bounty · Envío gratis Valera.
+  Los precios reales los aplica Shopify en el carrito; esta página solo los comunica.
+  Las tarjetas usan el snippet fitcore-product-card (foto, precios divisa/BCV, botón de carrito).
+{%- endcomment -%}
+
+{{ 'fitcore-cards.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign wa = section.settings.whatsapp | default: '584220384328'
+  assign wa_msg_enc = section.settings.whatsapp_msg | default: 'Hola Fitcore Store, quiero aprovechar las ofertas de lanzamiento' | url_encode
+  assign creatine = section.settings.creatine_product | default: all_products['nutrex-creatine-monohydrate-300-g']
+  assign nb_col = section.settings.nb_collection | default: collections['natures-bounty']
+  assign cr_new_bcv = section.settings.creatine_promo_bcv | default: 16.09 | times: 100 | round
+  assign cr_new_div = cr_new_bcv | times: 100 | divided_by: 115
+  assign cr_old_bcv = creatine.price | default: 2069
+  assign cr_old_div = cr_old_bcv | times: 100 | divided_by: 115
+  assign cr_save = cr_old_div | minus: cr_new_div
+  assign start_iso = section.settings.start_iso | default: '2026-11-01T00:00:00-04:00'
+  assign end_iso = section.settings.end_iso | default: '2026-11-15T23:59:59-04:00'
+-%}
+
+<style>
+  #fc-of-{{ section.id }} { --navy:#0B1840; --purple:#3B1F6B; --green:#19C37D; --green-d:#12994f; --ink:#0B1840; --muted:#56607a; --line:#e7eaf2; --soft:#F6F7FA; font-family:var(--font-body-family,sans-serif); color:var(--ink); }
+  #fc-of-{{ section.id }} * { box-sizing:border-box; }
+  #fc-of-{{ section.id }} .w { max-width:1180px; margin:0 auto; padding:0 20px; }
+
+  /* Hero compacto */
+  #fc-of-{{ section.id }} .hero { background:radial-gradient(640px 320px at 8% -30%, rgba(59,31,107,.9), transparent 60%), linear-gradient(120deg,var(--navy),var(--purple)); color:#fff; padding:34px 0 30px; }
+  #fc-of-{{ section.id }} .hero .w { display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:20px 32px; }
+  #fc-of-{{ section.id }} .eyebrow { display:inline-block; font:800 11px/1 sans-serif; letter-spacing:.1em; text-transform:uppercase; color:#7ff0bd; background:rgba(25,195,125,.14); border:1px solid rgba(25,195,125,.4); padding:7px 11px; border-radius:99px; margin-bottom:12px; }
+  #fc-of-{{ section.id }} h1 { font-family:var(--font-heading-family,sans-serif); font-weight:800; font-size:clamp(28px,4vw,42px); line-height:1.05; letter-spacing:-.02em; margin:0; }
+  #fc-of-{{ section.id }} .sub { margin:10px 0 0; max-width:52ch; color:rgba(255,255,255,.82); font-size:15.5px; line-height:1.5; }
+  #fc-of-{{ section.id }} .clock { display:flex; align-items:stretch; gap:8px; }
+  #fc-of-{{ section.id }} .clock-l { align-self:center; font:700 12px/1.2 sans-serif; text-transform:uppercase; letter-spacing:.08em; color:rgba(255,255,255,.7); margin-right:4px; max-width:9ch; }
+  #fc-of-{{ section.id }} .clock div.u { min-width:62px; text-align:center; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.2); border-radius:12px; padding:9px 8px 8px; }
+  #fc-of-{{ section.id }} .clock b { display:block; font:800 24px/1 var(--font-heading-family,sans-serif); font-variant-numeric:tabular-nums; }
+  #fc-of-{{ section.id }} .clock small { display:block; margin-top:5px; font:700 9.5px/1 sans-serif; letter-spacing:.1em; text-transform:uppercase; color:rgba(255,255,255,.65); }
+
+  /* Secciones */
+  #fc-of-{{ section.id }} .sec { padding:36px 0 8px; }
+  #fc-of-{{ section.id }} .sec-h { display:flex; flex-wrap:wrap; align-items:baseline; gap:6px 14px; margin:0 0 18px; }
+  #fc-of-{{ section.id }} .sec-h h2 { font-family:var(--font-heading-family,sans-serif); font-weight:800; font-size:clamp(22px,2.8vw,30px); letter-spacing:-.02em; margin:0; }
+  #fc-of-{{ section.id }} .sec-h p { margin:0; color:var(--muted); font-size:14.5px; }
+  #fc-of-{{ section.id }} .tag { display:inline-block; background:var(--green); color:#071631; font:800 10.5px/1 sans-serif; letter-spacing:.08em; text-transform:uppercase; padding:6px 9px; border-radius:99px; }
+
+  /* Tarjeta destacada Nutrex */
+  #fc-of-{{ section.id }} .feat { display:grid; grid-template-columns:minmax(0,5fr) minmax(0,6fr); background:#fff; border:1px solid var(--line); border-radius:20px; overflow:hidden; }
+  #fc-of-{{ section.id }} .feat-img { position:relative; background:var(--soft); display:block; min-height:300px; }
+  #fc-of-{{ section.id }} .feat-img img { position:absolute; inset:18px; margin:auto; max-width:calc(100% - 36px); max-height:calc(100% - 36px); width:auto; height:auto; object-fit:contain; mix-blend-mode:multiply; }
+  #fc-of-{{ section.id }} .feat-b { padding:26px 28px; display:flex; flex-direction:column; align-items:flex-start; gap:10px; }
+  #fc-of-{{ section.id }} .feat-b .v { color:var(--purple); font:700 11px/1 sans-serif; letter-spacing:.09em; text-transform:uppercase; }
+  #fc-of-{{ section.id }} .feat-b h3 { margin:0; font:800 22px/1.2 var(--font-body-family,sans-serif); }
+  #fc-of-{{ section.id }} .feat-b h3 a { color:inherit; text-decoration:none; }
+  #fc-of-{{ section.id }} .feat-b p { margin:0; color:var(--muted); font-size:14.5px; line-height:1.5; max-width:46ch; }
+  #fc-of-{{ section.id }} .prices { display:flex; flex-wrap:wrap; gap:8px 22px; margin:4px 0 2px; }
+  #fc-of-{{ section.id }} .pr { display:flex; flex-direction:column; gap:4px; }
+  #fc-of-{{ section.id }} .pr em { font:700 10px/1 sans-serif; letter-spacing:.08em; text-transform:uppercase; font-style:normal; color:var(--muted); }
+  #fc-of-{{ section.id }} .pr b { font:800 34px/1 var(--font-heading-family,sans-serif); color:var(--green-d); font-variant-numeric:tabular-nums; }
+  #fc-of-{{ section.id }} .pr.bcv b { font-size:24px; color:var(--navy); }
+  #fc-of-{{ section.id }} .pr s { font-size:14px; color:#8a93a8; font-variant-numeric:tabular-nums; }
+  #fc-of-{{ section.id }} .pr .l { display:flex; align-items:baseline; gap:8px; }
+  #fc-of-{{ section.id }} .save { background:#e7f9f0; color:#0a7d3f; font:800 12.5px/1 sans-serif; padding:7px 10px; border-radius:8px; }
+  #fc-of-{{ section.id }} .buy { display:inline-flex; align-items:center; justify-content:center; gap:9px; border:0; cursor:pointer; background:var(--navy); color:#fff; font:800 15px/1 sans-serif; padding:15px 24px; border-radius:12px; text-decoration:none; transition:background .15s, transform .15s; min-height:48px; }
+  #fc-of-{{ section.id }} .buy:hover { background:var(--green); color:#071631; transform:translateY(-2px); }
+  #fc-of-{{ section.id }} .buy svg { width:20px; height:20px; }
+  #fc-of-{{ section.id }} .buy.is-loading { pointer-events:none; opacity:.7; }
+  #fc-of-{{ section.id }} .buy.is-added { background:var(--green); color:#071631; }
+
+  /* Lleva 3 paga 2 */
+  #fc-of-{{ section.id }} .trio { background:linear-gradient(120deg,var(--navy),var(--purple)); color:#fff; border-radius:20px; padding:22px 26px; display:grid; grid-template-columns:minmax(0,1fr) auto; gap:16px 28px; align-items:center; margin-bottom:20px; }
+  #fc-of-{{ section.id }} .trio h2 { font-family:var(--font-heading-family,sans-serif); font-weight:800; font-size:clamp(22px,2.8vw,30px); margin:10px 0 6px; letter-spacing:-.02em; }
+  #fc-of-{{ section.id }} .trio p { margin:0; color:rgba(255,255,255,.85); font-size:14.5px; line-height:1.5; max-width:60ch; }
+  #fc-of-{{ section.id }} .steps { display:flex; gap:10px; }
+  #fc-of-{{ section.id }} .st { text-align:center; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.2); border-radius:14px; padding:12px 14px; min-width:84px; }
+  #fc-of-{{ section.id }} .st b { display:block; font:800 22px/1 var(--font-heading-family,sans-serif); }
+  #fc-of-{{ section.id }} .st span { display:block; margin-top:5px; font:600 11.5px/1.25 sans-serif; color:rgba(255,255,255,.8); }
+  #fc-of-{{ section.id }} .st.free { background:var(--green); border-color:var(--green); color:#071631; }
+  #fc-of-{{ section.id }} .st.free span { color:#071631; }
+  #fc-of-{{ section.id }} .grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:16px; }
+  #fc-of-{{ section.id }} .terms { margin:16px 0 0; padding:14px 16px; background:var(--soft); border-radius:12px; color:var(--muted); }
+
+  /* Envio */
+  #fc-of-{{ section.id }} .ship { display:flex; flex-wrap:wrap; align-items:center; gap:10px 18px; background:#e7f9f0; border:1px solid #8fe3b8; border-radius:16px; padding:16px 20px; }
+  #fc-of-{{ section.id }} .ship b { color:#0a7d3f; font-size:16px; }
+  #fc-of-{{ section.id }} .ship span { color:#2d5c43; font-size:14px; }
+  #fc-of-{{ section.id }} .cta { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px 20px; padding:22px 0 40px; }
+  #fc-of-{{ section.id }} .cta p { margin:0; color:var(--muted); font-size:15px; }
+  #fc-of-{{ section.id }} .wa { display:inline-flex; align-items:center; font:800 14px/1 sans-serif; text-decoration:none; padding:13px 20px; border-radius:11px; border:1.5px solid var(--navy); color:var(--navy); }
+  #fc-of-{{ section.id }} .wa:hover { background:var(--navy); color:#fff; }
+
+  @media (max-width:1000px){ #fc-of-{{ section.id }} .grid { grid-template-columns:repeat(3,minmax(0,1fr)); } }
+  @media (max-width:760px){
+    #fc-of-{{ section.id }} .w { padding:0 16px; }
+    #fc-of-{{ section.id }} .hero { padding:26px 0 22px; }
+    #fc-of-{{ section.id }} .clock { width:100%; }
+    #fc-of-{{ section.id }} .clock-l { display:none; }
+    #fc-of-{{ section.id }} .clock div.u { flex:1; min-width:0; }
+    #fc-of-{{ section.id }} .feat { grid-template-columns:1fr; }
+    #fc-of-{{ section.id }} .feat-img { min-height:0; aspect-ratio:1/1; }
+    #fc-of-{{ section.id }} .feat-b { padding:20px; }
+    #fc-of-{{ section.id }} .buy { width:100%; }
+    #fc-of-{{ section.id }} .trio { grid-template-columns:1fr; padding:18px; }
+    #fc-of-{{ section.id }} .steps { width:100%; }
+    #fc-of-{{ section.id }} .st { flex:1; min-width:0; padding:10px 6px; }
+    #fc-of-{{ section.id }} .grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+    #fc-of-{{ section.id }} .cta { flex-direction:column; align-items:flex-start; }
+  }
+</style>
+
+<div id="fc-of-{{ section.id }}" data-start="{{ start_iso }}" data-end="{{ end_iso }}">
+
+  <section class="hero">
+    <div class="w">
+      <div>
+        <span class="eyebrow">{{ section.settings.eyebrow | default: 'Del 1 al 15 de noviembre' }}</span>
+        <h1>{{ section.settings.title | default: 'Ofertas de lanzamiento' }}</h1>
+        <p class="sub">{{ section.settings.subtitle | default: 'Marcas originales importadas de EE.UU. a precio de inauguración. El descuento se aplica solo en tu carrito, sin cupones.' }}</p>
+      </div>
+      <div class="clock" data-clock hidden>
+        <span class="clock-l" data-clock-label>Termina en</span>
+        <div class="u"><b data-d>00</b><small>Días</small></div>
+        <div class="u"><b data-h>00</b><small>Horas</small></div>
+        <div class="u"><b data-m>00</b><small>Min</small></div>
+        <div class="u"><b data-s>00</b><small>Seg</small></div>
+      </div>
+    </div>
+  </section>
+
+  {%- if creatine != blank -%}
+  <section class="sec">
+    <div class="w">
+      <div class="sec-h"><h2>Precio de lanzamiento</h2><p>Un producto, un precio que no vas a ver otra vez.</p></div>
+      <article class="feat">
+        <a class="feat-img" href="{{ creatine.url }}">
+          {%- if creatine.featured_image -%}<img src="{{ creatine.featured_image | image_url: width: 800 }}" alt="{{ creatine.title | escape }}" width="800" height="800">{%- endif -%}
+        </a>
+        <div class="feat-b">
+          <span class="tag">Oferta de lanzamiento</span>
+          <span class="v">{{ creatine.vendor }}</span>
+          <h3><a href="{{ creatine.url }}">{{ creatine.title }}</a></h3>
+          <p>Creatina monohidratada pura en 300 g (60 servicios). El básico de fuerza y volumen.</p>
+          <div class="prices">
+            <div class="pr"><em>Divisa</em><span class="l"><b>{{ cr_new_div | money }}</b><s>{{ cr_old_div | money }}</s></span></div>
+            <div class="pr bcv"><em>Bolívares BCV</em><span class="l"><b>{{ cr_new_bcv | money }}</b><s>{{ cr_old_bcv | money }}</s></span></div>
+          </div>
+          <span class="save">Ahorras {{ cr_save | money }} pagando en divisa</span>
+          {%- assign fc_cv = creatine.selected_or_first_available_variant -%}
+          {%- if fc_cv and fc_cv.available -%}
+            <form method="post" action="{{ routes.cart_add_url }}" data-fc-add>
+              <input type="hidden" name="form_type" value="product">
+              <input type="hidden" name="utf8" value="✓">
+              <input type="hidden" name="id" value="{{ fc_cv.id }}">
+              <button type="submit" class="buy" data-buy>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>
+                <span>Agregar al carrito</span>
+              </button>
+            </form>
+          {%- else -%}
+            <a class="buy" href="{{ creatine.url }}">Ver producto</a>
+          {%- endif -%}
+        </div>
+      </article>
+    </div>
+  </section>
+  {%- endif -%}
+
+  <section class="sec">
+    <div class="w">
+      <div class="trio">
+        <div>
+          <span class="tag">Oferta de lanzamiento</span>
+          <h2>Lleva 3, paga solo 2</h2>
+          <p>Mezcla las vitaminas Nature's Bounty que quieras. Por cada 3 en tu carrito, una te sale gratis. El descuento se aplica solo al pagar.</p>
+        </div>
+        <div class="steps" aria-hidden="true">
+          <div class="st"><b>1</b><span>Elige 3</span></div>
+          <div class="st"><b>2</b><span>Agrégalas</span></div>
+          <div class="st free"><b>0$</b><span>Una gratis</span></div>
+        </div>
+      </div>
+      {%- if nb_col != blank and nb_col.products_count > 0 -%}
+        <div class="grid">
+          {%- for p in nb_col.products limit: 24 -%}
+            {%- render 'fitcore-product-card', product: p, lazy: true -%}
+          {%- endfor -%}
+        </div>
+      {%- else -%}
+        <p><a href="/search?q=nature%27s+bounty">Ver productos Nature's Bounty</a></p>
+      {%- endif -%}
+      <div class="terms">{%- render 'fitcore-promo-terms' -%}</div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="w">
+      <div class="ship">
+        <b>Envío gratis en Valera</b>
+        <span>Sin mínimo de compra durante el lanzamiento. Después, gratis desde $45. También puedes retirar gratis en la tienda del CC Plaza.</span>
+      </div>
+      <div class="cta">
+        <p>¿Dudas antes de comprar? Te ayudamos a armar tu pedido.</p>
+        <a class="wa" href="https://wa.me/{{ wa }}?text={{ wa_msg_enc }}" target="_blank" rel="noopener">Escribir por WhatsApp</a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+(function(){
+  var root = document.getElementById('fc-of-{{ section.id }}'); if(!root) return;
+  /* Cuenta regresiva */
+  var start = new Date(root.dataset.start).getTime(), end = new Date(root.dataset.end).getTime();
+  var box = root.querySelector('[data-clock]'), label = root.querySelector('[data-clock-label]');
+  function pad(n){ return (n<10?'0':'')+n; }
+  function tick(){
+    if (isNaN(start) || isNaN(end)) return;
+    var now = Date.now(), t;
+    if (now < start) { t = start-now; label.textContent = 'Empieza en'; }
+    else if (now <= end) { t = end-now; label.textContent = 'Termina en'; }
+    else { box.hidden = true; return; }
+    box.hidden = false;
+    box.querySelector('[data-d]').textContent = pad(Math.floor(t/864e5));
+    box.querySelector('[data-h]').textContent = pad(Math.floor(t%864e5/36e5));
+    box.querySelector('[data-m]').textContent = pad(Math.floor(t%36e5/6e4));
+    box.querySelector('[data-s]').textContent = pad(Math.floor(t%6e4/1e3));
+    setTimeout(tick, 1000);
+  }
+  tick();
+  /* Agregar al carrito sin salir de la pagina (mismas tarjetas que el catalogo) */
+  root.addEventListener('submit', function(ev){
+    var form = ev.target.closest ? ev.target.closest('form[data-fc-add]') : null;
+    if (!form || !window.fetch) return;
+    ev.preventDefault();
+    var btn = form.querySelector('.fc-pc-cart, [data-buy]');
+    if (btn) { if (btn.classList.contains('is-loading')) return; btn.classList.add('is-loading'); }
+    var notif = document.querySelector('cart-notification, cart-drawer');
+    var body = new FormData(form);
+    body.append('sections', 'cart-notification-product,cart-notification-button,cart-icon-bubble');
+    body.append('sections_url', window.location.pathname);
+    fetch('{{ routes.cart_add_url }}.js', { method:'POST', headers:{ 'Accept':'application/json', 'X-Requested-With':'XMLHttpRequest' }, body: body })
+      .then(function(r){ return r.json(); })
+      .then(function(res){
+        if (res && res.status) { if (btn) btn.classList.remove('is-loading'); form.submit(); return; }
+        if (btn) {
+          btn.classList.remove('is-loading'); btn.classList.add('is-added');
+          var html = btn.innerHTML;
+          btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px"><path d="M20 6L9 17l-5-5"/></svg>';
+          setTimeout(function(){ btn.innerHTML = html; btn.classList.remove('is-added'); }, 1600);
+        }
+        if (notif && typeof notif.renderContents === 'function') { try { notif.renderContents(res); } catch (e) {} }
+        else if (res.sections && res.sections['cart-icon-bubble']) {
+          var b = document.getElementById('cart-icon-bubble');
+          if (b) { var t = document.createElement('div'); t.innerHTML = res.sections['cart-icon-bubble']; var s = t.querySelector('.shopify-section'); b.innerHTML = s ? s.innerHTML : t.innerHTML; }
+        }
+        document.dispatchEvent(new CustomEvent('fc:cart:added'));
+      })
+      .catch(function(){ if (btn) btn.classList.remove('is-loading'); form.submit(); });
+  });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Fitcore Ofertas",
+  "tag": "section",
+  "class": "fitcore-ofertas",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Etiqueta superior", "default": "Del 1 al 15 de noviembre" },
+    { "type": "text", "id": "title", "label": "Título (hero)", "default": "Ofertas de lanzamiento" },
+    { "type": "textarea", "id": "subtitle", "label": "Subtítulo (hero)", "default": "Marcas originales importadas de EE.UU. a precio de inauguración. El descuento se aplica solo en tu carrito, sin cupones." },
+    { "type": "text", "id": "start_iso", "label": "Inicio (ISO, hora Venezuela)", "default": "2026-11-01T00:00:00-04:00" },
+    { "type": "text", "id": "end_iso", "label": "Fin (ISO, hora Venezuela)", "default": "2026-11-15T23:59:59-04:00" },
+    { "type": "product", "id": "creatine_product", "label": "Producto: Nutrex Creatine" },
+    { "type": "text", "id": "creatine_promo_bcv", "label": "Nutrex: precio promo en BCV (USD)", "default": "16.09" },
+    { "type": "collection", "id": "nb_collection", "label": "Colección elegible Lleva 3 paga solo 2 (Nature's Bounty)" },
+    { "type": "text", "id": "whatsapp", "label": "WhatsApp (solo dígitos)", "default": "584220384328" },
+    { "type": "text", "id": "whatsapp_msg", "label": "Mensaje precargado", "default": "Hola Fitcore Store, quiero aprovechar las ofertas de lanzamiento" }
+  ],
+  "presets": [ { "name": "Fitcore Ofertas" } ]
+}
+{% endschema %}
+

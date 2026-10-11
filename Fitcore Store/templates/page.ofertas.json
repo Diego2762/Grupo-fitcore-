@@ -1,0 +1,12 @@
+{
+  "sections": {
+    "main": {
+      "type": "fitcore-ofertas",
+      "settings": {
+        "creatine_product": "nutrex-creatine-monohydrate-300-g",
+        "nb_collection": "natures-bounty"
+      }
+    }
+  },
+  "order": ["main"]
+}

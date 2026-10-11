@@ -1,0 +1,51 @@
+{%- comment -%}
+  Fitcore · Promos de lanzamiento (UN SOLO LUGAR para editar).
+  Se muestran del 1 al 15 nov 2026 (hora Venezuela). Mientras el tema NO este publicado (borrador/vista previa)
+  o dentro del editor, se muestran siempre para poder revisarlas.
+  El descuento real lo aplican los descuentos automaticos de Shopify; esto solo lo comunica.
+
+  Uso:
+    part: 'bcv'   -> precio BCV promo en centavos (vacio si el producto no tiene promo)
+    part: 'chips' -> etiquetas HTML (Oferta de lanzamiento / 3x2)
+    part: 'live'  -> 'yes' si las promos estan activas
+    part: 'end'   -> fecha ISO de fin (cuenta regresiva)
+
+  Promos de precio: 'handle:precio_BCV_en_centavos', separadas por coma.
+  Promo 3x2: todos los productos con vendor igual a fc_trio_vendor.
+{%- endcomment -%}
+{%- liquid
+  assign fc_promos = 'nutrex-creatine-monohydrate-300-g:1609' | split: ','
+  assign fc_trio_vendor = "Nature's Bounty"
+  assign fc_now = 'now' | date: '%s' | plus: 0
+  assign fc_p_start = '2026-11-01 00:00:00 -0400' | date: '%s' | plus: 0
+  assign fc_p_end = '2026-11-15 23:59:59 -0400' | date: '%s' | plus: 0
+  assign fc_live = false
+  if request.design_mode or theme.role != 'main'
+    assign fc_live = true
+  elsif fc_now >= fc_p_start and fc_now <= fc_p_end
+    assign fc_live = true
+  endif
+  assign fc_out = ''
+  if part == 'end'
+    assign fc_out = '2026-11-15T23:59:59-04:00'
+  endif
+  if part == 'live' and fc_live
+    assign fc_out = 'yes'
+  endif
+  if fc_live
+    for fc_item in fc_promos
+      assign fc_parts = fc_item | split: ':'
+      if fc_parts[0] == product.handle
+        if part == 'bcv'
+          assign fc_out = fc_parts[1]
+        elsif part == 'chips'
+          assign fc_out = fc_out | append: '<span style="display:inline-block;background:#19C37D;color:#071631;font:800 11px/1 sans-serif;letter-spacing:.06em;text-transform:uppercase;padding:5px 8px;border-radius:99px;margin:0 6px 6px 0">Oferta de lanzamiento</span>'
+        endif
+      endif
+    endfor
+    if part == 'chips' and product.vendor == fc_trio_vendor
+      assign fc_out = fc_out | append: '<a href="/collections/natures-bounty" style="display:inline-block;background:#3B1F6B;color:#fff;font:800 11px/1 sans-serif;letter-spacing:.06em;text-transform:uppercase;padding:5px 8px;border-radius:99px;margin:0 6px 6px 0;text-decoration:none">Lleva 3, paga solo 2</a>'
+    endif
+  endif
+-%}
+{{- fc_out -}}
