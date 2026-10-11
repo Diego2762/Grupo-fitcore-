@@ -19,11 +19,20 @@
     {%- if variant.image -%}{%- assign fc_img = variant.image -%}{%- endif -%}
     {%- assign fc_name = product.title | append: ' ' | append: variant.title -%}
   {%- endif -%}
+  {%- capture fc_pb -%}{%- render 'fitcore-promo', product: product, part: 'bcv' -%}{%- endcapture -%}
+  {%- assign fc_pbn = fc_pb | strip | plus: 0 -%}
+  {%- assign fc_off = 0 -%}
+  {%- if fc_pbn > 0 and product.price > fc_pbn -%}
+    {%- assign fc_off = product.price | minus: fc_pbn | times: 100.0 | divided_by: product.price | round -%}
+  {%- endif -%}
   {%- if lazy -%}{%- assign fc_loading = 'lazy' -%}{%- else -%}{%- assign fc_loading = 'eager' -%}{%- endif -%}
   <div class="fc-pc" data-handle="{{ product.handle }}">
     <a class="fc-pc-media" href="{{ fc_url }}">
       {%- if badge != blank -%}
         <span class="fc-pc-rank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/></svg>{{ badge }}</span>
+      {%- endif -%}
+      {%- if fc_off > 0 -%}
+        <span class="fc-pc-off" style="position:absolute;top:10px;right:10px;z-index:2;background:#19C37D;color:#071631;font:900 15px/1 var(--font-body-family, sans-serif);padding:8px 10px;border-radius:12px;box-shadow:0 6px 16px rgba(11,24,64,.18)">-{{ fc_off }}%</span>
       {%- endif -%}
       {%- if fc_img -%}
         <img src="{{ fc_img | image_url: width: 600 }}" alt="{{ fc_name | escape }}" loading="{{ fc_loading }}" width="600" height="600">
@@ -60,8 +69,6 @@
         <span class="fc-pc-variants">{{ fc_var_label }}</span>
       {%- endif -%}
       <div class="fc-pc-foot">
-        {%- capture fc_pb -%}{%- render 'fitcore-promo', product: product, part: 'bcv' -%}{%- endcapture -%}
-        {%- assign fc_pbn = fc_pb | strip | plus: 0 -%}
         {%- assign fc_bcv_now = product.price -%}
         {%- if fc_pbn > 0 -%}{%- assign fc_bcv_now = fc_pbn -%}{%- endif -%}
         {%- assign fc_divisa = fc_bcv_now | times: 100 | divided_by: 115 -%}

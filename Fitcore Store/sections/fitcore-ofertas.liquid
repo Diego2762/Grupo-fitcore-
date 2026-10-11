@@ -2,7 +2,7 @@
   Fitcore Store · Página "Ofertas de apertura" (B2C) · versión oscura, hermana visual de la página de clave (password).
   Todas las ofertas duran una semana (semana de inauguración). Fechas: ajustar start_iso / end_iso aquí y en snippets/fitcore-promo.liquid.
   Espejo de los descuentos automáticos de Shopify:
-    Nutrex Creatine a $13.99 divisa ($16.09 BCV) · Lleva 3, paga 2 en Nature's Bounty · Envío gratis Valera
+    Creatinas: Nutrex $13.99 divisa (-22%), ON Micronized $25.99 divisa (-16%), Cellucor -10% · Lleva 3, paga 2 en Nature's Bounty · Envío gratis Valera
     Nutrex Liquid Carnitine y Lipo-6: 10% (divisa y BCV) · BSN AMINOx, XTEND BCAA y XTEND EAA: 5% (divisa y BCV)
   Los precios reales los aplica Shopify en el carrito; esta página solo los comunica.
   Las tarjetas usan el snippet fitcore-product-card (foto, precios divisa/BCV, botón de carrito).
@@ -15,14 +15,8 @@
 {%- liquid
   assign wa = section.settings.whatsapp | default: '584220384328'
   assign wa_msg_enc = section.settings.whatsapp_msg | default: 'Hola Fitcore Store, quiero aprovechar las ofertas de apertura' | url_encode
-  assign creatine = section.settings.creatine_product | default: all_products['nutrex-creatine-monohydrate-300-g']
   assign nb_col = section.settings.nb_collection | default: collections['natures-bounty']
   assign nb_hide = section.settings.nb_hide | default: 'natures-bounty-melatonina-10-mg-45-tabletas-de-disolucion-rapida' | split: ','
-  assign cr_new_bcv = section.settings.creatine_promo_bcv | default: 16.09 | times: 100 | round
-  assign cr_new_div = cr_new_bcv | times: 100 | divided_by: 115
-  assign cr_old_bcv = creatine.price | default: 2069
-  assign cr_old_div = cr_old_bcv | times: 100 | divided_by: 115
-  assign cr_save = cr_old_div | minus: cr_new_div
   assign start_iso = section.settings.start_iso | default: '2026-11-01T00:00:00-04:00'
   assign end_iso = section.settings.end_iso | default: '2026-11-15T23:59:59-04:00'
   assign ship_t0 = start_iso | date: '%s' | plus: 0
@@ -31,6 +25,7 @@
   assign ship_days = ship_secs | divided_by: 86400.0 | ceil
 
   # Quemadores: una ficha por sabor de Liquid Carnitine + Lipo-6 (3 fichas, igual que el bloque de aminos)
+  assign creatine_handles = 'nutrex-creatine-monohydrate-300-g,optimum-nutrition-micronized-creatine-powder,cellucor-cor-performance-creatine' | split: ','
   assign burn_handles = 'nutrex-liquid-carnitine-3000,nutrex-lipo-6-black-ultra-concentrate-60-capsulas' | split: ','
   assign amino_handles = 'bsn-aminox-435-g,xtend-original-bcaa,xtend-eaa' | split: ','
   assign sb_url = section.settings.supabase_url
@@ -90,14 +85,6 @@
   #fc-of-{{ section.id }} .tag--p { background:rgba(183,156,255,.18); color:var(--accent); border:1px solid rgba(183,156,255,.5); }
 
   /* Tarjeta destacada Nutrex */
-  #fc-of-{{ section.id }} .feat { display:grid; grid-template-columns:minmax(0,5fr) minmax(0,6fr); background:rgba(255,255,255,.06); border:1px solid var(--line); border-radius:22px; overflow:hidden; }
-  #fc-of-{{ section.id }} .feat-img { position:relative; background:#F6F7FA; display:block; min-height:320px; }
-  #fc-of-{{ section.id }} .feat-img img { position:absolute; inset:18px; margin:auto; max-width:calc(100% - 36px); max-height:calc(100% - 36px); width:auto; height:auto; object-fit:contain; mix-blend-mode:multiply; }
-  #fc-of-{{ section.id }} .feat-b { padding:28px 30px; display:flex; flex-direction:column; align-items:flex-start; gap:10px; }
-  #fc-of-{{ section.id }} .feat-b .v { color:var(--accent); font:700 11px/1 sans-serif; letter-spacing:.09em; text-transform:uppercase; }
-  #fc-of-{{ section.id }} .feat-b h3 { margin:0; font:800 24px/1.2 'Inter',sans-serif; }
-  #fc-of-{{ section.id }} .feat-b h3 a { color:inherit; text-decoration:none; }
-  #fc-of-{{ section.id }} .feat-b p { margin:0; color:var(--muted); font-size:15px; line-height:1.55; max-width:46ch; }
   #fc-of-{{ section.id }} .prices { display:flex; flex-wrap:wrap; gap:8px 26px; margin:6px 0 2px; }
   #fc-of-{{ section.id }} .pr { display:flex; flex-direction:column; gap:5px; }
   #fc-of-{{ section.id }} .pr em { font:700 10px/1 sans-serif; letter-spacing:.08em; text-transform:uppercase; font-style:normal; color:var(--muted); }
@@ -201,11 +188,7 @@
     #fc-of-{{ section.id }} .w { padding:0 16px; }
     #fc-of-{{ section.id }} .hero { padding:30px 0 24px; }
     #fc-of-{{ section.id }} .sec { padding:36px 0 2px; }
-    #fc-of-{{ section.id }} .feat { grid-template-columns:1fr; }
-    #fc-of-{{ section.id }} .feat-img { min-height:0; aspect-ratio:4/3; }
-    #fc-of-{{ section.id }} .feat-b { padding:20px; }
-    #fc-of-{{ section.id }} .buy, #fc-of-{{ section.id }} .feat-b form { width:100%; }
-    #fc-of-{{ section.id }} .promo { grid-template-columns:minmax(0,1fr) auto; padding:18px; gap:12px 14px; border-radius:18px; }
+          #fc-of-{{ section.id }} .promo { grid-template-columns:minmax(0,1fr) auto; padding:18px; gap:12px 14px; border-radius:18px; }
     #fc-of-{{ section.id }} .promo > div:first-child { grid-column:1 / -1; }
     #fc-of-{{ section.id }} .promo h2 { font-size:22px; margin:10px 0 6px; }
     #fc-of-{{ section.id }} .promo p { font-size:14px; }
@@ -368,43 +351,23 @@
     </div>
   </section>
 
-  {%- if creatine != blank -%}
   <section class="sec">
     <div class="w">
-      <div class="sec-h"><h2>Precio de apertura</h2><p>Un producto, un precio que no vas a ver otra vez.</p></div>
-      <article class="feat">
-        <a class="feat-img" href="{{ creatine.url }}">
-          {%- if creatine.featured_image -%}<img src="{{ creatine.featured_image | image_url: width: 800 }}" alt="{{ creatine.title | escape }}" width="800" height="800">{%- endif -%}
-        </a>
-        <div class="feat-b">
+      <div class="promo">
+        <div>
           <span class="tag">Oferta de apertura</span>
-          <span class="v">{{ creatine.vendor }}</span>
-          <h3><a href="{{ creatine.url }}">{{ creatine.title }}</a></h3>
-          <p>Creatina monohidratada pura en 300 g (60 servicios). El básico de fuerza y volumen.</p>
-          <div class="prices">
-            <div class="pr"><em>Divisa</em><span class="l"><b>{{ cr_new_div | money }}</b><s>{{ cr_old_div | money }}</s></span></div>
-            <div class="pr bcv"><em>Bolívares BCV</em><span class="l"><b>{{ cr_new_bcv | money }}</b><s>{{ cr_old_bcv | money }}</s></span></div>
-          </div>
-          <span class="save">Ahorras {{ cr_save | money }} pagando en divisa</span>
-          {%- assign fc_cv = creatine.selected_or_first_available_variant -%}
-          {%- if fc_cv and fc_cv.available -%}
-            <form method="post" action="{{ routes.cart_add_url }}" data-fc-add>
-              <input type="hidden" name="form_type" value="product">
-              <input type="hidden" name="utf8" value="✓">
-              <input type="hidden" name="id" value="{{ fc_cv.id }}">
-              <button type="submit" class="buy" data-buy>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>
-                <span>Agregar al carrito</span>
-              </button>
-            </form>
-          {%- else -%}
-            <a class="buy" href="{{ creatine.url }}">Ver producto</a>
-          {%- endif -%}
+          <h2>Nuestras ofertas en creatinas</h2>
+          <p>Las creatinas más vendidas a precio de apertura, en divisa y en bolívares BCV. El descuento de cada una está en su ficha y se aplica solo al pagar.</p>
         </div>
-      </article>
+      </div>
+      <div class="grid grid--3">
+        {%- for h in creatine_handles -%}
+          {%- assign p = all_products[h] -%}
+          {%- if p != blank -%}{%- render 'fitcore-product-card', product: p, lazy: true -%}{%- endif -%}
+        {%- endfor -%}
+      </div>
     </div>
   </section>
-  {%- endif -%}
 
   <section class="sec">
     <div class="w">
@@ -632,8 +595,6 @@
     { "type": "text", "id": "start_iso", "label": "Inicio (ISO, hora Venezuela)", "default": "2026-11-01T00:00:00-04:00" },
     { "type": "text", "id": "end_iso", "label": "Fin (ISO, hora Venezuela)", "info": "Define el reloj y los días del banner de envío gratis. Cambiar también en snippets/fitcore-promo.liquid.", "default": "2026-11-15T23:59:59-04:00" },
     { "type": "header", "content": "Productos" },
-    { "type": "product", "id": "creatine_product", "label": "Producto: Nutrex Creatine" },
-    { "type": "text", "id": "creatine_promo_bcv", "label": "Nutrex: precio promo en BCV (USD)", "default": "16.09" },
     { "type": "text", "id": "nb_hide", "label": "Nature's Bounty: handles a ocultar en esta página (separados por coma)", "info": "Solo se ocultan aquí; siguen participando en el 3x2.", "default": "natures-bounty-melatonina-10-mg-45-tabletas-de-disolucion-rapida" },
     { "type": "collection", "id": "nb_collection", "label": "Colección elegible Lleva 3, paga 2 (Nature's Bounty)" },
     { "type": "header", "content": "Premios" },

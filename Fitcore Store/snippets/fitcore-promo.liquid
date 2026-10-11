@@ -19,7 +19,7 @@
   Promo 3x2: todos los productos con vendor igual a fc_trio_vendor.
 {%- endcomment -%}
 {%- liquid
-  assign fc_promos = 'nutrex-creatine-monohydrate-300-g:1609,nutrex-liquid-carnitine-3000:-10,nutrex-lipo-6-black-ultra-concentrate-60-capsulas:-10,bsn-aminox-435-g:-5,xtend-original-bcaa:-5,xtend-eaa:-5' | split: ','
+  assign fc_promos = 'nutrex-creatine-monohydrate-300-g:1609,optimum-nutrition-micronized-creatine-powder:2989,cellucor-cor-performance-creatine:-10,nutrex-liquid-carnitine-3000:-10,nutrex-lipo-6-black-ultra-concentrate-60-capsulas:-10,bsn-aminox-435-g:-5,xtend-original-bcaa:-5,xtend-eaa:-5' | split: ','
   assign fc_trio_vendor = "Nature's Bounty"
   assign fc_now = 'now' | date: '%s' | plus: 0
   assign fc_p_start = '2026-11-01 00:00:00 -0400' | date: '%s' | plus: 0
@@ -52,7 +52,7 @@
         elsif part == 'chips'
           if fc_val < 0
             assign fc_pct = fc_val | times: -1
-            assign fc_out = fc_out | append: '<span style="display:inline-block;background:#19C37D;color:#071631;font:800 11px/1 sans-serif;letter-spacing:.06em;text-transform:uppercase;padding:5px 8px;border-radius:99px;margin:0 6px 6px 0">-' | append: fc_pct | append: '% apertura</span>'
+            assign fc_out = fc_out | append: '<span style="display:inline-block;background:#19C37D;color:#071631;font:800 11px/1 sans-serif;letter-spacing:.06em;text-transform:uppercase;padding:5px 8px;border-radius:99px;margin:0 6px 6px 0">Oferta de apertura</span>'
           else
             assign fc_out = fc_out | append: '<span style="display:inline-block;background:#19C37D;color:#071631;font:800 11px/1 sans-serif;letter-spacing:.06em;text-transform:uppercase;padding:5px 8px;border-radius:99px;margin:0 6px 6px 0">Oferta de apertura</span>'
           endif
