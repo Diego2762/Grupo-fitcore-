@@ -20,42 +20,69 @@
   else
     assign fc_bcv = product.selected_or_first_available_variant.price | default: product.price
   endif
+  assign fc_old_bcv = fc_bcv
+  assign fc_promo = false
+
   assign fc_base = fc_bcv | times: 100 | divided_by: 115
+  assign fc_old_base = fc_old_bcv | times: 100 | divided_by: 115
   if settings.currency_code_enabled
     assign fc_base_money = fc_base | money_with_currency
     assign fc_bs_money = fc_bcv | money_with_currency
+    assign fc_old_base_money = fc_old_base | money_with_currency
+    assign fc_old_bs_money = fc_old_bcv | money_with_currency
   else
     assign fc_base_money = fc_base | money
     assign fc_bs_money = fc_bcv | money
+    assign fc_old_base_money = fc_old_base | money
+    assign fc_old_bs_money = fc_old_bcv | money
   endif
 -%}
+{%- capture fc_pb -%}{%- render 'fitcore-promo', product: product, part: 'bcv' -%}{%- endcapture -%}
+{%- assign fc_pbn = fc_pb | strip | plus: 0 -%}
+{%- if fc_pbn > 0 -%}
+  {%- assign fc_promo = true -%}
+  {%- assign fc_promo_bcv = fc_pbn -%}
+  {%- assign fc_bcv = fc_pbn -%}
+  {%- assign fc_base = fc_bcv | times: 100 | divided_by: 115 -%}
+  {%- assign fc_base_money = fc_base | money -%}
+  {%- assign fc_bs_money = fc_bcv | money -%}
+  {%- assign fc_old_base_money = fc_old_bcv | times: 100 | divided_by: 115 | money -%}
+  {%- assign fc_old_bs_money = fc_old_bcv | money -%}
+{%- endif -%}
+{%- render 'fitcore-promo', product: product, part: 'chips' -%}
 {%- if fc_ctx == 'card' -%}
   <div class="fc-dual fc-divisa--card">
     <div class="fc-divisa">
       <span class="fc-divisa__label">Divisa:</span>
       <span class="fc-divisa__amount">{{ fc_base_money }}</span>
+      {%- if fc_promo -%}<s class="fc-old">{{ fc_old_base_money }}</s>{%- endif -%}
     </div>
     <div class="fc-bs">
       <span class="fc-bs__label">En bolívares BCV:</span>
-      <span class="fc-bs__amount">{{ fc_bs_money }}</span>    </div>
+      <span class="fc-bs__amount">{{ fc_bs_money }}</span>
+      {%- if fc_promo -%}<s class="fc-old">{{ fc_old_bs_money }}</s>{%- endif -%}
+    </div>
   </div>
 {%- else -%}
   <div class="fc-dual" id="fc-divisa-{{ uid }}">
     <div class="fc-divisa">
       <span class="fc-divisa__label">En divisas:</span>
       <span class="fc-divisa__amount" data-fc-base-amount>{{ fc_base_money }}</span>
-      <span class="fc-divisa__off">Mejor precio</span>
+      {%- if fc_promo -%}<s class="fc-old">{{ fc_old_base_money }}</s>{%- endif -%}
+      <span class="fc-divisa__off">{% if fc_promo %}Oferta de lanzamiento{% else %}Mejor precio{% endif %}</span>
     </div>
     <div class="fc-bs">
       <span class="fc-bs__label">En bolívares BCV:</span>
-      <span class="fc-bs__amount" data-fc-bs-amount>{{ fc_bs_money }}</span>    </div>
+      <span class="fc-bs__amount" data-fc-bs-amount>{{ fc_bs_money }}</span>
+      {%- if fc_promo -%}<s class="fc-old">{{ fc_old_bs_money }}</s>{%- endif -%}
+    </div>
   </div>
   <script>
     (function () {
       var wrap = document.getElementById('fc-divisa-{{ uid }}');
       if (!wrap) return;
       var pi = wrap.closest('product-info');
-      var map = { {%- for v in product.variants -%}"{{ v.id }}":{"b":"{% if settings.currency_code_enabled %}{{ v.price | times: 100 | divided_by: 115 | money_with_currency }}{% else %}{{ v.price | times: 100 | divided_by: 115 | money }}{% endif %}","bs":"{% if settings.currency_code_enabled %}{{ v.price | money_with_currency }}{% else %}{{ v.price | money }}{% endif %}"}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%} };
+      var map = { {%- for v in product.variants -%}{%- if fc_promo -%}{%- assign fc_vp = fc_promo_bcv -%}{%- else -%}{%- assign fc_vp = v.price -%}{%- endif -%}"{{ v.id }}":{"b":"{% if settings.currency_code_enabled %}{{ fc_vp | times: 100 | divided_by: 115 | money_with_currency }}{% else %}{{ fc_vp | times: 100 | divided_by: 115 | money }}{% endif %}","bs":"{% if settings.currency_code_enabled %}{{ fc_vp | money_with_currency }}{% else %}{{ fc_vp | money }}{% endif %}"}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%} };
       var baseOut = wrap.querySelector('[data-fc-base-amount]');
       var bsOut = wrap.querySelector('[data-fc-bs-amount]');
       function cur() { var i = (pi || document).querySelector('[name="id"]'); return i ? i.value : null; }

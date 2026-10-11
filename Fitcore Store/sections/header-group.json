@@ -17,8 +17,8 @@
         "announcement-bar-0": {
           "type": "announcement",
           "settings": {
-            "text": "Suplementos 100% originales · Envío gratis en Valera desde $30 · Paga como prefieras",
-            "link": ""
+            "text": "Suplementos 100% originales · Envío gratis en Valera desde $45 · Ofertas de lanzamiento",
+            "link": "/pages/ofertas"
           }
         }
       },
