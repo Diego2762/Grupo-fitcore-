@@ -9,6 +9,10 @@
   assign wa = section.settings.whatsapp | default: '584220384328'
   assign wa_msg_enc = section.settings.whatsapp_msg | default: 'Hola Fitcore Store, quiero aprovechar las ofertas de lanzamiento' | url_encode
   assign creatine = section.settings.creatine_product
+  assign cr_new_bcv = section.settings.creatine_promo_bcv | default: 16.09 | times: 100 | round
+  assign cr_new_div = cr_new_bcv | times: 100 | divided_by: 115
+  assign cr_old_bcv = creatine.price | default: 2069
+  assign cr_old_div = cr_old_bcv | times: 100 | divided_by: 115
   assign nb_col = section.settings.nb_collection
   assign start_iso = section.settings.start_iso | default: '2026-11-01T00:00:00-04:00'
   assign end_iso = section.settings.end_iso | default: '2026-11-15T23:59:59-04:00'
@@ -44,6 +48,7 @@
   #fc-of-{{ section.id }} .fc-price { display:flex; align-items:baseline; gap:10px; margin:0 0 18px; }
   #fc-of-{{ section.id }} .fc-price b { font:800 34px/1 var(--font-heading-family,sans-serif); color:var(--fc-navy); }
   #fc-of-{{ section.id }} .fc-price s { color:#8a93a8; font:500 16px/1 var(--font-body-family,sans-serif); }
+  #fc-of-{{ section.id }} .fc-bcv { margin:-6px 0 18px; font-size:13.5px; } #fc-of-{{ section.id }} .fc-bcv b { color:var(--fc-navy); } #fc-of-{{ section.id }} .fc-bcv s { color:#8a93a8; }
   #fc-of-{{ section.id }} .fc-big { font:800 40px/1 var(--font-heading-family,sans-serif); color:var(--fc-purple); margin:0 0 18px; }
   #fc-of-{{ section.id }} .fc-note { color:#8a93a8; font:400 12.5px/1.5 var(--font-body-family,sans-serif); margin:12px 0 0; }
   #fc-of-{{ section.id }} .fc-btn { margin-top:auto; display:inline-flex; justify-content:center; align-items:center; font:700 15px/1 var(--font-body-family,sans-serif); text-decoration:none; padding:15px 22px; border-radius:11px; background:var(--fc-navy); color:#fff; transition:transform .18s ease, background .18s ease; }
@@ -92,9 +97,10 @@
           {%- endif -%}
           <h3>{{ creatine.title | default: 'Nutrex Creatine Monohydrate (300 g)' }}</h3>
           <p>Creatina monohidratada pura, el básico de fuerza y volumen, a precio de inauguración.</p>
-          <div class="fc-price"><b>$14.99</b>{%- if creatine != blank -%}<s>{{ creatine.price | money }}</s>{%- endif -%}</div>
+          <div class="fc-price"><b>{{ cr_new_div | money }}</b><s>{{ cr_old_div | money }}</s></div>
+          <p class="fc-bcv">Divisa (Zelle, USDT o efectivo). En bolívares BCV: <b>{{ cr_new_bcv | money }}</b> <s>{{ cr_old_bcv | money }}</s></p>
           <a class="fc-btn" href="{{ creatine.url | default: '/search?q=nutrex+creatine' }}">Ver producto</a>
-          <p class="fc-note">Descuento automático por producto, un precio por unidad.</p>
+          <p class="fc-note">Descuento automático por unidad. El precio en divisa se ve al pagar con MEJORPRECIO.</p>
         </article>
 
         <article class="fc-offer">
@@ -112,7 +118,7 @@
           <p>Durante el lanzamiento, tu pedido en Valera llega gratis el mismo día, sea del monto que sea. Fuera de Valera aplican las tarifas normales.</p>
           <div class="fc-big">$0</div>
           <a class="fc-btn" href="{{ routes.all_products_collection_url }}">Ir a comprar</a>
-          <p class="fc-note">Fuera de la promoción: envío gratis en Valera desde $30.</p>
+          <p class="fc-note">Fuera de la promoción: envío gratis en Valera desde $45.</p>
         </article>
       </div>
     </div>
@@ -177,6 +183,7 @@
     { "type": "text", "id": "start_iso", "label": "Inicio (ISO, hora Venezuela)", "default": "2026-11-01T00:00:00-04:00" },
     { "type": "text", "id": "end_iso", "label": "Fin (ISO, hora Venezuela)", "default": "2026-11-15T23:59:59-04:00" },
     { "type": "product", "id": "creatine_product", "label": "Producto: Nutrex Creatine" },
+    { "type": "text", "id": "creatine_promo_bcv", "label": "Nutrex: precio promo en BCV (USD)", "default": "16.09" },
     { "type": "collection", "id": "nb_collection", "label": "Colección elegible 3x2 (Nature's Bounty)" },
     { "type": "text", "id": "whatsapp", "label": "WhatsApp (solo dígitos)", "default": "584220384328" },
     { "type": "text", "id": "whatsapp_msg", "label": "Mensaje precargado", "default": "Hola Fitcore Store, quiero aprovechar las ofertas de lanzamiento" }
