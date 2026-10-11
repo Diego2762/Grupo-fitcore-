@@ -28,9 +28,19 @@
       <p>{{ section.settings.sub | default: 'Tu combo para brillar: multivitamínico, biotina para pelo y uñas, proteína ligera y pesas para tu pilates en casa. Todo original, nada de imitaciones.' }}</p>
     </div>
     <div class="fc-best-grid">
-      {%- for fc_h in fc_handles -%}
-        {%- assign fc_handle = fc_h | strip -%}
-        {%- assign fc_prod = all_products[fc_handle] -%}
+      {%- comment -%} product_list no tiene el tope de 20 handles de all_products {%- endcomment -%}
+      {%- if section.settings.products != blank -%}
+        {%- assign fc_list = section.settings.products -%}
+      {%- else -%}
+        {%- assign fc_list = fc_handles -%}
+      {%- endif -%}
+      {%- for fc_item in fc_list -%}
+        {%- if fc_item.id -%}
+          {%- assign fc_prod = fc_item -%}
+        {%- else -%}
+          {%- assign fc_handle = fc_item | strip -%}
+          {%- assign fc_prod = all_products[fc_handle] -%}
+        {%- endif -%}
         {%- if fc_prod != blank and fc_prod.id -%}
           {%- assign fc_var = fc_prod.selected_or_first_available_variant -%}
           <div class="fc-pc">
@@ -89,6 +99,7 @@
     { "type": "text", "id": "eyebrow", "label": "Etiqueta", "default": "Para ellas" },
     { "type": "text", "id": "title", "label": "Título", "default": "Brilla por dentro, fuerte por fuera" },
     { "type": "textarea", "id": "sub", "label": "Subtítulo", "default": "Tu combo para brillar: multivitamínico, biotina para pelo y uñas, proteína ligera y pesas para tu pilates en casa. Todo original, nada de imitaciones." },
+    { "type": "product_list", "id": "products", "label": "Productos", "limit": 8 },
     { "type": "textarea", "id": "handles", "label": "Handles de productos (separados por coma)", "default": "optimum-nutrition-opti-women,natures-bounty-hair-skin-nails-60-caplets,dymatize-iso100-whey-protein-isolate,forfit-pesas-para-muneca-y-tobillo-triangulares" }
   ],
   "presets": [{ "name": "Fitcore Para ellas" }]
