@@ -55,7 +55,7 @@ class CartNotification extends HTMLElement {
   async updateFreeShip() {
     const bar = document.getElementById('cart-notification-freeship');
     if (!bar) return;
-    const threshold = parseInt(bar.getAttribute('data-threshold'), 10) || 3000;
+    const threshold = parseInt(bar.getAttribute('data-threshold'), 10) || 4500;
     try {
       const response = await fetch(`${routes.cart_url}.js`);
       const cart = await response.json();
@@ -65,18 +65,65 @@ class CartNotification extends HTMLElement {
         bar.classList.add('is-free');
         bar.innerHTML =
           '<span class="cart-notification-freeship__check">&#10003;</span> ' +
-          '<span>&iexcl;Genial! Ya tienes <b>env&iacute;o gratis</b> en Valera y Trujillo.</span>';
+          '<span>&iexcl;Genial! Ya tienes <b>env&iacute;o gratis</b> en Valera.</span>';
       } else {
         bar.classList.remove('is-free');
         bar.innerHTML =
           '<span>Te faltan <b>' +
           money(threshold - total) +
-          '</b> para <b>env&iacute;o gratis</b> local en Valera y Trujillo.</span>';
+          '</b> para <b>env&iacute;o gratis</b> local en Valera.</span>';
       }
       bar.hidden = false;
+      this.updatePromo3x2(cart);
     } catch (e) {
       // informativo; si falla, no mostramos la barra
     }
+  }
+
+  // Banner "Lleva 3, paga solo 2" (Nature's Bounty) con cuenta regresiva. Solo existe si la promo esta activa.
+  updatePromo3x2(cart) {
+    const box = document.getElementById('cart-notification-3x2');
+    if (!box) return;
+    let n = 0;
+    (cart.items || []).forEach((i) => {
+      if (i.vendor === "Nature's Bounty") n += i.quantity;
+    });
+    clearInterval(this.promoTimer);
+    if (!n) {
+      box.hidden = true;
+      return;
+    }
+    const r = n % 3;
+    const msg = box.querySelector('[data-3x2-msg]');
+    const btn = box.querySelector('[data-3x2-btn]');
+    if (r === 0) {
+      msg.textContent = '¡Lo tienes! Cada grupo de 3 te sale por el precio de 2.';
+      btn.textContent = 'Agregar otro grupo';
+    } else if (r === 1) {
+      msg.textContent = 'Agrega 2 más y llévate 3 pagando solo 2.';
+      btn.textContent = 'Ver elegibles';
+    } else {
+      msg.textContent = '¡Te falta 1! Agrégalo y paga solo 2 de los 3.';
+      btn.textContent = 'Agregar 1 más';
+    }
+    box.hidden = false;
+    const end = new Date(box.getAttribute('data-end')).getTime();
+    const clock = box.querySelector('[data-3x2-time]');
+    const pad = (x) => (x < 10 ? '0' : '') + x;
+    const paint = () => {
+      const d = end - Date.now();
+      if (isNaN(end) || d <= 0) {
+        clock.textContent = '';
+        return;
+      }
+      const days = Math.floor(d / 864e5);
+      const h = Math.floor((d % 864e5) / 36e5);
+      const m = Math.floor((d % 36e5) / 6e4);
+      const sec = Math.floor((d % 6e4) / 1e3);
+      clock.textContent = 'Termina en ' + (days ? days + 'd ' : '') + pad(h) + ':' + pad(m) + ':' + pad(sec);
+    };
+    paint();
+    this.promoTimer = setInterval(paint, 1000);
   }
 
   // The notification's outer element is server-rendered once at page load, so
@@ -161,3 +208,4 @@ class CartNotification extends HTMLElement {
 }
 
 customElements.define('cart-notification', CartNotification);
+

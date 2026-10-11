@@ -9,6 +9,9 @@
   {% render 'cart-notification' %}
 {% endcomment %}
 
+{%- capture fc_live -%}{%- render 'fitcore-promo', product: nil, part: 'live' -%}{%- endcapture -%}
+{%- capture fc_end -%}{%- render 'fitcore-promo', product: nil, part: 'end' -%}{%- endcapture -%}
+
 <cart-notification>
   <div class="cart-notification-wrapper{% if desktop_menu_type != 'drawer' %} page-width{% endif %}">
     <div
@@ -37,9 +40,22 @@
       <div
         id="cart-notification-freeship"
         class="cart-notification-freeship"
-        data-threshold="3000"
+        data-threshold="4500"
         hidden
       ></div>
+      {%- if fc_live contains 'yes' -%}
+        <div id="cart-notification-3x2" class="cart-notification-3x2" data-end="{{ fc_end | strip }}" hidden>
+          <div class="cart-notification-3x2__top">
+            <span class="cart-notification-3x2__tag">Oferta de lanzamiento</span>
+            <strong>Lleva 3, paga solo 2</strong>
+            <span class="cart-notification-3x2__time" data-3x2-time></span>
+          </div>
+          <div class="cart-notification-3x2__row">
+            <span data-3x2-msg></span>
+            <a href="/collections/natures-bounty" data-3x2-btn>Ver elegibles</a>
+          </div>
+        </div>
+      {%- endif -%}
       <div id="cart-notification-product" class="cart-notification-product"></div>
       <div class="cart-notification__links">
         <a
@@ -49,11 +65,14 @@
         >
           {{- 'general.cart.view_empty_cart' | t -}}
         </a>
-        <form action="{{ routes.cart_url }}" method="post" id="cart-notification-form">
-          <button class="button button--primary button--full-width" name="checkout">
-            {{ 'sections.cart.checkout' | t }}
-          </button>
-        </form>
+        {%- comment -%}
+          Fitcore: "Pagar pedido" lleva a la pagina del carrito, no directo al
+          checkout. Ahi el cliente elige forma de pago y entrega (atributos del
+          carrito que usan MEJORPRECIO y HidePay). Ir directo los saltaba.
+        {%- endcomment -%}
+        <a href="{{ routes.cart_url }}" id="cart-notification-form" class="button button--primary button--full-width">
+          {{ 'sections.cart.checkout' | t }}
+        </a>
         <button type="button" class="link button-label">{{ 'general.continue_shopping' | t }}</button>
       </div>
     </div>
@@ -104,4 +123,66 @@
     font-size: 1.2rem;
     flex: 0 0 auto;
   }
+  .cart-notification-3x2 {
+    margin: 0 0 1.2rem;
+    padding: 1rem 1.2rem;
+    border-radius: 12px;
+    background: linear-gradient(120deg, #0b1840, #3b1f6b);
+    color: #fff;
+    font-size: 1.3rem;
+    line-height: 1.35;
+  }
+  .cart-notification-3x2[hidden] {
+    display: none;
+  }
+  .cart-notification-3x2__top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 10px;
+  }
+  .cart-notification-3x2__top strong {
+    font-size: 1.5rem;
+    font-weight: 800;
+  }
+  .cart-notification-3x2__tag {
+    background: #19c37d;
+    color: #071631;
+    font-size: 1rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 5px 8px;
+    border-radius: 99px;
+    white-space: nowrap;
+  }
+  .cart-notification-3x2__time {
+    margin-left: auto;
+    background: rgba(255, 255, 255, 0.14);
+    font-size: 1.15rem;
+    font-weight: 700;
+    padding: 5px 8px;
+    border-radius: 8px;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+  .cart-notification-3x2__row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px 12px;
+    margin-top: 6px;
+  }
+  .cart-notification-3x2__row a {
+    background: #fff;
+    color: #0b1840;
+    font-weight: 800;
+    font-size: 1.2rem;
+    padding: 8px 12px;
+    border-radius: 9px;
+    text-decoration: none;
+    white-space: nowrap;
+  }
 {% endstyle %}
+
