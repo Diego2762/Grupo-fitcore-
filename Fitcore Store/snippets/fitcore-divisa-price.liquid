@@ -42,6 +42,7 @@
 {%- if fc_pbn > 0 -%}
   {%- assign fc_promo = true -%}
   {%- assign fc_promo_bcv = fc_pbn -%}
+  {%- assign fc_promo_off = fc_old_bcv | minus: fc_pbn | times: 100.0 | divided_by: fc_old_bcv | round -%}
   {%- assign fc_bcv = fc_pbn -%}
   {%- assign fc_base = fc_bcv | times: 100 | divided_by: 115 -%}
   {%- assign fc_base_money = fc_base | money -%}
@@ -69,7 +70,7 @@
       <span class="fc-divisa__label">En divisas:</span>
       <span class="fc-divisa__amount" data-fc-base-amount>{{ fc_base_money }}</span>
       {%- if fc_promo -%}<s class="fc-old">{{ fc_old_base_money }}</s>{%- endif -%}
-      <span class="fc-divisa__off">{% if fc_promo %}Oferta de apertura{% else %}Mejor precio{% endif %}</span>
+      <span class="fc-divisa__off">{% if fc_promo %}Oferta de apertura{% if fc_promo_off > 0 %} -{{ fc_promo_off }}%{% endif %}{% else %}Mejor precio{% endif %}</span>
     </div>
     <div class="fc-bs">
       <span class="fc-bs__label">En bolívares BCV:</span>

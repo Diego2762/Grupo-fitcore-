@@ -3,7 +3,7 @@
   Todas las ofertas duran una semana (semana de inauguración). Fechas: ajustar start_iso / end_iso aquí y en snippets/fitcore-promo.liquid.
   Espejo de los descuentos automáticos de Shopify:
     Creatinas: Nutrex $13.99 divisa (-22%), ON Micronized $25.99 divisa (-16%), Cellucor -10% · Lleva 3, paga 2 en Nature's Bounty · Envío gratis Valera
-    Nutrex Liquid Carnitine y Lipo-6: 10% (divisa y BCV) · BSN AMINOx, XTEND BCAA y XTEND EAA: 5% (divisa y BCV)
+    Nutrex Liquid Carnitine, Lipo-6 y BCAA 6000: 10% · BSN AMINOx, XTEND BCAA y XTEND EAA: 5% (XTEND BCAA no se muestra en esta pagina)
   Los precios reales los aplica Shopify en el carrito; esta página solo los comunica.
   Las tarjetas usan el snippet fitcore-product-card (foto, precios divisa/BCV, botón de carrito).
   Los porcentajes se definen en snippets/fitcore-promo.liquid (fuente única). Las listas de handles de abajo deben coincidir.
@@ -27,7 +27,8 @@
   # Quemadores: una ficha por sabor de Liquid Carnitine + Lipo-6 (3 fichas, igual que el bloque de aminos)
   assign creatine_handles = 'nutrex-creatine-monohydrate-300-g,optimum-nutrition-micronized-creatine-powder,cellucor-cor-performance-creatine' | split: ','
   assign burn_handles = 'nutrex-liquid-carnitine-3000,nutrex-lipo-6-black-ultra-concentrate-60-capsulas' | split: ','
-  assign amino_handles = 'bsn-aminox-435-g,xtend-original-bcaa,xtend-eaa' | split: ','
+  # Aminos en esta pagina: XTEND Original BCAA sigue con su 5% en la tienda, pero aqui se reemplaza por Nutrex BCAA 6000 (10%)
+  assign amino_handles = 'nutrex-bcaa-6000,bsn-aminox-435-g,xtend-eaa' | split: ','
   assign sb_url = section.settings.supabase_url
   assign sb_key = section.settings.supabase_key
 -%}
@@ -399,10 +400,10 @@
       <div class="promo">
         <div>
           <span class="tag">Oferta de apertura</span>
-          <h2>Aminoácidos y BCAA: 5% menos</h2>
-          <p>BSN AMINOx, XTEND BCAA y XTEND EAA con 5% de descuento, en divisa y en bolívares BCV. Recuperación y rendimiento a precio de inauguración.</p>
+          <h2>Aminoácidos y BCAA: hasta 10% menos</h2>
+          <p>Nutrex BCAA 6000 con 10% y BSN AMINOx y XTEND EAA con 5% de descuento, en divisa y en bolívares BCV. El descuento de cada uno está en su ficha.</p>
         </div>
-        <div class="pct">-5%<small>Divisa y BCV</small></div>
+        <div class="pct"><span style="display:block;font-size:.32em;letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px">Hasta</span>-10%<small>Divisa y BCV</small></div>
       </div>
       <div class="grid grid--3">
         {%- for h in amino_handles -%}
