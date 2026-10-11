@@ -204,3 +204,18 @@ Archivos que llevan este texto: `sections/fitcore-home.liquid`, `sections/fitcor
 4. `brand.md` — voz (ojo: escrito para B2B; la tienda es B2C).
 5. Complementarios según tarea: `Shopify Theme/PAGOS.md` (textos de pago), `MARKET_RESEARCH.md` (mercado), `references/offer.md` (oferta).
 - **Fuente de verdad de la tienda = MCP de Shopify.** GitHub = contexto de lectura. Supabase = solo para el flujo de pagos (otro chat).
+
+## 13. Ofertas de lanzamiento: pendiente para mañana (oct 2026)
+
+**Dónde está el trabajo:** tema **sin publicar "artistic-look v2.6.1"** (`gid://shopify/OnlineStoreTheme/167282671874`) y rama `claude/hopeful-shannon-q6vzq6`. El tema publicado (v2.5) NO tiene ofertas.
+
+**Ya hecho:** página `/pages/ofertas` rediseñada (oscura estilo password, reloj grande, banner animado de envío gratis, premios primero con registro, quemadores Nutrex -10% con 3 fichas, aminos BSN/XTEND -5%, Nature's Bounty "Lleva 3, paga 2"). "Paga solo 2" cambiado a "paga 2" en todo el tema.
+
+**Fuente única de promos:** `snippets/fitcore-promo.liquid`, lista `fc_promos` con formato `handle:valor` (positivo = precio BCV fijo en centavos, negativo = % de descuento). Ese snippet lo leen la tarjeta (`fitcore-product-card`: home y catálogo), la ficha de producto (`fitcore-divisa-price`), el home (`fitcore-home` más vendidos) y la búsqueda (`predictive-search`). Las listas de handles de `sections/fitcore-ofertas.liquid` deben coincidir.
+
+**Pendiente (Diego):**
+1. Diego va a cargar un par de productos más y un par de creatinas más para las ofertas (falta definir cuáles y su %).
+2. **Tachado de oferta en TODO el website** para todos los productos en promo (listing/ficha, home, catálogo, búsqueda), igual que ya pasa con Creatina Nutrex y Nature's Bounty. Diego ve hoy el tachado de los nuevos (Carnitine, Lipo-6, AMINOx, XTEND BCAA, XTEND EAA) solo en la página de ofertas. Verificar en la vista previa de v2.6.1 si ya sale en ficha/home/catálogo (el snippet ya incluye los %) y corregir lo que falte; agregar ahí también los productos nuevos.
+3. Crear en Shopify los **descuentos automáticos** reales: 10% Nutrex Liquid Carnitine + Lipo-6, 5% BSN AMINOx + XTEND BCAA + XTEND EAA (+ los nuevos). Sin eso el carrito cobra precio completo.
+4. **Fechas:** todas las ofertas duran 1 semana (semana de inauguración, fecha por definir). Hoy dicen 1 al 15 nov en: setting `start_iso`/`end_iso` de la sección, `snippets/fitcore-promo.liquid`, `snippets/fitcore-promo-terms.liquid` y los descuentos de Shopify (creatina y 3x2 hasta 15 nov, envío gratis Valera 1 al 15 nov).
+5. Revisar todo en móvil (la tienda se convertirá en app/PWA).
