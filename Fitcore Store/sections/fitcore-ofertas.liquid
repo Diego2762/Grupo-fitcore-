@@ -17,6 +17,7 @@
   assign wa_msg_enc = section.settings.whatsapp_msg | default: 'Hola Fitcore Store, quiero aprovechar las ofertas de apertura' | url_encode
   assign creatine = section.settings.creatine_product | default: all_products['nutrex-creatine-monohydrate-300-g']
   assign nb_col = section.settings.nb_collection | default: collections['natures-bounty']
+  assign nb_hide = section.settings.nb_hide | default: 'natures-bounty-melatonina-10-mg-45-tabletas-de-disolucion-rapida' | split: ','
   assign cr_new_bcv = section.settings.creatine_promo_bcv | default: 16.09 | times: 100 | round
   assign cr_new_div = cr_new_bcv | times: 100 | divided_by: 115
   assign cr_old_bcv = creatine.price | default: 2069
@@ -117,14 +118,7 @@
   #fc-of-{{ section.id }} .promo p { margin:0; color:rgba(255,255,255,.85); font-size:15px; line-height:1.55; max-width:60ch; }
   #fc-of-{{ section.id }} .pct { font:900 clamp(54px,8vw,92px)/.9 'Inter',sans-serif; letter-spacing:-.04em; color:var(--green); text-align:center; }
   #fc-of-{{ section.id }} .pct small { display:block; margin-top:8px; font:700 12px/1 'Inter',sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); }
-  #fc-of-{{ section.id }} .steps { display:flex; align-items:center; gap:8px; }
-  #fc-of-{{ section.id }} .st { text-align:center; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.2); border-radius:14px; padding:12px 14px 11px; min-width:88px; }
-  #fc-of-{{ section.id }} .st svg { display:block; width:30px; height:30px; margin:0 auto; }
-  #fc-of-{{ section.id }} .st span { display:block; margin-top:7px; font:800 12px/1 'Inter',sans-serif; letter-spacing:.1em; text-transform:uppercase; color:rgba(255,255,255,.85); }
-  #fc-of-{{ section.id }} .st.free { background:var(--green); border-color:var(--green); color:#071631; }
-  #fc-of-{{ section.id }} .st.free span { color:#071631; }
-  #fc-of-{{ section.id }} .st-plus { font:800 22px/1 'Inter',sans-serif; color:rgba(255,255,255,.55); }
-  #fc-of-{{ section.id }} .steps-wrap small { display:block; margin-top:8px; text-align:center; font-size:12.5px; color:rgba(255,255,255,.7); }
+  #fc-of-{{ section.id }} .pct--3x2 small { font-size:15px; letter-spacing:.12em; color:#fff; margin-top:10px; }
   #fc-of-{{ section.id }} .grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:16px; }
   #fc-of-{{ section.id }} .grid--3 { grid-template-columns:repeat(3,minmax(0,1fr)); }
   #fc-of-{{ section.id }} .terms { margin:16px 0 0; padding:14px 16px; background:rgba(255,255,255,.06); border:1px solid var(--line); border-radius:12px; color:var(--muted); }
@@ -157,7 +151,7 @@
   #fc-of-{{ section.id }} .prize:hover { transform:translateY(-5px); border-color:var(--green); background:rgba(255,255,255,.11); }
   #fc-of-{{ section.id }} .prize img, #fc-of-{{ section.id }} .prize .ph { width:100%; height:auto; aspect-ratio:4/3; border-radius:14px; object-fit:cover; display:block; margin-bottom:16px; background:#0d1e46; }
   #fc-of-{{ section.id }} .prize .ph { display:flex; align-items:center; justify-content:center; text-align:center; color:rgba(255,255,255,.55); font-size:13px; border:1px dashed rgba(255,255,255,.25); }
-  #fc-of-{{ section.id }} .prize-rib { position:absolute; top:24px; left:24px; z-index:2; background:linear-gradient(135deg,#2ee59a,#19C37D); color:#04281a; font:900 13px/1 'Inter',sans-serif; letter-spacing:.12em; text-transform:uppercase; padding:9px 14px; border-radius:99px; box-shadow:0 8px 20px rgba(0,0,0,.35); }
+  #fc-of-{{ section.id }} .prize-rib { position:absolute; top:24px; left:24px; z-index:2; background:linear-gradient(135deg,#2ee59a,#19C37D); color:#04281a; font:900 13px/1 'Inter',sans-serif; letter-spacing:.12em; text-transform:uppercase; padding:9px 14px; border-radius:99px; white-space:nowrap; box-shadow:0 8px 20px rgba(0,0,0,.35); }
   #fc-of-{{ section.id }} .prize-t { font:800 12px/1 'Inter',sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--green); margin:0 6px 8px; }
   #fc-of-{{ section.id }} .prize-h { font:800 clamp(21px,2.6vw,27px)/1.2 'Inter',sans-serif; margin:0 6px 8px; }
   #fc-of-{{ section.id }} .prize-p { font-size:15px; line-height:1.5; color:rgba(255,255,255,.85); margin:0 6px; }
@@ -217,14 +211,10 @@
     #fc-of-{{ section.id }} .promo p { font-size:14px; }
     #fc-of-{{ section.id }} .pct { grid-column:1 / -1; display:flex; align-items:baseline; gap:10px; font-size:48px; text-align:left; }
     #fc-of-{{ section.id }} .pct small { margin:0; }
-    #fc-of-{{ section.id }} .steps { grid-column:1 / -1; }
     #fc-of-{{ section.id }} .sec-h { margin-bottom:14px; }
     #fc-of-{{ section.id }} .prices { gap:8px 18px; }
     #fc-of-{{ section.id }} .pr b { font-size:34px; }
     #fc-of-{{ section.id }} .pr.bcv b { font-size:22px; }
-    #fc-of-{{ section.id }} .steps { width:100%; }
-    #fc-of-{{ section.id }} .st { flex:1; min-width:0; padding:10px 6px; }
-    #fc-of-{{ section.id }} .steps-wrap { grid-column:1 / -1; }
     #fc-of-{{ section.id }} .grid, #fc-of-{{ section.id }} .grid--3 { grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
     #fc-of-{{ section.id }} .prizes { grid-template-columns:1fr; }
     #fc-of-{{ section.id }} .win { padding-top:28px; }
@@ -300,7 +290,7 @@
             {%- assign p_title = section.settings.prize2_title -%}{%- assign p_text = section.settings.prize2_text -%}
           {%- endif -%}
           <div class="prize">
-            <span class="prize-rib">Gratis</span>
+            <span class="prize-rib">Participa gratis</span>
             {%- if p_img != blank -%}
               <img src="{{ p_img }}" alt="{{ p_title | escape }}" width="800" height="600">
             {%- else -%}
@@ -468,20 +458,12 @@
           <h2>Lleva 3, paga 2</h2>
           <p>Mezcla las vitaminas Nature's Bounty que quieras. Por cada 3 en tu carrito, una te sale gratis. El descuento se aplica solo al pagar.</p>
         </div>
-        <div class="steps-wrap">
-          <div class="steps" role="img" aria-label="Llevas 3 vitaminas, pagas 2 y la tercera es gratis">
-            <div class="st"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2.5" width="10" height="3.5" rx="1"/><path d="M8 6h8v2.2c1.8.8 3 2.6 3 4.6V19a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 5 19v-6.2c0-2 1.2-3.8 3-4.6z"/><path d="M5 13h14M5 18h14"/></svg><span>Pagas</span></div>
-            <span class="st-plus" aria-hidden="true">+</span>
-            <div class="st"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2.5" width="10" height="3.5" rx="1"/><path d="M8 6h8v2.2c1.8.8 3 2.6 3 4.6V19a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 5 19v-6.2c0-2 1.2-3.8 3-4.6z"/><path d="M5 13h14M5 18h14"/></svg><span>Pagas</span></div>
-            <span class="st-plus" aria-hidden="true">+</span>
-            <div class="st free"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2.5" width="10" height="3.5" rx="1"/><path d="M8 6h8v2.2c1.8.8 3 2.6 3 4.6V19a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 5 19v-6.2c0-2 1.2-3.8 3-4.6z"/><path d="M5 13h14M5 18h14"/></svg><span>Gratis</span></div>
-          </div>
-          <small>La de menor precio va por nuestra cuenta</small>
-        </div>
+        <div class="pct pct--3x2">3x2<small>Compra 3, paga 2</small></div>
       </div>
       {%- if nb_col != blank and nb_col.products_count > 0 -%}
         <div class="grid">
           {%- for p in nb_col.products limit: 24 -%}
+            {%- if nb_hide contains p.handle -%}{%- continue -%}{%- endif -%}
             {%- render 'fitcore-product-card', product: p, lazy: true -%}
           {%- endfor -%}
         </div>
@@ -652,6 +634,7 @@
     { "type": "header", "content": "Productos" },
     { "type": "product", "id": "creatine_product", "label": "Producto: Nutrex Creatine" },
     { "type": "text", "id": "creatine_promo_bcv", "label": "Nutrex: precio promo en BCV (USD)", "default": "16.09" },
+    { "type": "text", "id": "nb_hide", "label": "Nature's Bounty: handles a ocultar en esta página (separados por coma)", "info": "Solo se ocultan aquí; siguen participando en el 3x2.", "default": "natures-bounty-melatonina-10-mg-45-tabletas-de-disolucion-rapida" },
     { "type": "collection", "id": "nb_collection", "label": "Colección elegible Lleva 3, paga 2 (Nature's Bounty)" },
     { "type": "header", "content": "Premios" },
     { "type": "text", "id": "hero_gift_label", "label": "Botón del hero hacia los premios", "default": "Participa por combos de regalo" },
