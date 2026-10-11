@@ -1,0 +1,95 @@
+{%- comment -%}
+  Fitcore Store · "Para ellas" (home)
+  4 productos con el mismo formato de tarjeta de "Los más vendidos".
+  Se renderiza despues de fitcore-home y un script la mueve dentro de
+  #fc-home-* justo antes de "Encuentra lo que necesites" (.fc-cats), para
+  heredar los estilos de esa seccion sin tocar su archivo.
+{%- endcomment -%}
+
+{%- assign fc_default = 'optimum-nutrition-opti-women,natures-bounty-hair-skin-nails-60-caplets,dymatize-iso100-whey-protein-isolate,forfit-pesas-para-muneca-y-tobillo-triangulares' -%}
+{%- assign fc_str = section.settings.handles | default: fc_default -%}
+{%- assign fc_handles = fc_str | split: ',' -%}
+
+<style>
+  .fc-ellas { background: linear-gradient(180deg,#fff5f9 0%,#fff 100%) !important; }
+  .fc-ellas .fc-ellas-eyebrow { display:inline-flex; align-items:center; gap:7px; background:#ffe3ef; color:#b0306b; font:800 12.5px/1 var(--font-body-family,sans-serif); letter-spacing:.3px; text-transform:uppercase; padding:7px 12px; border-radius:99px; margin-bottom:14px; }
+  .fc-ellas .fc-ellas-eyebrow svg { width:14px; height:14px; }
+  .fc-ellas .fc-pc-rank { background:#e0458a !important; color:#fff !important; }
+  .fc-ellas .fc-best-all { background:#e0458a !important; }
+  .fc-ellas .fc-best-all:hover { background:#b0306b !important; }
+</style>
+
+<section class="fc-best fc-ellas" id="fc-ellas-{{ section.id }}">
+  <div class="fc-wrap">
+    <div class="fc-best-head">
+      <span class="fc-ellas-eyebrow"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.1 0 3.6 1.2 4.3 2.4.7-1.2 2.2-2.4 4.3-2.4 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z"/></svg>{{ section.settings.eyebrow | default: 'Para ellas' }}</span>
+      <h2>{{ section.settings.title | default: 'Pensado para ti, mujer' }}</h2>
+      <p>{{ section.settings.sub | default: 'Vitaminas para tu día a día, belleza desde adentro, proteína limpia y lo necesario para entrenar en casa. Todo 100% original.' }}</p>
+    </div>
+    <div class="fc-best-grid">
+      {%- for fc_h in fc_handles -%}
+        {%- assign fc_handle = fc_h | strip -%}
+        {%- assign fc_prod = all_products[fc_handle] -%}
+        {%- if fc_prod != blank and fc_prod.id -%}
+          {%- assign fc_var = fc_prod.selected_or_first_available_variant -%}
+          <div class="fc-pc">
+            <a class="fc-pc-media" href="{{ fc_prod.url }}">
+              <span class="fc-pc-rank">Para ellas</span>
+              {%- if fc_prod.featured_image -%}
+                <img src="{{ fc_prod.featured_image | image_url: width: 600 }}" alt="{{ fc_prod.title | escape }}" loading="lazy" width="600" height="600">
+              {%- endif -%}
+            </a>
+            <div class="fc-pc-body">
+              {%- if fc_prod.vendor != blank -%}<span class="fc-pc-vendor">{{ fc_prod.vendor }}</span>{%- endif -%}
+              <a class="fc-pc-title" href="{{ fc_prod.url }}">{{ fc_prod.title }}</a>
+              <div class="fc-pc-foot">
+                {%- assign fc_divisa = fc_prod.price | times: 100 | divided_by: 115 -%}
+                <div class="fc-pc-prices">
+                  <span class="fc-pc-price fc-pc-price--divisa">{{ fc_divisa | money }}<span class="fc-pc-cur">Divisa</span></span>
+                  <span class="fc-pc-price">{{ fc_prod.price | money }}<span class="fc-pc-cur">BCV</span></span>
+                </div>
+                {%- if fc_var and fc_var.available -%}
+                  <form method="post" action="{{ routes.cart_add_url }}" class="fc-pc-form" data-fc-add>
+                    <input type="hidden" name="form_type" value="product">
+                    <input type="hidden" name="utf8" value="✓">
+                    <input type="hidden" name="id" value="{{ fc_var.id }}">
+                    <button type="submit" class="fc-pc-cart" aria-label="Agregar {{ fc_prod.title | escape }} al carrito">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                    </button>
+                  </form>
+                {%- else -%}
+                  <a class="fc-pc-cart fc-pc-cart--out" href="{{ fc_prod.url }}" aria-label="Ver {{ fc_prod.title | escape }}">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 5l7 7-7 7"/></svg>
+                  </a>
+                {%- endif -%}
+              </div>
+            </div>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+<script>
+  (function () {
+    var el = document.getElementById('fc-ellas-{{ section.id }}');
+    var cats = document.querySelector('[id^="fc-home-"] .fc-cats');
+    if (el && cats && cats.parentNode) cats.parentNode.insertBefore(el, cats);
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Fitcore Para ellas",
+  "tag": "div",
+  "class": "fitcore-home-ellas",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Etiqueta", "default": "Para ellas" },
+    { "type": "text", "id": "title", "label": "Título", "default": "Pensado para ti, mujer" },
+    { "type": "textarea", "id": "sub", "label": "Subtítulo", "default": "Vitaminas para tu día a día, belleza desde adentro, proteína limpia y lo necesario para entrenar en casa. Todo 100% original." },
+    { "type": "textarea", "id": "handles", "label": "Handles de productos (separados por coma)", "default": "optimum-nutrition-opti-women,natures-bounty-hair-skin-nails-60-caplets,dymatize-iso100-whey-protein-isolate,forfit-pesas-para-muneca-y-tobillo-triangulares" }
+  ],
+  "presets": [{ "name": "Fitcore Para ellas" }]
+}
+{% endschema %}
