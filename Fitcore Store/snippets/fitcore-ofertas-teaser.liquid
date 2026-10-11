@@ -1,7 +1,7 @@
 {%- comment -%}
   Fitcore · Adelanto de "Ofertas de apertura" para el home (va entre el marquee de marcas y Los mas vendidos).
   Mismo hero, reloj y banner de envio que la pagina /pages/ofertas, con un boton que lleva a esa pagina
-  y una cinta con los productos en oferta (foto, % y precio, sin carrito) que avanza sola y se desliza con el dedo; cada ficha lleva a su producto.
+  y una cinta con los productos en oferta (foto, % y precio, sin carrito) que avanza sola y se desliza con el dedo; cada ficha lleva a /pages/ofertas (para que vean el sorteo).
   Fechas: deben coincidir con los ajustes de la seccion de ofertas (inicio/fin y envio gratis).
 {%- endcomment -%}
 {%- liquid
@@ -299,7 +299,7 @@
           {%- assign off = p.price | minus: pbn | times: 100.0 | divided_by: p.price | round -%}
           {%- assign now_div = pbn | times: 100 | divided_by: 115 -%}
           {%- assign old_div = p.price | times: 100 | divided_by: 115 -%}
-          <a class="rib-it" href="{{ p.url }}">
+          <a class="rib-it" href="/pages/ofertas" aria-label="{{ p.title | escape }}: ver ofertas de apertura">
             <span class="rib-img">
               {%- if p.featured_image -%}<img src="{{ p.featured_image | image_url: width: 300 }}" alt="{{ p.title | escape }}" loading="lazy" width="300" height="300">{%- endif -%}
               <span class="rib-off">-{{ off }}%</span>

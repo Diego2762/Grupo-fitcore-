@@ -40,7 +40,7 @@
             >
           {%- endif -%}
           <p class="announcement-bar__message h5">
-            <span>{%- comment -%} Fitcore: [s]texto[/s] se muestra tachado {%- endcomment -%}{{ section.blocks.first.settings.text | escape | replace: '[s]', '<s style="opacity:.65">' | replace: '[/s]', '</s>' }}</span>
+            <span>{%- comment -%} Fitcore: [s]texto[/s] tachado, [g]texto[/g] en verde {%- endcomment -%}{{ section.blocks.first.settings.text | escape | replace: '[s]', '<s style="opacity:.65">' | replace: '[/s]', '</s>' | replace: '[g]', '<span style="color:#5ff0b4">' | replace: '[/g]', '</span>' }}</span>
             {%- if section.blocks.first.settings.link != blank -%}
               {{- 'icon-arrow.svg' | inline_asset_content -}}
             {%- endif -%}
@@ -100,7 +100,7 @@
                       >
                     {%- endif -%}
                     <p class="announcement-bar__message h5">
-                      <span>{{ block.settings.text | escape | replace: '[s]', '<s style="opacity:.65">' | replace: '[/s]', '</s>' }}</span>
+                      <span>{{ block.settings.text | escape | replace: '[s]', '<s style="opacity:.65">' | replace: '[/s]', '</s>' | replace: '[g]', '<span style="color:#5ff0b4">' | replace: '[/g]', '</span>' }}</span>
                       {%- if block.settings.link != blank -%}
                         {{- 'icon-arrow.svg' | inline_asset_content -}}
                       {%- endif -%}
@@ -161,6 +161,13 @@
     </div>
   </div>
 </div>
+
+{%- comment -%} Fitcore: en movil un poco menos de espaciado para que el anuncio quepa en 2 lineas {%- endcomment -%}
+<style>
+  @media screen and (max-width: 749px) {
+    .announcement-bar__message { letter-spacing: .02rem; }
+  }
+</style>
 
 {% schema %}
 {
