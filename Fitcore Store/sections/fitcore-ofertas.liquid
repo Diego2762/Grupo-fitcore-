@@ -42,10 +42,10 @@
     position:relative; overflow:hidden; color:#fff; font-family:'Open Sans','Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
     background:
       radial-gradient(1200px 600px at 12% -6%, rgba(90,47,160,.55), transparent 60%),
-      radial-gradient(1000px 700px at 112% 22%, rgba(25,195,125,.14), transparent 55%),
+      radial-gradient(1000px 700px at 112% 22%, rgba(90,47,160,.22), transparent 55%),
       linear-gradient(160deg, var(--navy) 0%, var(--navy-d) 55%, #05101f 100%);
   }
-  #fc-of-{{ section.id }}::before { content:''; position:absolute; inset:-20% -10% auto -10%; height:80%; z-index:0; pointer-events:none; background:radial-gradient(620px 620px at 28% 18%, rgba(90,47,160,.38), transparent 62%), radial-gradient(520px 520px at 78% 60%, rgba(25,195,125,.16), transparent 62%); animation:fcof-float 15s ease-in-out infinite alternate; }
+  #fc-of-{{ section.id }}::before { content:''; position:absolute; inset:-20% -10% auto -10%; height:80%; z-index:0; pointer-events:none; background:radial-gradient(620px 620px at 28% 18%, rgba(90,47,160,.38), transparent 62%), radial-gradient(520px 520px at 78% 60%, rgba(90,47,160,.22), transparent 62%); animation:fcof-float 15s ease-in-out infinite alternate; }
   @keyframes fcof-float { from { transform:translate3d(0,0,0) scale(1); } to { transform:translate3d(0,-26px,0) scale(1.08); } }
   @keyframes fcof-up { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:none; } }
   @keyframes fcof-pulse { 0%,100% { box-shadow:0 8px 22px rgba(59,31,107,.45); } 50% { box-shadow:0 12px 34px rgba(90,47,160,.85); } }
