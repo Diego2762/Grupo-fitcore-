@@ -382,7 +382,11 @@
       function go() { window.location.href = root_path + 'checkout'; }
       // Fija descuento y forma de pago justo antes del checkout (aunque el
       // cliente no haya tocado el selector, queda la opcion marcada).
-      post({ discount: code, attributes: methodAttrs(m) }).then(go).catch(go);
+      // Dos llamadas: combinar discount + attributes en una sola no aplicaba
+      // el cupon. Primero la forma de pago, luego el descuento (como antes).
+      post({ attributes: methodAttrs(m) })
+        .then(function () { return post({ discount: code }); })
+        .then(go).catch(go);
     }, true);
 
     // Mantener SIEMPRE el carrito en pantalla en precio BCV completo (sin
