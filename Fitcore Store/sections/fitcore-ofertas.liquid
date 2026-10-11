@@ -217,7 +217,7 @@
   }
   /* Movil: secciones de 3 productos como carrusel deslizable (la siguiente ficha asoma) */
   @media (max-width:760px){
-    #fc-of-{{ section.id }} .grid--3 { display:flex; gap:12px; overflow-x:auto; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch; margin:0 -16px; padding:2px 16px 8px; scroll-padding-left:16px; scrollbar-width:none; }
+    #fc-of-{{ section.id }} .grid--3 { display:flex; flex-wrap:nowrap; flex-direction:row; column-gap:12px; row-gap:0; gap:12px; overflow-x:auto; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch; margin:0 -16px; padding:2px 16px 8px; scroll-padding-left:16px; scrollbar-width:none; }
     #fc-of-{{ section.id }} .grid--3::-webkit-scrollbar { display:none; }
     #fc-of-{{ section.id }} .grid--3 > * { flex:0 0 68%; scroll-snap-align:start; }
   }
