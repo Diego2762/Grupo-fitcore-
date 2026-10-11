@@ -9,6 +9,7 @@
 {%- assign fc_default = 'optimum-nutrition-opti-women,natures-bounty-hair-skin-nails-60-caplets,dymatize-iso100-whey-protein-isolate,forfit-pesas-para-muneca-y-tobillo-triangulares' -%}
 {%- assign fc_str = section.settings.handles | default: fc_default -%}
 {%- assign fc_handles = fc_str | split: ',' -%}
+{%- assign fc_pref = section.settings.pref_variants | default: 'dymatize-iso100-whey-protein-isolate:Cookies' | split: ',' -%}
 
 <style>
   .fc-ellas { background: linear-gradient(180deg,#fff5f9 0%,#fff 100%) !important; }
@@ -43,16 +44,33 @@
         {%- endif -%}
         {%- if fc_prod != blank and fc_prod.id -%}
           {%- assign fc_var = fc_prod.selected_or_first_available_variant -%}
+          {%- assign fc_img = fc_prod.featured_image -%}
+          {%- assign fc_url = fc_prod.url -%}
+          {%- for fc_pp in fc_pref -%}
+            {%- assign fc_ppa = fc_pp | split: ':' -%}
+            {%- assign fc_pph = fc_ppa[0] | strip -%}
+            {%- assign fc_ppv = fc_ppa[1] | strip -%}
+            {%- if fc_pph == fc_prod.handle and fc_ppv != blank -%}
+              {%- for fc_v in fc_prod.variants -%}
+                {%- if fc_v.title contains fc_ppv and fc_v.available -%}
+                  {%- assign fc_var = fc_v -%}
+                  {%- assign fc_url = fc_v.url -%}
+                  {%- if fc_v.featured_image -%}{%- assign fc_img = fc_v.featured_image -%}{%- endif -%}
+                  {%- break -%}
+                {%- endif -%}
+              {%- endfor -%}
+            {%- endif -%}
+          {%- endfor -%}
           <div class="fc-pc">
-            <a class="fc-pc-media" href="{{ fc_prod.url }}">
+            <a class="fc-pc-media" href="{{ fc_url }}">
               <span class="fc-pc-rank">Para ellas</span>
-              {%- if fc_prod.featured_image -%}
-                <img src="{{ fc_prod.featured_image | image_url: width: 600 }}" alt="{{ fc_prod.title | escape }}" loading="lazy" width="600" height="600">
+              {%- if fc_img -%}
+                <img src="{{ fc_img | image_url: width: 600 }}" alt="{{ fc_prod.title | escape }}" loading="lazy" width="600" height="600">
               {%- endif -%}
             </a>
             <div class="fc-pc-body">
               {%- if fc_prod.vendor != blank -%}<span class="fc-pc-vendor">{{ fc_prod.vendor }}</span>{%- endif -%}
-              <a class="fc-pc-title" href="{{ fc_prod.url }}">{{ fc_prod.title }}</a>
+              <a class="fc-pc-title" href="{{ fc_url }}">{{ fc_prod.title }}</a>
               <div class="fc-pc-foot">
                 {%- assign fc_divisa = fc_prod.price | times: 100 | divided_by: 115 -%}
                 <div class="fc-pc-prices">
@@ -69,7 +87,7 @@
                     </button>
                   </form>
                 {%- else -%}
-                  <a class="fc-pc-cart fc-pc-cart--out" href="{{ fc_prod.url }}" aria-label="Ver {{ fc_prod.title | escape }}">
+                  <a class="fc-pc-cart fc-pc-cart--out" href="{{ fc_url }}" aria-label="Ver {{ fc_prod.title | escape }}">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 5l7 7-7 7"/></svg>
                   </a>
                 {%- endif -%}
@@ -100,6 +118,7 @@
     { "type": "text", "id": "title", "label": "Título", "default": "Brilla por dentro, fuerte por fuera" },
     { "type": "textarea", "id": "sub", "label": "Subtítulo", "default": "Tu combo para brillar: multivitamínico, biotina para pelo y uñas, proteína ligera y pesas para tu pilates en casa. Todo original, nada de imitaciones." },
     { "type": "product_list", "id": "products", "label": "Productos", "limit": 8 },
+    { "type": "text", "id": "pref_variants", "label": "Variante destacada (handle:texto de la variante, separados por coma)", "default": "dymatize-iso100-whey-protein-isolate:Cookies" },
     { "type": "textarea", "id": "handles", "label": "Handles de productos (separados por coma)", "default": "optimum-nutrition-opti-women,natures-bounty-hair-skin-nails-60-caplets,dymatize-iso100-whey-protein-isolate,forfit-pesas-para-muneca-y-tobillo-triangulares" }
   ],
   "presets": [{ "name": "Fitcore Para ellas" }]
