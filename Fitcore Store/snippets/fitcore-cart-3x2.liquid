@@ -1,23 +1,37 @@
 {%- comment -%}
-  Fitcore · Aviso 3x2 en el carrito (Nature's Bounty). Se muestra solo mientras la promo esta activa.
-  Cuenta unidades Nature's Bounty: de cada 3, la mas barata va gratis (lo aplica el descuento automatico de Shopify).
+  Fitcore · Banner "Lleva 3, paga solo 2" en el carrito (Nature's Bounty). Solo visible con la promo activa.
+  Se actualiza solo (sin recargar) al agregar, quitar o cambiar cantidades.
 {%- endcomment -%}
 {%- capture fc_live -%}{%- render 'fitcore-promo', product: cart.items.first.product, part: 'live' -%}{%- endcapture -%}
-{%- if fc_live contains 'yes' and cart.item_count > 0 -%}
-  {%- assign fc_nb = 0 -%}
-  {%- for item in cart.items -%}
-    {%- if item.product.vendor == "Nature's Bounty" -%}{%- assign fc_nb = fc_nb | plus: item.quantity -%}{%- endif -%}
-  {%- endfor -%}
-  {%- assign fc_rest = fc_nb | modulo: 3 -%}
-  {%- if fc_nb > 0 -%}
-    <div style="margin:12px 20px;padding:12px 14px;border-radius:12px;background:#F3EEFA;border:1px solid #d9cdf0;color:#3B1F6B;font:600 14px/1.45 sans-serif">
-      {%- if fc_rest == 0 -%}
-        <b>3x2 listo:</b> el Nature's Bounty más barato de cada grupo de 3 va gratis. <a href="/collections/natures-bounty" style="color:#3B1F6B;text-decoration:underline">Agregar otro grupo</a>
-      {%- elsif fc_rest == 1 -%}
-        <b>3x2:</b> agrega 2 Nature's Bounty más y el más barato va gratis. <a href="/collections/natures-bounty" style="color:#3B1F6B;text-decoration:underline">Ver elegibles</a>
-      {%- else -%}
-        <b>3x2:</b> te falta 1 Nature's Bounty para llevarte uno gratis. <a href="/collections/natures-bounty" style="color:#3B1F6B;text-decoration:underline">Ver elegibles</a>
-      {%- endif -%}
-    </div>
-  {%- endif -%}
+{%- if fc_live contains 'yes' -%}
+<div class="fc-3x2" data-fc-3x2 hidden style="margin:12px 20px;padding:16px 18px;border-radius:16px;background:linear-gradient(120deg,#0B1840,#3B1F6B);color:#fff;font-family:sans-serif">
+  <span style="display:inline-block;background:#19C37D;color:#071631;font:800 11px/1 sans-serif;letter-spacing:.08em;text-transform:uppercase;padding:6px 10px;border-radius:99px">Oferta de lanzamiento</span>
+  <div style="font:800 20px/1.2 sans-serif;margin:10px 0 4px">Lleva 3, paga solo 2</div>
+  <div data-fc-3x2-msg style="font:500 14.5px/1.45 sans-serif;color:rgba(255,255,255,.88)"></div>
+  <a href="/collections/natures-bounty" data-fc-3x2-btn style="display:inline-block;margin-top:12px;background:#fff;color:#0B1840;font:800 14px/1 sans-serif;padding:12px 18px;border-radius:10px;text-decoration:none">Agregar otro grupo</a>
+  <div style="color:rgba(255,255,255,.85)">{%- render 'fitcore-promo-terms' -%}</div>
+</div>
+<script>
+(function(){
+  var box = document.currentScript.previousElementSibling; if(!box || !box.hasAttribute('data-fc-3x2')) return;
+  var msg = box.querySelector('[data-fc-3x2-msg]'), btn = box.querySelector('[data-fc-3x2-btn]'), t;
+  function paint(cart){
+    var n = 0; (cart.items||[]).forEach(function(i){ if(i.vendor === "Nature's Bounty") n += i.quantity; });
+    if(!n){ box.hidden = true; return; }
+    box.hidden = false;
+    var r = n % 3;
+    if(r === 0){ msg.textContent = '¡Lo tienes! Cada grupo de 3 Nature\'s Bounty te sale por el precio de 2.'; btn.textContent = 'Agregar otro grupo'; }
+    else if(r === 1){ msg.textContent = 'Agrega 2 más y llévate 3 pagando solo 2.'; btn.textContent = 'Ver elegibles'; }
+    else { msg.textContent = '¡Te falta 1! Agrégalo y paga solo 2 de los 3.'; btn.textContent = 'Agregar 1 más'; }
+  }
+  function refresh(){ fetch('/cart.js', {credentials:'same-origin'}).then(function(r){return r.json();}).then(paint).catch(function(){}); }
+  function later(){ clearTimeout(t); t = setTimeout(refresh, 500); }
+  refresh();
+  if (typeof subscribe === 'function' && typeof PUB_SUB_EVENTS !== 'undefined') { subscribe(PUB_SUB_EVENTS.cartUpdate, later); }
+  document.addEventListener('change', later, true);
+  document.addEventListener('click', function(e){ if (e.target.closest && e.target.closest('cart-remove-button, quantity-input, .quantity__button, [name="add"], .quick-add__submit')) later(); }, true);
+  var obs = new MutationObserver(later);
+  document.querySelectorAll('cart-drawer-items, cart-items').forEach(function(el){ obs.observe(el, {childList:true, subtree:true}); });
+})();
+</script>
 {%- endif -%}

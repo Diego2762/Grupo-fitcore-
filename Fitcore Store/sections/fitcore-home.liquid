@@ -472,7 +472,7 @@
         <p>{{ section.settings.best_sub | default: 'Los favoritos que más se mueven: proteínas, creatina, pre-entrenos y más. Todos 100% originales y listos para despacho el mismo día.' }}</p>
       </div>
       <div class="fc-best-grid">
-        {%- assign fc_best_default = 'optimum-nutrition-gold-standard-100-whey,dymatize-iso100-whey-protein-isolate,optimum-nutrition-micronized-creatine-powder,c4-original-pre-entreno' -%}
+        {%- assign fc_best_default = 'optimum-nutrition-gold-standard-100-whey,nutrex-creatine-monohydrate-300-g,optimum-nutrition-micronized-creatine-powder,c4-original-pre-entreno' -%}
         {%- assign fc_best_str = section.settings.best_handles | default: fc_best_default -%}
         {%- assign fc_best_handles = fc_best_str | split: ',' -%}
         {%- for fc_h in fc_best_handles -%}
@@ -1129,7 +1129,7 @@
     { "type": "header", "content": "Los más vendidos" },
     { "type": "text", "id": "best_title", "label": "Título", "default": "Los más vendidos" },
     { "type": "textarea", "id": "best_sub", "label": "Subtítulo", "default": "Los favoritos que más se mueven: proteínas, creatina, pre-entrenos y más. Todos 100% originales y listos para despacho el mismo día." },
-    { "type": "textarea", "id": "best_handles", "label": "Handles de productos (separados por coma)", "default": "optimum-nutrition-gold-standard-100-whey,dymatize-iso100-whey-protein-isolate,optimum-nutrition-micronized-creatine-powder,c4-original-pre-entreno" },
+    { "type": "textarea", "id": "best_handles", "label": "Handles de productos (separados por coma)", "default": "optimum-nutrition-gold-standard-100-whey,nutrex-creatine-monohydrate-300-g,optimum-nutrition-micronized-creatine-powder,c4-original-pre-entreno" },
     { "type": "header", "content": "WhatsApp" },
     { "type": "text", "id": "whatsapp", "label": "Número (solo dígitos, con país)", "default": "584220384328" },
     { "type": "text", "id": "whatsapp_msg", "label": "Mensaje precargado", "default": "Hola Fitcore Store, quiero hacer un pedido" },

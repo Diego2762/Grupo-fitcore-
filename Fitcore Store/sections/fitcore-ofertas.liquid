@@ -104,12 +104,12 @@
         </article>
 
         <article class="fc-offer">
-          <span class="fc-tag">Lleva 3, paga 2</span>
-          <h3>Nature's Bounty 3x2</h3>
-          <p>Elige 3 productos Nature's Bounty elegibles y el más económico va gratis. Biotina, Vitamina C, D3, B12 y más.</p>
+          <span class="fc-tag">Oferta de lanzamiento</span>
+          <h3>Lleva 3, paga solo 2</h3>
+          <p>En vitaminas Nature's Bounty: mezcla las que quieras y el tercero te sale gratis. Una oferta que no te puedes perder.</p>
           <div class="fc-big">3x2</div>
           <a class="fc-btn" href="{{ nb_col.url | default: '/search?q=nature%27s+bounty' }}">Armar mi 3x2</a>
-          <p class="fc-note">Aplica a los productos Nature's Bounty elegibles de la promoción.</p>
+          <div class="fc-note">{%- render 'fitcore-promo-terms' -%}</div>
         </article>
 
         <article class="fc-offer">
@@ -127,7 +127,7 @@
   {%- if nb_col != blank and nb_col.products_count > 0 -%}
   <section class="fc-sec fc-sec--alt">
     <div class="fc-wrap">
-      <div class="fc-head"><h2>Elegibles para el 3x2</h2><p>Mezcla los que quieras.</p></div>
+      <div class="fc-head"><h2>Elegibles para Lleva 3, paga solo 2</h2><p>Mezcla los que quieras.</p></div>
       <div class="fc-grid">
         {%- for p in nb_col.products limit: 8 -%}
           <a class="fc-pc" href="{{ p.url }}">
