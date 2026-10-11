@@ -17,10 +17,13 @@
   assign wa_msg_enc = section.settings.whatsapp_msg | default: 'Hola Fitcore Store, quiero aprovechar las ofertas de apertura' | url_encode
   assign nb_col = section.settings.nb_collection | default: collections['natures-bounty']
   assign nb_hide = section.settings.nb_hide | default: 'natures-bounty-melatonina-10-mg-45-tabletas-de-disolucion-rapida' | split: ','
-  assign start_iso = section.settings.start_iso | default: '2026-11-01T00:00:00-04:00'
+  assign start_iso = section.settings.start_iso | default: '2026-10-11T00:00:00-04:00'
   assign end_iso = section.settings.end_iso | default: '2026-11-15T23:59:59-04:00'
-  assign ship_t0 = start_iso | date: '%s' | plus: 0
-  assign ship_t1 = end_iso | date: '%s' | plus: 0
+  # El envio gratis tiene su propia ventana (igual que el descuento automatico de envio)
+  assign ship_start_iso = section.settings.ship_start_iso | default: '2026-11-01T00:00:00-04:00'
+  assign ship_end_iso = section.settings.ship_end_iso | default: '2026-11-15T23:59:59-04:00'
+  assign ship_t0 = ship_start_iso | date: '%s' | plus: 0
+  assign ship_t1 = ship_end_iso | date: '%s' | plus: 0
   assign ship_secs = ship_t1 | minus: ship_t0
   assign ship_days = ship_secs | divided_by: 86400.0 | ceil
 
@@ -593,8 +596,10 @@
     { "type": "text", "id": "eyebrow", "label": "Etiqueta superior", "default": "Semana de inauguración" },
     { "type": "text", "id": "title", "label": "Título (hero)", "default": "Ofertas de apertura" },
     { "type": "textarea", "id": "subtitle", "label": "Subtítulo (hero)", "default": "Marcas originales importadas de EE.UU. a precio de inauguración. El descuento se aplica solo en tu carrito, sin cupones." },
-    { "type": "text", "id": "start_iso", "label": "Inicio (ISO, hora Venezuela)", "default": "2026-11-01T00:00:00-04:00" },
+    { "type": "text", "id": "start_iso", "label": "Inicio (ISO, hora Venezuela)", "default": "2026-10-11T00:00:00-04:00" },
     { "type": "text", "id": "end_iso", "label": "Fin (ISO, hora Venezuela)", "info": "Define el reloj y los días del banner de envío gratis. Cambiar también en snippets/fitcore-promo.liquid.", "default": "2026-11-15T23:59:59-04:00" },
+    { "type": "text", "id": "ship_start_iso", "label": "Envío gratis: inicio (ISO)", "info": "Define los días del banner. Debe coincidir con el descuento automático de envío.", "default": "2026-11-01T00:00:00-04:00" },
+    { "type": "text", "id": "ship_end_iso", "label": "Envío gratis: fin (ISO)", "default": "2026-11-15T23:59:59-04:00" },
     { "type": "header", "content": "Productos" },
     { "type": "text", "id": "nb_hide", "label": "Nature's Bounty: handles a ocultar en esta página (separados por coma)", "info": "Solo se ocultan aquí; siguen participando en el 3x2.", "default": "natures-bounty-melatonina-10-mg-45-tabletas-de-disolucion-rapida" },
     { "type": "collection", "id": "nb_collection", "label": "Colección elegible Lleva 3, paga 2 (Nature's Bounty)" },
