@@ -353,6 +353,12 @@
     // carrito en pantalla NO cambia: el descuento solo se fija en el instante
     // de pagar (nativo /cart/update.js, parametro discount).
     var goingToCheckout = false;
+    // Si el cliente vuelve del checkout con "atras", el navegador restaura la
+    // pagina desde cache (bfcache) con goingToCheckout=true y el descuento
+    // viejo: el siguiente Pagar se saltaba la logica. Recargar limpia todo.
+    window.addEventListener('pageshow', function (e) {
+      if (e.persisted) window.location.reload();
+    });
     function selectedMethod() {
       var checked = root.querySelector('[data-pay-opts] input[type="radio"]:checked');
       return checked ? checked.value : 'divisa';
