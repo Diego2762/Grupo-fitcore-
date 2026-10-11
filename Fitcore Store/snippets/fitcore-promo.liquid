@@ -6,6 +6,7 @@
   Uso:
     part: 'bcv'   -> precio BCV promo en centavos (vacio si el producto no tiene promo)
     part: 'chips' -> etiquetas HTML (Oferta de lanzamiento / 3x2)
+    part: 'live'  -> 'yes' si las promos estan activas
 
   Promos de precio: 'handle:precio_BCV_en_centavos', separadas por coma.
   Promo 3x2: todos los productos con vendor igual a fc_trio_vendor.
@@ -23,6 +24,9 @@
     assign fc_live = true
   endif
   assign fc_out = ''
+  if part == 'live' and fc_live
+    assign fc_out = 'yes'
+  endif
   if fc_live
     for fc_item in fc_promos
       assign fc_parts = fc_item | split: ':'

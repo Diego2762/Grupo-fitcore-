@@ -1,0 +1,23 @@
+{%- comment -%}
+  Fitcore · Aviso 3x2 en el carrito (Nature's Bounty). Se muestra solo mientras la promo esta activa.
+  Cuenta unidades Nature's Bounty: de cada 3, la mas barata va gratis (lo aplica el descuento automatico de Shopify).
+{%- endcomment -%}
+{%- capture fc_live -%}{%- render 'fitcore-promo', product: cart.items.first.product, part: 'live' -%}{%- endcapture -%}
+{%- if fc_live contains 'yes' and cart.item_count > 0 -%}
+  {%- assign fc_nb = 0 -%}
+  {%- for item in cart.items -%}
+    {%- if item.product.vendor == "Nature's Bounty" -%}{%- assign fc_nb = fc_nb | plus: item.quantity -%}{%- endif -%}
+  {%- endfor -%}
+  {%- assign fc_rest = fc_nb | modulo: 3 -%}
+  {%- if fc_nb > 0 -%}
+    <div style="margin:12px 20px;padding:12px 14px;border-radius:12px;background:#F3EEFA;border:1px solid #d9cdf0;color:#3B1F6B;font:600 14px/1.45 sans-serif">
+      {%- if fc_rest == 0 -%}
+        <b>3x2 listo:</b> el Nature's Bounty más barato de cada grupo de 3 va gratis. <a href="/collections/natures-bounty" style="color:#3B1F6B;text-decoration:underline">Agregar otro grupo</a>
+      {%- elsif fc_rest == 1 -%}
+        <b>3x2:</b> agrega 2 Nature's Bounty más y el más barato va gratis. <a href="/collections/natures-bounty" style="color:#3B1F6B;text-decoration:underline">Ver elegibles</a>
+      {%- else -%}
+        <b>3x2:</b> te falta 1 Nature's Bounty para llevarte uno gratis. <a href="/collections/natures-bounty" style="color:#3B1F6B;text-decoration:underline">Ver elegibles</a>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+{%- endif -%}
