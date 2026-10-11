@@ -8,6 +8,7 @@
     part: 'bcv'   -> precio BCV promo en centavos (vacio si el producto no tiene promo)
     part: 'chips' -> etiquetas HTML (Oferta de lanzamiento / 3x2)
     part: 'live'  -> 'yes' si las promos estan activas
+    part: 'end'   -> fecha ISO de fin (cuenta regresiva)
 
   Promos de precio: 'handle:precio_BCV_en_centavos', separadas por coma.
   Promo 3x2: todos los productos con vendor igual a fc_trio_vendor.
@@ -25,6 +26,9 @@
     assign fc_live = true
   endif
   assign fc_out = ''
+  if part == 'end'
+    assign fc_out = '2026-11-15T23:59:59-04:00'
+  endif
   if part == 'live' and fc_live
     assign fc_out = 'yes'
   endif
