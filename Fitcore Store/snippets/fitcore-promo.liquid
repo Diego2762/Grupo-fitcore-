@@ -6,15 +6,20 @@
 
   Uso:
     part: 'bcv'   -> precio BCV promo en centavos (vacio si el producto no tiene promo)
-    part: 'chips' -> etiquetas HTML (Oferta de lanzamiento / 3x2)
+    part: 'chips' -> etiquetas HTML (Oferta de lanzamiento / -10% / 3x2)
     part: 'live'  -> 'yes' si las promos estan activas
     part: 'end'   -> fecha ISO de fin (cuenta regresiva)
 
-  Promos de precio: 'handle:precio_BCV_en_centavos', separadas por coma.
+  Promos de precio, separadas por coma, formato 'handle:valor':
+    - valor positivo = precio BCV promo fijo en centavos      (nutrex-creatine-monohydrate-300-g:1609)
+    - valor negativo = porcentaje de descuento sobre el BCV   (nutrex-liquid-carnitine-3000:-10)
+  El porcentaje aplica igual al precio divisa (la tarjeta lo deriva del BCV promo).
+  Si cambias esta lista, actualiza tambien las listas de handles de sections/fitcore-ofertas.liquid.
+
   Promo 3x2: todos los productos con vendor igual a fc_trio_vendor.
 {%- endcomment -%}
 {%- liquid
-  assign fc_promos = 'nutrex-creatine-monohydrate-300-g:1609' | split: ','
+  assign fc_promos = 'nutrex-creatine-monohydrate-300-g:1609,nutrex-liquid-carnitine-3000:-10,nutrex-lipo-6-black-ultra-concentrate-60-capsulas:-10,bsn-aminox-435-g:-5,xtend-original-bcaa:-5,xtend-eaa:-5' | split: ','
   assign fc_trio_vendor = "Nature's Bounty"
   assign fc_now = 'now' | date: '%s' | plus: 0
   assign fc_p_start = '2026-11-01 00:00:00 -0400' | date: '%s' | plus: 0
@@ -36,10 +41,21 @@
     for fc_item in fc_promos
       assign fc_parts = fc_item | split: ':'
       if fc_parts[0] == product.handle
+        assign fc_val = fc_parts[1] | plus: 0
         if part == 'bcv'
-          assign fc_out = fc_parts[1]
+          if fc_val < 0
+            assign fc_k = 100 | plus: fc_val
+            assign fc_out = product.price | times: fc_k | divided_by: 100.0 | round
+          else
+            assign fc_out = fc_val
+          endif
         elsif part == 'chips'
-          assign fc_out = fc_out | append: '<span style="display:inline-block;background:#19C37D;color:#071631;font:800 11px/1 sans-serif;letter-spacing:.06em;text-transform:uppercase;padding:5px 8px;border-radius:99px;margin:0 6px 6px 0">Oferta de lanzamiento</span>'
+          if fc_val < 0
+            assign fc_pct = fc_val | times: -1
+            assign fc_out = fc_out | append: '<span style="display:inline-block;background:#19C37D;color:#071631;font:800 11px/1 sans-serif;letter-spacing:.06em;text-transform:uppercase;padding:5px 8px;border-radius:99px;margin:0 6px 6px 0">-' | append: fc_pct | append: '% lanzamiento</span>'
+          else
+            assign fc_out = fc_out | append: '<span style="display:inline-block;background:#19C37D;color:#071631;font:800 11px/1 sans-serif;letter-spacing:.06em;text-transform:uppercase;padding:5px 8px;border-radius:99px;margin:0 6px 6px 0">Oferta de lanzamiento</span>'
+          endif
         endif
       endif
     endfor

@@ -4,7 +4,12 @@
       "type": "fitcore-ofertas",
       "settings": {
         "creatine_product": "nutrex-creatine-monohydrate-300-g",
-        "nb_collection": "natures-bounty"
+        "nb_collection": "natures-bounty",
+        "prize1_image_url": "https://cdn.shopify.com/s/files/1/0826/2241/5106/files/premio1-combo.jpg?v=1787892104",
+        "prize2_image_url": "https://cdn.shopify.com/s/files/1/0826/2241/5106/files/premio2-nutrex.jpg?v=1787892104",
+        "instagram_url": "https://www.instagram.com/fitcore.ve",
+        "supabase_url": "",
+        "supabase_key": ""
       }
     }
   },
