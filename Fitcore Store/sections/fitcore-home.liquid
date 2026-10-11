@@ -353,6 +353,18 @@
     #fc-home-{{ section.id }} .fc-hero .fc-wrap { padding-left: 18px; padding-right: 18px; }
     #fc-home-{{ section.id }} .fc-hero .fc-wrap > * { max-width: 100%; }
     #fc-home-{{ section.id }} .fc-hero p { max-width: 100%; }
+    /* Movil compacto: menos scroll hasta el primer producto */
+    #fc-home-{{ section.id }} .fc-hero { padding-bottom: 26px; }
+    #fc-home-{{ section.id }} .fc-hero .fc-wrap .fc-hero-photo { height: 210px; object-fit: cover; object-position: center 40%; margin-bottom: 14px; }
+    #fc-home-{{ section.id }} .fc-hero h1 { font-size: 30px; line-height: 1.08; max-width: 100%; margin-bottom: 10px; }
+    #fc-home-{{ section.id }} .fc-hero p { display: none; }
+    #fc-home-{{ section.id }} .fc-bene { padding: 16px 0; }
+    #fc-home-{{ section.id }} .fc-bene .fc-bene-grid { grid-template-columns: repeat(2,1fr); gap: 12px 10px; }
+    #fc-home-{{ section.id }} .fc-bene-item { gap: 8px; align-items: center; }
+    #fc-home-{{ section.id }} .fc-bene-item svg { width: 20px; height: 20px; }
+    #fc-home-{{ section.id }} .fc-bene-item b { font-size: 13px; margin: 0; }
+    #fc-home-{{ section.id }} .fc-bene-item span { display: none; }
+    #fc-home-{{ section.id }} .fc-marq { padding: 18px 0 20px; }
     #fc-home-{{ section.id }} .fc-cats,
     #fc-home-{{ section.id }} .fc-steps,
     #fc-home-{{ section.id }} .fc-info,
@@ -489,7 +501,7 @@
             {%- assign fc_var = fc_prod.selected_or_first_available_variant -%}
             <div class="fc-pc fc-reveal" style="--fc-d:{{ fc_delay }}ms">
               <a class="fc-pc-media" href="{{ fc_prod.url }}">
-                {%- render 'fitcore-promo-off', product: fc_prod -%}
+                {%- render 'fitcore-promo-off', product: fc_prod, pos: 'bottom' -%}
                 <span class="fc-pc-rank"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 6.9H22l-6 4.6 2.3 7L12 16.9 5.7 20.5 8 13.5 2 8.9h7.6z"/></svg>Top ventas</span>
                 {%- if fc_prod.featured_image -%}
                   <img src="{{ fc_prod.featured_image | image_url: width: 600 }}" alt="{{ fc_prod.title | escape }}" loading="lazy" width="600" height="600">

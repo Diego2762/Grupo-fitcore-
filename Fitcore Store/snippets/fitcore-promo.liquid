@@ -8,6 +8,7 @@
     part: 'chips' -> etiquetas HTML (Oferta de apertura / -10% / 3x2)
     part: 'live'  -> 'yes' si las promos estan activas
     part: 'end'   -> fecha ISO de fin (cuenta regresiva)
+    part: 'handles' -> handles con promo de precio, separados por coma (cinta de ofertas del home)
 
   Promos de precio, separadas por coma, formato 'handle:valor':
     - valor positivo = precio BCV promo fijo en centavos      (nutrex-creatine-monohydrate-300-g:1609)
@@ -28,6 +29,12 @@
   endif
   if part == 'live' and fc_live
     assign fc_out = 'yes'
+  endif
+  if part == 'handles' and fc_live
+    for fc_item in fc_promos
+      assign fc_parts = fc_item | split: ':'
+      assign fc_out = fc_out | append: fc_parts[0] | append: ','
+    endfor
   endif
   if fc_live
     for fc_item in fc_promos

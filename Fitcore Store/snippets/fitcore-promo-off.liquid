@@ -2,12 +2,13 @@
   Fitcore · Badge "-XX%" en la esquina superior derecha de la foto de un producto en oferta de apertura.
   Lee el precio promo de snippets/fitcore-promo.liquid. El contenedor padre debe tener position:relative (o absolute).
   Uso: {% render 'fitcore-promo-off', product: product %}
+       pos: 'bottom' -> esquina inferior derecha (cuando arriba ya hay otra etiqueta, ej. Top ventas)
 {%- endcomment -%}
 {%- if product != blank -%}
   {%- capture fc_po_pb -%}{%- render 'fitcore-promo', product: product, part: 'bcv' -%}{%- endcapture -%}
   {%- assign fc_po_pbn = fc_po_pb | strip | plus: 0 -%}
   {%- if fc_po_pbn > 0 and product.price > fc_po_pbn -%}
     {%- assign fc_po_off = product.price | minus: fc_po_pbn | times: 100.0 | divided_by: product.price | round -%}
-    <span class="fc-pc-off" style="position:absolute;top:10px;right:10px;z-index:3;background:#19C37D;color:#071631;font:900 15px/1 var(--font-body-family, sans-serif);padding:8px 10px;border-radius:12px;box-shadow:0 6px 16px rgba(11,24,64,.18);pointer-events:none">-{{ fc_po_off }}%</span>
+    <span class="fc-pc-off" style="position:absolute;{% if pos == 'bottom' %}bottom:10px{% else %}top:10px{% endif %};right:10px;z-index:3;background:#19C37D;color:#071631;font:900 15px/1 var(--font-body-family, sans-serif);padding:8px 10px;border-radius:12px;box-shadow:0 6px 16px rgba(11,24,64,.18);pointer-events:none">-{{ fc_po_off }}%</span>
   {%- endif -%}
 {%- endif -%}
