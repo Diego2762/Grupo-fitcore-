@@ -26,7 +26,7 @@
     <div class="fc-best-head">
       <span class="fc-ellas-eyebrow"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.1 0 3.6 1.2 4.3 2.4.7-1.2 2.2-2.4 4.3-2.4 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z"/></svg>{{ section.settings.eyebrow | default: 'Para ellas' }}</span>
       <h2>{{ section.settings.title | default: 'Hecho para ellas 💪✨' }}</h2>
-      <p>{{ section.settings.sub | default: 'Pilates, gym o la sala de tu casa: tú pones el plan 🧘‍♀️ Vitaminas, biotina para pelo y uñas, proteína y pesas para tu rutina. Todo original, cero imitaciones 💖' }}</p>
+      <p>{{ section.settings.sub | default: 'Tu era de pilates y autocuidado empieza aquí 🎀 Vitaminas, biotina para pelo y uñas, proteína y pesas para entrenar a tu ritmo.' }}</p>
     </div>
     <div class="fc-best-grid">
       {%- comment -%} product_list no tiene el tope de 20 handles de all_products {%- endcomment -%}
@@ -116,7 +116,7 @@
   "settings": [
     { "type": "text", "id": "eyebrow", "label": "Etiqueta", "default": "Para ellas" },
     { "type": "text", "id": "title", "label": "Título", "default": "Hecho para ellas 💪✨" },
-    { "type": "textarea", "id": "sub", "label": "Subtítulo", "default": "Pilates, gym o la sala de tu casa: tú pones el plan 🧘‍♀️ Vitaminas, biotina para pelo y uñas, proteína y pesas para tu rutina. Todo original, cero imitaciones 💖" },
+    { "type": "textarea", "id": "sub", "label": "Subtítulo", "default": "Tu era de pilates y autocuidado empieza aquí 🎀 Vitaminas, biotina para pelo y uñas, proteína y pesas para entrenar a tu ritmo." },
     { "type": "product_list", "id": "products", "label": "Productos", "limit": 8 },
     { "type": "text", "id": "pref_variants", "label": "Variante destacada (handle:texto de la variante, separados por coma)", "default": "dymatize-iso100-whey-protein-isolate:Cookies" },
     { "type": "textarea", "id": "handles", "label": "Handles de productos (separados por coma)", "default": "optimum-nutrition-opti-women,natures-bounty-hair-skin-nails-60-caplets,dymatize-iso100-whey-protein-isolate,forfit-pesas-para-muneca-y-tobillo-triangulares" }
