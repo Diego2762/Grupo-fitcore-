@@ -472,7 +472,7 @@
         <p>{{ section.settings.best_sub | default: 'Los favoritos que más se mueven: proteínas, creatina, pre-entrenos y más. Todos 100% originales y listos para despacho el mismo día.' }}</p>
       </div>
       <div class="fc-best-grid">
-        {%- assign fc_best_default = 'optimum-nutrition-gold-standard-100-whey,dymatize-iso100-whey-protein-isolate,optimum-nutrition-micronized-creatine-powder,c4-original-pre-entreno' -%}
+        {%- assign fc_best_default = 'optimum-nutrition-gold-standard-100-whey,nutrex-creatine-monohydrate-300-g,optimum-nutrition-micronized-creatine-powder,c4-original-pre-entreno' -%}
         {%- assign fc_best_str = section.settings.best_handles | default: fc_best_default -%}
         {%- assign fc_best_handles = fc_best_str | split: ',' -%}
         {%- for fc_h in fc_best_handles -%}
@@ -492,10 +492,16 @@
                 {%- if fc_prod.vendor != blank -%}<span class="fc-pc-vendor">{{ fc_prod.vendor }}</span>{%- endif -%}
                 <a class="fc-pc-title" href="{{ fc_prod.url }}">{{ fc_prod.title }}</a>
                 <div class="fc-pc-foot">
-                  {%- assign fc_divisa = fc_prod.price | times: 100 | divided_by: 115 -%}
+                  {%- capture fc_pb -%}{%- render 'fitcore-promo', product: fc_prod, part: 'bcv' -%}{%- endcapture -%}
+                  {%- assign fc_pbn = fc_pb | strip | plus: 0 -%}
+                  {%- assign fc_bcv_now = fc_prod.price -%}
+                  {%- if fc_pbn > 0 -%}{%- assign fc_bcv_now = fc_pbn -%}{%- endif -%}
+                  {%- assign fc_divisa = fc_bcv_now | times: 100 | divided_by: 115 -%}
+                  {%- assign fc_old_div = fc_prod.price | times: 100 | divided_by: 115 -%}
                   <div class="fc-pc-prices">
-                    <span class="fc-pc-price fc-pc-price--divisa">{{ fc_divisa | money }}<span class="fc-pc-cur">Divisa</span></span>
-                    <span class="fc-pc-price">{{ fc_prod.price | money }}<span class="fc-pc-cur">BCV</span></span>
+                    {%- render 'fitcore-promo', product: fc_prod, part: 'chips' -%}
+                    <span class="fc-pc-price fc-pc-price--divisa">{{ fc_divisa | money }}{% if fc_pbn > 0 %}<s style="font-weight:500;font-size:.78em;opacity:.55;color:#0B1840">{{ fc_old_div | money }}</s>{% endif %}<span class="fc-pc-cur">Divisa</span></span>
+                    <span class="fc-pc-price">{{ fc_bcv_now | money }}{% if fc_pbn > 0 %}<s style="font-weight:500;font-size:.78em;opacity:.55">{{ fc_prod.price | money }}</s>{% endif %}<span class="fc-pc-cur">BCV</span></span>
                   </div>
                   {%- if fc_var and fc_var.available -%}
                     <form method="post" action="{{ routes.cart_add_url }}" class="fc-pc-form" data-fc-add>
@@ -823,7 +829,7 @@
         <h2 class="fc-h">Envíos de suplementos a toda Venezuela</h2>
         <ul class="fc-list">
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><div><b>Entrega mismo día</b><span>En Valera y sus alrededores.</span></div></li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg><div><b>Envío gratis</b><span>En Valera y sus alrededores desde $30.</span></div></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg><div><b>Envío gratis</b><span>En Valera y sus alrededores desde $45.</span></div></li>
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 3h15v13H1z"/><path d="M16 8h4l3 3v5h-7z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg><div><b>Envío nacional</b><span>A todo el país en 1 a 2 días hábiles (MRW o Tealca).</span></div></li>
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg><div><b>Retiro en tienda</b><span>Recoge tu pedido en CC Plaza, Valera.</span></div></li>
         </ul>
@@ -866,11 +872,11 @@
         </details>
         <details class="fc-faq-item fc-reveal" style="--fc-d:240ms">
           <summary>¿El envío es gratis?</summary>
-          <p>En Valera y sus alrededores el envío es gratis en compras desde $30, con entrega el mismo día. Al resto del país el flete se paga a destino (al recibir), con envío por MRW o Tealca.</p>
+          <p>En Valera y sus alrededores el envío es gratis en compras desde $45, con entrega el mismo día. Al resto del país el flete se paga a destino (al recibir), con envío por MRW o Tealca.</p>
         </details>
         <details class="fc-faq-item fc-reveal" style="--fc-d:270ms">
           <summary>¿A qué zonas hacen entregas?</summary>
-          <p>Entregamos en toda Venezuela. En Valera y sus alrededores el envío es gratis desde $30 y llega el mismo día. Al resto del país enviamos por MRW o Tealca: llega en 1 a 2 días hábiles. También puedes retirar tu pedido en la tienda del CC Plaza, Valera.</p>
+          <p>Entregamos en toda Venezuela. En Valera y sus alrededores el envío es gratis desde $45 y llega el mismo día. Al resto del país enviamos por MRW o Tealca: llega en 1 a 2 días hábiles. También puedes retirar tu pedido en la tienda del CC Plaza, Valera.</p>
         </details>
         <details class="fc-faq-item fc-reveal" style="--fc-d:300ms">
           <summary>¿Tienen tienda física?</summary>
@@ -1123,7 +1129,7 @@
     { "type": "header", "content": "Los más vendidos" },
     { "type": "text", "id": "best_title", "label": "Título", "default": "Los más vendidos" },
     { "type": "textarea", "id": "best_sub", "label": "Subtítulo", "default": "Los favoritos que más se mueven: proteínas, creatina, pre-entrenos y más. Todos 100% originales y listos para despacho el mismo día." },
-    { "type": "textarea", "id": "best_handles", "label": "Handles de productos (separados por coma)", "default": "optimum-nutrition-gold-standard-100-whey,dymatize-iso100-whey-protein-isolate,optimum-nutrition-micronized-creatine-powder,c4-original-pre-entreno" },
+    { "type": "textarea", "id": "best_handles", "label": "Handles de productos (separados por coma)", "default": "optimum-nutrition-gold-standard-100-whey,nutrex-creatine-monohydrate-300-g,optimum-nutrition-micronized-creatine-powder,c4-original-pre-entreno" },
     { "type": "header", "content": "WhatsApp" },
     { "type": "text", "id": "whatsapp", "label": "Número (solo dígitos, con país)", "default": "584220384328" },
     { "type": "text", "id": "whatsapp_msg", "label": "Mensaje precargado", "default": "Hola Fitcore Store, quiero hacer un pedido" },
