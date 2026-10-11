@@ -164,6 +164,8 @@
 
 {%- comment -%} Fitcore: en movil un poco menos de espaciado para que el anuncio quepa en 2 lineas {%- endcomment -%}
 <style>
+  /* Fitcore: sin flecha en el anuncio (el texto sigue siendo enlace) */
+  .announcement-bar__message svg { display: none; }
   @media screen and (max-width: 749px) {
     .announcement-bar__message { letter-spacing: .02rem; }
   }
