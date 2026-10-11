@@ -1,0 +1,186 @@
+{%- comment -%}
+  Fitcore Store · Página "Ofertas de lanzamiento" (B2C)
+  Espejo de los descuentos automáticos de Shopify (1 al 15 nov 2026, hora Venezuela):
+  Nutrex Creatine a $14.99 · Nature's Bounty 3x2 · Envío gratis Valera sin mínimo.
+  Los precios reales los aplica Shopify en el carrito; esta página solo los comunica.
+{%- endcomment -%}
+
+{%- liquid
+  assign wa = section.settings.whatsapp | default: '584220384328'
+  assign wa_msg_enc = section.settings.whatsapp_msg | default: 'Hola Fitcore Store, quiero aprovechar las ofertas de lanzamiento' | url_encode
+  assign creatine = section.settings.creatine_product
+  assign nb_col = section.settings.nb_collection
+  assign start_iso = section.settings.start_iso | default: '2026-11-01T00:00:00-04:00'
+  assign end_iso = section.settings.end_iso | default: '2026-11-15T23:59:59-04:00'
+-%}
+
+<style>
+  #fc-of-{{ section.id }} { --fc-navy:#0B1840; --fc-purple:#3B1F6B; --fc-accent:#19C37D; --fc-darker:#071631; --fc-line:#e7eaf2; --fc-muted:#56607a; }
+  #fc-of-{{ section.id }} .fc-wrap { max-width:1140px; margin:0 auto; padding:0 22px; }
+  #fc-of-{{ section.id }} .fc-of-hero { position:relative; overflow:hidden; color:#fff; padding:clamp(52px,7vw,84px) 0; background:radial-gradient(720px 420px at 12% -20%, rgba(59,31,107,.85) 0%, transparent 62%), linear-gradient(120deg, var(--fc-navy) 0%, var(--fc-purple) 100%); }
+  #fc-of-{{ section.id }} .fc-of-hero:before { content:""; position:absolute; inset:0; background:radial-gradient(circle at 84% 22%, rgba(25,195,125,.28), transparent 46%); pointer-events:none; }
+  #fc-of-{{ section.id }} .fc-of-hero .fc-wrap { position:relative; z-index:1; }
+  #fc-of-{{ section.id }} .fc-of-eyebrow { display:inline-block; background:rgba(25,195,125,.14); border:1px solid rgba(25,195,125,.4); color:#7ff0bd; font:700 12px/1 var(--font-body-family,sans-serif); letter-spacing:.06em; text-transform:uppercase; padding:9px 15px; border-radius:999px; margin:0 0 20px; }
+  #fc-of-{{ section.id }} .fc-of-hero h1 { font-family:var(--font-heading-family,sans-serif); font-weight:800; font-size:clamp(30px,4.6vw,52px); line-height:1.05; letter-spacing:-.02em; margin:0; max-width:17ch; }
+  #fc-of-{{ section.id }} .fc-of-hero h1 span { color:var(--fc-accent); }
+  #fc-of-{{ section.id }} .fc-of-hero p.fc-sub { font:400 clamp(16px,1.6vw,19px)/1.55 var(--font-body-family,sans-serif); color:rgba(255,255,255,.82); margin:16px 0 0; max-width:56ch; }
+  #fc-of-{{ section.id }} .fc-count { display:flex; gap:10px; margin:28px 0 0; flex-wrap:wrap; }
+  #fc-of-{{ section.id }} .fc-count div { background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.18); border-radius:13px; padding:12px 16px; min-width:74px; text-align:center; }
+  #fc-of-{{ section.id }} .fc-count b { display:block; font:800 28px/1 var(--font-heading-family,sans-serif); }
+  #fc-of-{{ section.id }} .fc-count small { display:block; margin-top:6px; font:700 10.5px/1 var(--font-body-family,sans-serif); letter-spacing:.1em; text-transform:uppercase; color:rgba(255,255,255,.6); }
+  #fc-of-{{ section.id }} .fc-count-label { font:600 14px/1.4 var(--font-body-family,sans-serif); color:rgba(255,255,255,.75); margin:26px 0 0; }
+  #fc-of-{{ section.id }} .fc-sec { background:#fff; padding:clamp(44px,6vw,70px) 0; }
+  #fc-of-{{ section.id }} .fc-sec--alt { background:#F6F7FA; }
+  #fc-of-{{ section.id }} .fc-head { text-align:center; max-width:640px; margin:0 auto clamp(28px,4vw,42px); }
+  #fc-of-{{ section.id }} .fc-head h2 { font-family:var(--font-heading-family,sans-serif); color:var(--fc-navy); font-weight:800; font-size:clamp(24px,3.2vw,36px); letter-spacing:-.02em; margin:0; }
+  #fc-of-{{ section.id }} .fc-head p { font:400 16px/1.55 var(--font-body-family,sans-serif); color:var(--fc-muted); margin:12px 0 0; }
+  #fc-of-{{ section.id }} .fc-offers { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+  #fc-of-{{ section.id }} .fc-offer { position:relative; display:flex; flex-direction:column; background:#fff; border:1px solid var(--fc-line); border-radius:20px; padding:26px 24px; transition:transform .2s ease, box-shadow .2s ease; }
+  #fc-of-{{ section.id }} .fc-offer:hover { transform:translateY(-4px); box-shadow:0 22px 46px rgba(11,24,64,.1); }
+  #fc-of-{{ section.id }} .fc-tag { align-self:flex-start; background:var(--fc-accent); color:var(--fc-darker); font:800 11.5px/1 var(--font-body-family,sans-serif); letter-spacing:.1em; text-transform:uppercase; padding:8px 12px; border-radius:99px; margin:0 0 16px; }
+  #fc-of-{{ section.id }} .fc-offer h3 { color:var(--fc-navy); font:800 21px/1.2 var(--font-body-family,sans-serif); margin:0 0 8px; }
+  #fc-of-{{ section.id }} .fc-offer p { color:var(--fc-muted); font:400 14.5px/1.55 var(--font-body-family,sans-serif); margin:0 0 18px; }
+  #fc-of-{{ section.id }} .fc-offer img { width:100%; aspect-ratio:1/1; object-fit:contain; background:#F6F7FA; border-radius:14px; margin:0 0 16px; }
+  #fc-of-{{ section.id }} .fc-price { display:flex; align-items:baseline; gap:10px; margin:0 0 18px; }
+  #fc-of-{{ section.id }} .fc-price b { font:800 34px/1 var(--font-heading-family,sans-serif); color:var(--fc-navy); }
+  #fc-of-{{ section.id }} .fc-price s { color:#8a93a8; font:500 16px/1 var(--font-body-family,sans-serif); }
+  #fc-of-{{ section.id }} .fc-big { font:800 40px/1 var(--font-heading-family,sans-serif); color:var(--fc-purple); margin:0 0 18px; }
+  #fc-of-{{ section.id }} .fc-note { color:#8a93a8; font:400 12.5px/1.5 var(--font-body-family,sans-serif); margin:12px 0 0; }
+  #fc-of-{{ section.id }} .fc-btn { margin-top:auto; display:inline-flex; justify-content:center; align-items:center; font:700 15px/1 var(--font-body-family,sans-serif); text-decoration:none; padding:15px 22px; border-radius:11px; background:var(--fc-navy); color:#fff; transition:transform .18s ease, background .18s ease; }
+  #fc-of-{{ section.id }} .fc-btn:hover { transform:translateY(-2px); background:var(--fc-purple); }
+  #fc-of-{{ section.id }} .fc-btn--wa { background:transparent; color:#fff; border:1.5px solid rgba(255,255,255,.35); }
+  #fc-of-{{ section.id }} .fc-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+  #fc-of-{{ section.id }} .fc-pc { text-decoration:none; border:1px solid var(--fc-line); border-radius:16px; padding:14px; background:#fff; display:block; transition:transform .2s ease, box-shadow .2s ease; }
+  #fc-of-{{ section.id }} .fc-pc:hover { transform:translateY(-3px); box-shadow:0 16px 34px rgba(11,24,64,.1); }
+  #fc-of-{{ section.id }} .fc-pc img { width:100%; aspect-ratio:1/1; object-fit:contain; background:#F6F7FA; border-radius:11px; }
+  #fc-of-{{ section.id }} .fc-pc span { display:block; color:var(--fc-navy); font:700 14px/1.35 var(--font-body-family,sans-serif); margin-top:10px; }
+  #fc-of-{{ section.id }} .fc-pc em { display:block; font-style:normal; color:var(--fc-purple); font:700 12px/1 var(--font-body-family,sans-serif); margin-top:8px; }
+  #fc-of-{{ section.id }} .fc-final { background:linear-gradient(150deg,var(--fc-navy),var(--fc-darker)); color:#fff; text-align:center; padding:clamp(46px,6vw,68px) 0; }
+  #fc-of-{{ section.id }} .fc-final h2 { font-family:var(--font-heading-family,sans-serif); font-weight:800; font-size:clamp(24px,3.2vw,36px); margin:0 0 12px; }
+  #fc-of-{{ section.id }} .fc-final p { color:rgba(255,255,255,.75); font:400 16px/1.55 var(--font-body-family,sans-serif); margin:0 auto 24px; max-width:52ch; }
+  #fc-of-{{ section.id }} .fc-final .fc-btn { margin:0; }
+  @media (max-width:900px){ #fc-of-{{ section.id }} .fc-offers { grid-template-columns:1fr; } #fc-of-{{ section.id }} .fc-grid { grid-template-columns:repeat(2,1fr); } }
+</style>
+
+<div id="fc-of-{{ section.id }}" data-start="{{ start_iso }}" data-end="{{ end_iso }}">
+  <section class="fc-of-hero">
+    <div class="fc-wrap">
+      <span class="fc-of-eyebrow">{{ section.settings.eyebrow | default: 'Ofertas de lanzamiento' }}</span>
+      <h1>{{ section.settings.title | default: 'Ofertas de lanzamiento de Fitcore Store' }}</h1>
+      <p class="fc-sub">{{ section.settings.subtitle | default: 'Del 1 al 15 de noviembre. Marcas originales importadas de EE.UU. con precios de inauguración, sin cupones: el descuento se aplica solo en tu carrito.' }}</p>
+      <p class="fc-count-label" data-of-label></p>
+      <div class="fc-count" data-of-count hidden>
+        <div><b data-d>00</b><small>Días</small></div>
+        <div><b data-h>00</b><small>Horas</small></div>
+        <div><b data-m>00</b><small>Min</small></div>
+        <div><b data-s>00</b><small>Seg</small></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="fc-sec">
+    <div class="fc-wrap">
+      <div class="fc-head">
+        <h2>Tres ofertas, un solo carrito</h2>
+        <p>Se aplican automáticamente mientras dure el lanzamiento. Hasta agotar existencias.</p>
+      </div>
+      <div class="fc-offers">
+        <article class="fc-offer">
+          <span class="fc-tag">Precio de lanzamiento</span>
+          {%- if creatine != blank and creatine.featured_image -%}
+            <img src="{{ creatine.featured_image | image_url: width: 600 }}" alt="{{ creatine.title | escape }}" loading="lazy" width="300" height="300">
+          {%- endif -%}
+          <h3>{{ creatine.title | default: 'Nutrex Creatine Monohydrate (300 g)' }}</h3>
+          <p>Creatina monohidratada pura, el básico de fuerza y volumen, a precio de inauguración.</p>
+          <div class="fc-price"><b>$14.99</b>{%- if creatine != blank -%}<s>{{ creatine.price | money }}</s>{%- endif -%}</div>
+          <a class="fc-btn" href="{{ creatine.url | default: '/search?q=nutrex+creatine' }}">Ver producto</a>
+          <p class="fc-note">Descuento automático por producto, un precio por unidad.</p>
+        </article>
+
+        <article class="fc-offer">
+          <span class="fc-tag">Lleva 3, paga 2</span>
+          <h3>Nature's Bounty 3x2</h3>
+          <p>Elige 3 vitaminas Nature's Bounty en elegibles y la más económica va gratis. Biotina, Vitamina C, D3, B12 y más.</p>
+          <div class="fc-big">3x2</div>
+          <a class="fc-btn" href="{{ nb_col.url | default: '/search?q=nature%27s+bounty' }}">Armar mi 3x2</a>
+          <p class="fc-note">Aplica a los productos Nature's Bounty elegibles de la promoción.</p>
+        </article>
+
+        <article class="fc-offer">
+          <span class="fc-tag">Envío gratis Valera</span>
+          <h3>Sin mínimo de compra</h3>
+          <p>Durante el lanzamiento, tu pedido en Valera llega gratis el mismo día, sea del monto que sea. Fuera de Valera aplican las tarifas normales.</p>
+          <div class="fc-big">$0</div>
+          <a class="fc-btn" href="{{ routes.all_products_collection_url }}">Ir a comprar</a>
+          <p class="fc-note">Fuera de la promoción: envío gratis en Valera desde $30.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  {%- if nb_col != blank and nb_col.products_count > 0 -%}
+  <section class="fc-sec fc-sec--alt">
+    <div class="fc-wrap">
+      <div class="fc-head"><h2>Elegibles para el 3x2</h2><p>Mezcla los que quieras.</p></div>
+      <div class="fc-grid">
+        {%- for p in nb_col.products limit: 8 -%}
+          <a class="fc-pc" href="{{ p.url }}">
+            {%- if p.featured_image -%}<img src="{{ p.featured_image | image_url: width: 400 }}" alt="{{ p.title | escape }}" loading="lazy" width="200" height="200">{%- endif -%}
+            <span>{{ p.title }}</span><em>{{ p.price | money }}</em>
+          </a>
+        {%- endfor -%}
+      </div>
+    </div>
+  </section>
+  {%- endif -%}
+
+  <section class="fc-final">
+    <div class="fc-wrap">
+      <h2>¿Dudas antes de comprar?</h2>
+      <p>Escríbenos por WhatsApp y te ayudamos a armar tu pedido.</p>
+      <a class="fc-btn" style="background:#fff;color:var(--fc-navy);display:inline-flex" href="https://wa.me/{{ wa }}?text={{ wa_msg_enc }}" target="_blank" rel="noopener">Escribir por WhatsApp</a>
+    </div>
+  </section>
+</div>
+
+<script>
+(function(){
+  var root = document.getElementById('fc-of-{{ section.id }}'); if(!root) return;
+  var start = new Date(root.dataset.start).getTime(), end = new Date(root.dataset.end).getTime();
+  var box = root.querySelector('[data-of-count]'), label = root.querySelector('[data-of-label]');
+  var el = {d:box.querySelector('[data-d]'),h:box.querySelector('[data-h]'),m:box.querySelector('[data-m]'),s:box.querySelector('[data-s]')};
+  function pad(n){ return (n<10?'0':'')+n; }
+  function tick(){
+    var now = Date.now(), t;
+    if (isNaN(start) || isNaN(end)) { return; }
+    if (now < start) { t = start-now; label.textContent = 'Empieza en:'; }
+    else if (now <= end) { t = end-now; label.textContent = 'Termina en:'; }
+    else { box.hidden = true; label.textContent = 'Las ofertas de lanzamiento ya terminaron. Escríbenos para conocer las próximas.'; return; }
+    box.hidden = false;
+    el.d.textContent = pad(Math.floor(t/864e5)); el.h.textContent = pad(Math.floor(t%864e5/36e5));
+    el.m.textContent = pad(Math.floor(t%36e5/6e4)); el.s.textContent = pad(Math.floor(t%6e4/1e3));
+    setTimeout(tick, 1000);
+  }
+  tick();
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Fitcore Ofertas",
+  "tag": "section",
+  "class": "fitcore-ofertas",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Etiqueta superior", "default": "Ofertas de lanzamiento" },
+    { "type": "text", "id": "title", "label": "Título (hero)", "default": "Ofertas de lanzamiento de Fitcore Store" },
+    { "type": "textarea", "id": "subtitle", "label": "Subtítulo (hero)", "default": "Del 1 al 15 de noviembre. Marcas originales importadas de EE.UU. con precios de inauguración, sin cupones: el descuento se aplica solo en tu carrito." },
+    { "type": "text", "id": "start_iso", "label": "Inicio (ISO, hora Venezuela)", "default": "2026-11-01T00:00:00-04:00" },
+    { "type": "text", "id": "end_iso", "label": "Fin (ISO, hora Venezuela)", "default": "2026-11-15T23:59:59-04:00" },
+    { "type": "product", "id": "creatine_product", "label": "Producto: Nutrex Creatine" },
+    { "type": "collection", "id": "nb_collection", "label": "Colección elegible 3x2 (Nature's Bounty)" },
+    { "type": "text", "id": "whatsapp", "label": "WhatsApp (solo dígitos)", "default": "584220384328" },
+    { "type": "text", "id": "whatsapp_msg", "label": "Mensaje precargado", "default": "Hola Fitcore Store, quiero aprovechar las ofertas de lanzamiento" }
+  ],
+  "presets": [ { "name": "Fitcore Ofertas" } ]
+}
+{% endschema %}

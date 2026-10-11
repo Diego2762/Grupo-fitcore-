@@ -1,0 +1,9 @@
+{
+  "sections": {
+    "main": {
+      "type": "fitcore-ofertas",
+      "settings": {}
+    }
+  },
+  "order": ["main"]
+}
