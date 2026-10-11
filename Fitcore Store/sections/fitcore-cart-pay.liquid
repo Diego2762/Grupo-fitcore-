@@ -3,6 +3,8 @@
   - Barra de progreso a envío gratis (compras sobre el umbral, aplica a entrega local).
   - El precio del carrito (variant.price) ES el precio en bolívares BCV: es lo que se factura.
   - En divisa el cliente aplica el cupón MEJORPRECIO en el checkout: divisa = BCV / 1.15 (= precio PV, gancho .99).
+  - Desglose de puntos del programa de recompensas (Smile): N puntos por cada $1
+    del total con la forma de pago elegida (divisa = total con descuento).
   - Selector "¿Cómo quieres recibir tu pedido?" (nacional / local / retiro).
     Los campos cambian según la opción. Se guardan como atributos del carrito.
 {%- endcomment -%}
@@ -18,6 +20,8 @@
   if progress > 100
     assign progress = 100
   endif
+  assign pts_per_usd = section.settings.points_per_usd | default: 5
+  assign pts_name = section.settings.points_name | default: 'puntos'
   assign current_method = cart.attributes['Método de pago']
   assign current_delivery = cart.attributes['Método de entrega']
   assign current_agency = cart.attributes['Agencia de envío']
@@ -32,6 +36,12 @@
   if current_method == 'Bolívares BCV (Pago Móvil / Transferencia)'
     assign is_bs = true
   endif
+  if is_bs
+    assign pts_base = base
+  else
+    assign pts_base = divisa_total
+  endif
+  assign pts_earn = pts_base | divided_by: 100 | times: pts_per_usd
   assign is_nac = false
   if current_delivery == 'Envío nacional (fuera de Trujillo)'
     assign is_nac = true
@@ -126,14 +136,24 @@
   #fc-pay-{{ section.id }} .fc-map-confirm:active { transform:scale(.99); }
   #fc-pay-{{ section.id }} .fc-map-confirm.is-done { background:var(--fc-accent); color:#062b1a; }
   #fc-pay-{{ section.id }} .fc-local-grid { margin-top:0; }
-  @media (max-width:780px){ #fc-pay-{{ section.id }} { padding:4px 16px 8px; } }
+  #fc-pay-{{ section.id }} .fc-pts { display:flex; align-items:center; gap:12px; background:#fff; border:1.5px solid #e3dcf3; border-radius:16px; padding:14px 18px; margin-bottom:16px; }
+  #fc-pay-{{ section.id }} .fc-pts-ico { flex:0 0 auto; width:36px; height:36px; border-radius:10px; background:#f1ecfa; color:var(--fc-purple); display:flex; align-items:center; justify-content:center; }
+  #fc-pay-{{ section.id }} .fc-pts-ico svg { width:20px; height:20px; }
+  #fc-pay-{{ section.id }} .fc-pts-txt { flex:1 1 auto; min-width:0; font-size:14px; color:var(--fc-navy); line-height:1.35; }
+  #fc-pay-{{ section.id }} .fc-pts-txt b { color:var(--fc-purple); font-weight:800; }
+  #fc-pay-{{ section.id }} .fc-pts-txt small { display:block; color:var(--fc-muted); font-size:12px; margin-top:2px; }
+  #fc-pay-{{ section.id }} .fc-pts-btn { flex:0 0 auto; border:0; border-radius:10px; background:var(--fc-purple); color:#fff; font-weight:700; font-size:13px; padding:9px 14px; cursor:pointer; }
+  #fc-pay-{{ section.id }} .fc-pts-btn:hover { background:var(--fc-navy); }
+  #fc-pay-{{ section.id }} .fc-pts-btn[hidden] { display:none; }
+  @media (max-width:780px){ #fc-pay-{{ section.id }} { padding:4px 16px 8px; } #fc-pay-{{ section.id }} .fc-pts { flex-wrap:wrap; } }
 </style>
 
 <div id="fc-pay-{{ section.id }}"
   data-base-money="{{ base | money }}"
   data-divisa-money="{{ divisa_total | money }}"
   data-discount="{{ discount }}"
-  data-threshold-cents="{{ threshold_cents }}">
+  data-threshold-cents="{{ threshold_cents }}"
+  data-pts-per-usd="{{ pts_per_usd }}">
 
   <div class="fc-pay-ship{% if remaining <= 0 %} is-free{% endif %}">
     {%- if remaining > 0 -%}
@@ -142,6 +162,15 @@
       <p class="fc-pay-ship-msg free"><span class="fc-free-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>¡Envío gratis!</span> <span><b>Tienes entrega local gratis en Valera y Trujillo.</b> También puedes retirar gratis en la tienda del CC Plaza.</span></p>
     {%- endif -%}
     <div class="fc-pay-track"><div class="fc-pay-fill" style="width:{{ progress }}%"></div></div>
+  </div>
+
+  <div class="fc-pts" data-pts>
+    <span class="fc-pts-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7M7.5 8a2.5 2.5 0 0 1 0-5C11 3 12 8 12 8s1-5 4.5-5a2.5 2.5 0 0 1 0 5"/></svg></span>
+    <span class="fc-pts-txt">
+      Con esta compra ganas <b data-pts-earn>{{ pts_earn }}</b> {{ pts_name | escape }}.
+      <small>{{ pts_per_usd }} {{ pts_name | escape }} por cada $1 del total con tu forma de pago.{% unless customer %} Inicia sesión o crea tu cuenta para acumularlos.{% endunless %}</small>
+    </span>
+    <button type="button" class="fc-pts-btn" data-pts-open hidden>Recompensas</button>
   </div>
 
   <div class="fc-pay-box">
@@ -283,6 +312,12 @@
       divisa: 'Divisa (Zelle, efectivo o tarjeta)',
       bs: 'Bolívares BCV (Pago Móvil / Transferencia)'
     };
+    // Clave ASCII para reglas de checkout (HidePay): forma_pago = BCV | DIVISA.
+    // 'Método de pago' queda como etiqueta legible para el personal.
+    var methodCode = { divisa: 'DIVISA', bs: 'BCV' };
+    function methodAttrs(m) {
+      return { 'Método de pago': methodLabel[m], 'forma_pago': methodCode[m] };
+    }
     var recvLabel = {
       nacional: 'Envío nacional (fuera de Trujillo)',
       local: 'Entrega local (Valera y Trujillo)',
@@ -307,7 +342,8 @@
         var input = opt.querySelector('input');
         if (input) input.checked = true;
         paint(m);
-        post({ attributes: { 'Método de pago': methodLabel[m] } });
+        paintPoints();
+        post({ attributes: methodAttrs(m) });
       });
     });
 
@@ -317,6 +353,12 @@
     // carrito en pantalla NO cambia: el descuento solo se fija en el instante
     // de pagar (nativo /cart/update.js, parametro discount).
     var goingToCheckout = false;
+    // Si el cliente vuelve del checkout con "atras", el navegador restaura la
+    // pagina desde cache (bfcache) con goingToCheckout=true y el descuento
+    // viejo: el siguiente Pagar se saltaba la logica. Recargar limpia todo.
+    window.addEventListener('pageshow', function (e) {
+      if (e.persisted) window.location.reload();
+    });
     function selectedMethod() {
       var checked = root.querySelector('[data-pay-opts] input[type="radio"]:checked');
       return checked ? checked.value : 'divisa';
@@ -340,10 +382,17 @@
       goingToCheckout = true;
       e.preventDefault();
       e.stopPropagation();
-      var code = selectedMethod() === 'bs' ? '' : 'MEJORPRECIO';
+      var m = selectedMethod();
+      var code = m === 'bs' ? '' : 'MEJORPRECIO';
       var root_path = (window.Shopify && Shopify.routes && Shopify.routes.root) ? Shopify.routes.root : '/';
       function go() { window.location.href = root_path + 'checkout'; }
-      post({ discount: code }).then(go).catch(go);
+      // Fija descuento y forma de pago justo antes del checkout (aunque el
+      // cliente no haya tocado el selector, queda la opcion marcada).
+      // Dos llamadas: combinar discount + attributes en una sola no aplicaba
+      // el cupon. Primero la forma de pago, luego el descuento (como antes).
+      post({ attributes: methodAttrs(m) })
+        .then(function () { return post({ discount: code }); })
+        .then(go).catch(go);
     }, true);
 
     // Mantener SIEMPRE el carrito en pantalla en precio BCV completo (sin
@@ -544,8 +593,32 @@
       return '$' + (cents / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
 
+    // ---- Puntos del programa de recompensas ----
+    // Puntos = dolares enteros del total con la forma de pago elegida x N.
+    var ptsPerUsd = parseInt(root.getAttribute('data-pts-per-usd'), 10) || 0;
+    var ptsEarn = root.querySelector('[data-pts-earn]');
+    var ptsOpen = root.querySelector('[data-pts-open]');
+    var lastBase = parseInt('{{ base }}', 10) || 0;
+    function paintPoints() {
+      if (!ptsEarn) return;
+      var amount = selectedMethod() === 'bs' ? lastBase : Math.round(lastBase * 100 / 115);
+      ptsEarn.textContent = (Math.floor(amount / 100) * ptsPerUsd).toLocaleString('es-VE');
+    }
+    // Boton "Recompensas" abre el panel de Smile si el widget esta cargado.
+    function smileReady() { return window.SmileUI && typeof window.SmileUI.openPanel === 'function'; }
+    if (ptsOpen) {
+      var smileTries = 0;
+      var smileWait = setInterval(function () {
+        if (smileReady()) { ptsOpen.hidden = false; clearInterval(smileWait); }
+        else if (++smileTries > 40) clearInterval(smileWait);
+      }, 250);
+      ptsOpen.addEventListener('click', function () { if (smileReady()) window.SmileUI.openPanel(); });
+    }
+
     function repaint(base) {
       if (typeof base !== 'number' || isNaN(base)) return;
+      lastBase = base;
+      paintPoints();
       // Totales: base = BCV (lo que se factura); divisa = base / 1.15 (= precio PV)
       if (trowDivisa) trowDivisa.textContent = money(Math.round(base * 100 / 115));
       if (trowBs) trowBs.textContent = money(base);
@@ -591,7 +664,9 @@
   "class": "fitcore-cart-pay",
   "settings": [
     { "type": "range", "id": "divisa_discount_pct", "min": 0, "max": 50, "step": 1, "unit": "%", "label": "Descuento pagando en divisa (cupón MEJORPRECIO)", "default": 13, "info": "Debe coincidir con el porcentaje del cupón MEJORPRECIO en Shopify. El BCV es el precio base facturado." },
-    { "type": "number", "id": "free_ship_threshold", "label": "Monto para entrega local gratis (USD)", "default": 30 }
+    { "type": "number", "id": "free_ship_threshold", "label": "Monto para entrega local gratis (USD)", "default": 30 },
+    { "type": "number", "id": "points_per_usd", "label": "Puntos por cada $1 gastado", "default": 5, "info": "Debe coincidir con la regla de ganancia del programa de puntos (Smile)." },
+    { "type": "text", "id": "points_name", "label": "Nombre de los puntos", "default": "puntos", "info": "Ej. FitCore Points. Igual al nombre configurado en Smile." }
   ],
   "presets": [
     { "name": "Fitcore Pago carrito" }

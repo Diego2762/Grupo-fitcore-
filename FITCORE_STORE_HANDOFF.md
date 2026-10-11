@@ -181,6 +181,7 @@ Archivos que llevan este texto: `sections/fitcore-home.liquid`, `sections/fitcor
 
 ### Pipeline de temas (CRÍTICO — el MCP NO puede escribir ni publicar el tema LIVE)
 - Flujo estándar: **editar local → commit → push → `themeDuplicate` del tema MAIN → `themeFilesUpsert` al duplicado (unpublished) → verificar `checksumMd5` → Diego publica manual en admin.** Publicar un tema NO expone la tienda (sigue tras el gate); el público entra solo cuando Diego quita la contraseña = lanzamiento.
+- **Subida de archivos al tema duplicado SIN pegar el archivo en el chat (ahorra tokens):** tras el push, `themeFilesUpsert` con `body: {type: "URL", value: "https://raw.githubusercontent.com/Diego2762/Grupo-fitcore-/<branch>/Fitcore%20Store/<ruta>"}`. Es async: esperar `processing:false` del tema duplicado antes de subir (si no, la copia pisa el archivo) y luego confirmar que `checksumMd5` = `md5sum` local. Nunca mandar el contenido completo como TEXT salvo archivos minimos.
 - Nunca editar directo el tema en vivo por MCP: la política de seguridad lo bloquea ("targets the live theme").
 - **Temas (revisar en admin por si cambian los roles):** la línea de temas va `artistic-look` → v1.7 → v1.8 (SEO local NAP+geo) → **v1.9 "OG image branded"** (staged con la imagen de link compartido). Diego publica el más nuevo cuando aprueba. Los IDs concretos cambian cada vez que se duplica; leerlos con una query de temas antes de asumir.
 
