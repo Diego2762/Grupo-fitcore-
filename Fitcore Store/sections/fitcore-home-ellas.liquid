@@ -24,8 +24,8 @@
   <div class="fc-wrap">
     <div class="fc-best-head">
       <span class="fc-ellas-eyebrow"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.1 0 3.6 1.2 4.3 2.4.7-1.2 2.2-2.4 4.3-2.4 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z"/></svg>{{ section.settings.eyebrow | default: 'Para ellas' }}</span>
-      <h2>{{ section.settings.title | default: 'Glow por dentro, fuerza por fuera' }}</h2>
-      <p>{{ section.settings.sub | default: 'Tu stack para brillar: multivitamínico, biotina para pelo y uñas, proteína ligera y pesas para tu pilates en casa. 100% original, cero fake.' }}</p>
+      <h2>{{ section.settings.title | default: 'Brilla por dentro, fuerte por fuera' }}</h2>
+      <p>{{ section.settings.sub | default: 'Tu combo para brillar: multivitamínico, biotina para pelo y uñas, proteína ligera y pesas para tu pilates en casa. Todo original, nada de imitaciones.' }}</p>
     </div>
     <div class="fc-best-grid">
       {%- for fc_h in fc_handles -%}
@@ -87,8 +87,8 @@
   "class": "fitcore-home-ellas",
   "settings": [
     { "type": "text", "id": "eyebrow", "label": "Etiqueta", "default": "Para ellas" },
-    { "type": "text", "id": "title", "label": "Título", "default": "Glow por dentro, fuerza por fuera" },
-    { "type": "textarea", "id": "sub", "label": "Subtítulo", "default": "Tu stack para brillar: multivitamínico, biotina para pelo y uñas, proteína ligera y pesas para tu pilates en casa. 100% original, cero fake." },
+    { "type": "text", "id": "title", "label": "Título", "default": "Brilla por dentro, fuerte por fuera" },
+    { "type": "textarea", "id": "sub", "label": "Subtítulo", "default": "Tu combo para brillar: multivitamínico, biotina para pelo y uñas, proteína ligera y pesas para tu pilates en casa. Todo original, nada de imitaciones." },
     { "type": "textarea", "id": "handles", "label": "Handles de productos (separados por coma)", "default": "optimum-nutrition-opti-women,natures-bounty-hair-skin-nails-60-caplets,dymatize-iso100-whey-protein-isolate,forfit-pesas-para-muneca-y-tobillo-triangulares" }
   ],
   "presets": [{ "name": "Fitcore Para ellas" }]
