@@ -117,12 +117,14 @@
   #fc-of-{{ section.id }} .promo p { margin:0; color:rgba(255,255,255,.85); font-size:15px; line-height:1.55; max-width:60ch; }
   #fc-of-{{ section.id }} .pct { font:900 clamp(54px,8vw,92px)/.9 'Inter',sans-serif; letter-spacing:-.04em; color:var(--green); text-align:center; }
   #fc-of-{{ section.id }} .pct small { display:block; margin-top:8px; font:700 12px/1 'Inter',sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); }
-  #fc-of-{{ section.id }} .steps { display:flex; gap:10px; }
-  #fc-of-{{ section.id }} .st { text-align:center; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.2); border-radius:14px; padding:12px 14px; min-width:84px; }
-  #fc-of-{{ section.id }} .st b { display:block; font:800 22px/1 'Inter',sans-serif; }
-  #fc-of-{{ section.id }} .st span { display:block; margin-top:5px; font:600 11.5px/1.25 sans-serif; color:rgba(255,255,255,.8); }
+  #fc-of-{{ section.id }} .steps { display:flex; align-items:center; gap:8px; }
+  #fc-of-{{ section.id }} .st { text-align:center; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.2); border-radius:14px; padding:12px 14px 11px; min-width:88px; }
+  #fc-of-{{ section.id }} .st svg { display:block; width:30px; height:30px; margin:0 auto; }
+  #fc-of-{{ section.id }} .st span { display:block; margin-top:7px; font:800 12px/1 'Inter',sans-serif; letter-spacing:.1em; text-transform:uppercase; color:rgba(255,255,255,.85); }
   #fc-of-{{ section.id }} .st.free { background:var(--green); border-color:var(--green); color:#071631; }
   #fc-of-{{ section.id }} .st.free span { color:#071631; }
+  #fc-of-{{ section.id }} .st-plus { font:800 22px/1 'Inter',sans-serif; color:rgba(255,255,255,.55); }
+  #fc-of-{{ section.id }} .steps-wrap small { display:block; margin-top:8px; text-align:center; font-size:12.5px; color:rgba(255,255,255,.7); }
   #fc-of-{{ section.id }} .grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:16px; }
   #fc-of-{{ section.id }} .grid--3 { grid-template-columns:repeat(3,minmax(0,1fr)); }
   #fc-of-{{ section.id }} .terms { margin:16px 0 0; padding:14px 16px; background:rgba(255,255,255,.06); border:1px solid var(--line); border-radius:12px; color:var(--muted); }
@@ -222,6 +224,7 @@
     #fc-of-{{ section.id }} .pr.bcv b { font-size:22px; }
     #fc-of-{{ section.id }} .steps { width:100%; }
     #fc-of-{{ section.id }} .st { flex:1; min-width:0; padding:10px 6px; }
+    #fc-of-{{ section.id }} .steps-wrap { grid-column:1 / -1; }
     #fc-of-{{ section.id }} .grid, #fc-of-{{ section.id }} .grid--3 { grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
     #fc-of-{{ section.id }} .prizes { grid-template-columns:1fr; }
     #fc-of-{{ section.id }} .win { padding-top:28px; }
@@ -465,10 +468,15 @@
           <h2>Lleva 3, paga 2</h2>
           <p>Mezcla las vitaminas Nature's Bounty que quieras. Por cada 3 en tu carrito, una te sale gratis. El descuento se aplica solo al pagar.</p>
         </div>
-        <div class="steps" aria-hidden="true">
-          <div class="st"><b>1</b><span>Elige 3</span></div>
-          <div class="st"><b>2</b><span>Agrégalas</span></div>
-          <div class="st free"><b>0$</b><span>Una gratis</span></div>
+        <div class="steps-wrap">
+          <div class="steps" role="img" aria-label="Llevas 3 vitaminas, pagas 2 y la tercera es gratis">
+            <div class="st"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2.5" width="10" height="3.5" rx="1"/><path d="M8 6h8v2.2c1.8.8 3 2.6 3 4.6V19a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 5 19v-6.2c0-2 1.2-3.8 3-4.6z"/><path d="M5 13h14M5 18h14"/></svg><span>Pagas</span></div>
+            <span class="st-plus" aria-hidden="true">+</span>
+            <div class="st"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2.5" width="10" height="3.5" rx="1"/><path d="M8 6h8v2.2c1.8.8 3 2.6 3 4.6V19a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 5 19v-6.2c0-2 1.2-3.8 3-4.6z"/><path d="M5 13h14M5 18h14"/></svg><span>Pagas</span></div>
+            <span class="st-plus" aria-hidden="true">+</span>
+            <div class="st free"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2.5" width="10" height="3.5" rx="1"/><path d="M8 6h8v2.2c1.8.8 3 2.6 3 4.6V19a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 5 19v-6.2c0-2 1.2-3.8 3-4.6z"/><path d="M5 13h14M5 18h14"/></svg><span>Gratis</span></div>
+          </div>
+          <small>La de menor precio va por nuestra cuenta</small>
         </div>
       </div>
       {%- if nb_col != blank and nb_col.products_count > 0 -%}
