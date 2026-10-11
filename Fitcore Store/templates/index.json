@@ -1,19 +1,17 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
+    "fitcore_ofertas_teaser": {
+      "type": "fitcore-ofertas",
+      "name": "Ofertas de apertura (adelanto)",
+      "settings": {
+        "mode": "teaser",
+        "offers_url": "/pages/ofertas"
+      }
+    },
     "fitcore_home_XPGYYb": {
       "type": "fitcore-home",
       "name": "Fitcore Inicio",
       "settings": {
-        "eyebrow": "Fitcore Store · Valera, Trujillo",
         "hero_title": "La tienda de suplementos que Venezuela estaba esperando",
         "hero_text": "<span class=\"fc-hl-g\">Marcas Top Mundiales 100% originales</span>, a precios irresistibles sin que tengas que viajar o importar tú mismo. Compra online en minutos y recíbela <span class=\"fc-hl-a\">el mismo día en Trujillo</span> o en todo el país <span class=\"fc-hl-a\">en 1 a 2 días</span>.",
         "hero_cta_label": "Comprar ahora",
@@ -24,9 +22,22 @@
         "color_purple": "#3B1F6B",
         "color_accent": "#19C37D"
       }
+    },
+    "fitcore_ellas": {
+      "type": "fitcore-home-ellas",
+      "settings": {
+        "products": [
+          "optimum-nutrition-opti-women",
+          "natures-bounty-hair-skin-nails-60-caplets",
+          "dymatize-iso100-whey-protein-isolate",
+          "forfit-pesas-para-muneca-y-tobillo-triangulares"
+        ]
+      }
     }
   },
   "order": [
-    "fitcore_home_XPGYYb"
+    "fitcore_ofertas_teaser",
+    "fitcore_home_XPGYYb",
+    "fitcore_ellas"
   ]
 }
