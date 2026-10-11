@@ -34,6 +34,12 @@
   assign amino_handles = 'nutrex-bcaa-6000,bsn-aminox-435-g,xtend-eaa' | split: ','
   assign sb_url = section.settings.supabase_url
   assign sb_key = section.settings.supabase_key
+  # Modo "teaser" (para el home): solo hero + reloj + banner de envio + boton a la pagina de ofertas
+  assign teaser = false
+  if section.settings.mode == 'teaser'
+    assign teaser = true
+  endif
+  assign offers_url = section.settings.offers_url | default: '/pages/ofertas'
 -%}
 
 <style>
@@ -59,8 +65,8 @@
   /* Hero + reloj grande */
   #fc-of-{{ section.id }} .hero { padding:44px 0 34px; text-align:center; }
   #fc-of-{{ section.id }} .eyebrow { display:inline-block; font:700 12px/1 'Inter',sans-serif; letter-spacing:.2em; text-transform:uppercase; color:var(--accent); border:1px solid rgba(183,156,255,.5); border-radius:999px; padding:8px 16px; margin-bottom:18px; animation:fcof-up .7s cubic-bezier(.16,.84,.44,1) both, fcof-badge 2.6s ease-in-out .9s infinite; }
-  #fc-of-{{ section.id }} h1 { font-family:'Inter',sans-serif; font-weight:800; font-size:clamp(42px,8.4vw,88px); line-height:1; letter-spacing:-.03em; margin:0 0 14px; animation:fcof-up .7s .1s cubic-bezier(.16,.84,.44,1) both; }
-  #fc-of-{{ section.id }} h1 em { font-style:normal; color:var(--green); }
+  #fc-of-{{ section.id }} h1, #fc-of-{{ section.id }} h2.h1 { font-family:'Inter',sans-serif; font-weight:800; font-size:clamp(42px,8.4vw,88px); line-height:1; letter-spacing:-.03em; margin:0 0 14px; animation:fcof-up .7s .1s cubic-bezier(.16,.84,.44,1) both; }
+  #fc-of-{{ section.id }} h1 em, #fc-of-{{ section.id }} h2.h1 em { font-style:normal; color:var(--green); }
   #fc-of-{{ section.id }} .sub { margin:0 auto; max-width:60ch; color:rgba(255,255,255,.85); font-size:clamp(15px,2.2vw,18px); line-height:1.6; animation:fcof-up .7s .2s cubic-bezier(.16,.84,.44,1) both; }
   #fc-of-{{ section.id }} .clock-wrap { margin-top:34px; animation:fcof-up .8s .3s cubic-bezier(.16,.84,.44,1) both; }
   #fc-of-{{ section.id }} .clock-l { display:block; font:800 clamp(13px,2vw,18px)/1 'Inter',sans-serif; letter-spacing:.22em; text-transform:uppercase; color:var(--green); margin-bottom:16px; }
@@ -69,6 +75,13 @@
   #fc-of-{{ section.id }} .clock .u:not(:last-child)::after { content:':'; position:absolute; right:calc(clamp(8px,2vw,22px) / -2); top:40%; transform:translate(50%,-50%); font:800 clamp(24px,5vw,64px)/1 'Inter',sans-serif; color:var(--accent); animation:fcof-blink 1s steps(2,end) infinite; z-index:2; }
   #fc-of-{{ section.id }} .clock b { display:block; font:800 clamp(44px,13.5vw,170px)/.95 'Inter',sans-serif; letter-spacing:-.03em; font-variant-numeric:tabular-nums; background:linear-gradient(180deg,#fff 30%,var(--accent)); -webkit-background-clip:text; background-clip:text; color:transparent; -webkit-text-fill-color:transparent; }
   #fc-of-{{ section.id }} .clock small { display:block; margin-top:clamp(8px,1.4vw,16px); font:700 clamp(10px,1.6vw,16px)/1 'Inter',sans-serif; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); }
+
+  /* Teaser del home: boton a la pagina de ofertas */
+  #fc-of-{{ section.id }} .teaser-cta { padding:26px 20px 34px; text-align:center; }
+  #fc-of-{{ section.id }} .teaser-btn { display:inline-flex; align-items:center; justify-content:center; gap:10px; background:linear-gradient(135deg,#2ee59a,#19C37D); color:#04281a; font:900 clamp(16px,2.2vw,19px)/1 'Inter',sans-serif; padding:19px 34px; border-radius:16px; min-height:56px; text-decoration:none; animation:fcof-gpulse 2.4s ease-in-out infinite; transition:transform .15s, filter .15s; }
+  #fc-of-{{ section.id }} .teaser-btn:hover { transform:translateY(-2px); filter:brightness(1.06); animation:none; }
+  #fc-of-{{ section.id }} .teaser-btn svg { width:20px; height:20px; flex:none; }
+  @media (max-width:760px){ #fc-of-{{ section.id }} .teaser-btn { width:100%; } }
 
   /* Banner de envio gratis (carrusel automatico) */
   #fc-of-{{ section.id }} .ship { margin:6px 0 0; background:linear-gradient(90deg,var(--green-d),var(--green) 40%,#2ee59a); color:#04281a; overflow:hidden; border-top:1px solid rgba(255,255,255,.35); border-bottom:1px solid rgba(0,0,0,.18); box-shadow:0 14px 40px rgba(25,195,125,.28); }
@@ -232,9 +245,9 @@
   <section class="hero">
     <div class="w">
       <span class="eyebrow">{{ section.settings.eyebrow | default: 'Semana de inauguración' }}</span>
-      <h1>{{ section.settings.title | default: 'Ofertas de apertura' }}</h1>
+      {%- if teaser -%}<h2 class="h1">{{ section.settings.title | default: 'Ofertas de apertura' }}</h2>{%- else -%}<h1>{{ section.settings.title | default: 'Ofertas de apertura' }}</h1>{%- endif -%}
       <p class="sub">{{ section.settings.subtitle | default: 'Marcas originales importadas de EE.UU. a precio de inauguración. El descuento se aplica solo en tu carrito, sin cupones.' }}</p>
-      <a class="hero-gift" href="#premios"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="9" width="18" height="4" rx="1"/><path d="M5 13v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7"/><path d="M12 9v12"/><path d="M12 9C11 6 9.2 5.2 7.8 5.9 6.6 6.5 7.2 8.4 9 9"/><path d="M12 9c1-3 2.8-3.8 4.2-3.1C17.4 6.5 16.8 8.4 15 9"/></svg>{{ section.settings.hero_gift_label | default: 'Participa por combos de regalo' }}</a>
+      <a class="hero-gift" href="{% if teaser %}{{ offers_url }}{% endif %}#premios"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="9" width="18" height="4" rx="1"/><path d="M5 13v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7"/><path d="M12 9v12"/><path d="M12 9C11 6 9.2 5.2 7.8 5.9 6.6 6.5 7.2 8.4 9 9"/><path d="M12 9c1-3 2.8-3.8 4.2-3.1C17.4 6.5 16.8 8.4 15 9"/></svg>{{ section.settings.hero_gift_label | default: 'Participa por combos de regalo' }}</a>
       <div class="clock-wrap" data-clock hidden>
         <span class="clock-l" data-clock-label>Termina en</span>
         <div class="clock" role="timer" aria-live="off">
@@ -263,6 +276,11 @@
     </div>
   </div>
 
+  {%- if teaser -%}
+  <div class="teaser-cta">
+    <a class="teaser-btn" href="{{ offers_url }}">{{ section.settings.teaser_cta | default: 'Ver todas las ofertas de apertura' }}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M13 5l7 7-7 7"/></svg></a>
+  </div>
+  {%- else -%}
   <section class="sec win" id="premios">
     <div class="w">
      <div class="win-box">
@@ -456,6 +474,7 @@
       </div>
     </div>
   </section>
+  {%- endif -%}
 </div>
 
 <script>
@@ -598,6 +617,9 @@
   "tag": "section",
   "class": "fitcore-ofertas",
   "settings": [
+    { "type": "select", "id": "mode", "label": "Modo", "options": [ { "value": "full", "label": "Página completa de ofertas" }, { "value": "teaser", "label": "Adelanto para el home (hero + reloj + envío + botón)" } ], "default": "full" },
+    { "type": "text", "id": "teaser_cta", "label": "Adelanto: texto del botón", "default": "Ver todas las ofertas de apertura" },
+    { "type": "text", "id": "offers_url", "label": "Adelanto: enlace del botón", "default": "/pages/ofertas" },
     { "type": "header", "content": "Hero y fechas" },
     { "type": "text", "id": "eyebrow", "label": "Etiqueta superior", "default": "Semana de inauguración" },
     { "type": "text", "id": "title", "label": "Título (hero)", "default": "Ofertas de apertura" },
