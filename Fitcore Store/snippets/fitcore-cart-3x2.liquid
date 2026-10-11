@@ -1,5 +1,5 @@
 {%- comment -%}
-  Fitcore · Banner compacto "Lleva 3, paga solo 2" (Nature's Bounty) para carrito y carrito lateral.
+  Fitcore · Banner compacto "Lleva 3, paga 2" (Nature's Bounty) para carrito y carrito lateral.
   Solo visible con la promo activa y con al menos 1 Nature's Bounty en el carrito.
   Se actualiza solo al agregar, quitar o cambiar cantidades. Incluye cuenta regresiva.
 {%- endcomment -%}
@@ -9,7 +9,7 @@
 <div data-fc-3x2 data-end="{{ fc_end | strip }}" hidden style="margin:10px 16px;padding:11px 14px;border-radius:14px;background:linear-gradient(120deg,#0B1840,#3B1F6B);color:#fff;font-family:sans-serif;box-sizing:border-box">
   <div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px">
     <span style="background:#19C37D;color:#071631;font:800 10px/1 sans-serif;letter-spacing:.08em;text-transform:uppercase;padding:5px 8px;border-radius:99px;white-space:nowrap">Oferta de lanzamiento</span>
-    <strong style="font:800 15px/1.2 sans-serif">Lleva 3, paga solo 2</strong>
+    <strong style="font:800 15px/1.2 sans-serif">Lleva 3, paga 2</strong>
     <span data-fc-3x2-time style="margin-left:auto;background:rgba(255,255,255,.14);font:700 11.5px/1 sans-serif;padding:5px 8px;border-radius:8px;white-space:nowrap;font-variant-numeric:tabular-nums"></span>
   </div>
   <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin-top:8px">
@@ -37,7 +37,7 @@
     var r = n % 3;
     if(r === 0){ msg.textContent = '¡Lo tienes! Cada grupo de 3 te sale por el precio de 2.'; btn.textContent = 'Agregar otro grupo'; }
     else if(r === 1){ msg.textContent = 'Agrega 2 más y llévate 3 pagando solo 2.'; btn.textContent = 'Ver elegibles'; }
-    else { msg.textContent = '¡Te falta 1! Agrégalo y paga solo 2 de los 3.'; btn.textContent = 'Agregar 1 más'; }
+    else { msg.textContent = '¡Te falta 1! Agrégalo y paga 2 de los 3.'; btn.textContent = 'Agregar 1 más'; }
     if(!shown){ shown = true; paintClock(); clearInterval(tick); tick = setInterval(paintClock, 1000); }
   }
   function refresh(){ fetch('/cart.js', {credentials:'same-origin'}).then(function(r){return r.json();}).then(paint).catch(function(){}); }

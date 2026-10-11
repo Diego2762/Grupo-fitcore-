@@ -2,7 +2,7 @@
   Fitcore Store · Página "Ofertas de lanzamiento" (B2C) · versión oscura, hermana visual de la página de clave (password).
   Todas las ofertas duran una semana (semana de inauguración). Fechas: ajustar start_iso / end_iso aquí y en snippets/fitcore-promo.liquid.
   Espejo de los descuentos automáticos de Shopify:
-    Nutrex Creatine a $13.99 divisa ($16.09 BCV) · Lleva 3 paga solo 2 en Nature's Bounty · Envío gratis Valera
+    Nutrex Creatine a $13.99 divisa ($16.09 BCV) · Lleva 3, paga 2 en Nature's Bounty · Envío gratis Valera
     Nutrex Liquid Carnitine y Lipo-6: 10% (divisa y BCV) · BSN AMINOx, XTEND BCAA y XTEND EAA: 5% (divisa y BCV)
   Los precios reales los aplica Shopify en el carrito; esta página solo los comunica.
   Las tarjetas usan el snippet fitcore-product-card (foto, precios divisa/BCV, botón de carrito).
@@ -29,6 +29,7 @@
   assign ship_secs = ship_t1 | minus: ship_t0
   assign ship_days = ship_secs | divided_by: 86400.0 | ceil
 
+  # Quemadores: una ficha por sabor de Liquid Carnitine + Lipo-6 (3 fichas, igual que el bloque de aminos)
   assign burn_handles = 'nutrex-liquid-carnitine-3000,nutrex-lipo-6-black-ultra-concentrate-60-capsulas' | split: ','
   assign amino_handles = 'bsn-aminox-435-g,xtend-original-bcaa,xtend-eaa' | split: ','
   assign sb_url = section.settings.supabase_url
@@ -124,7 +125,6 @@
   #fc-of-{{ section.id }} .st.free span { color:#071631; }
   #fc-of-{{ section.id }} .grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:16px; }
   #fc-of-{{ section.id }} .grid--3 { grid-template-columns:repeat(3,minmax(0,1fr)); }
-  #fc-of-{{ section.id }} .grid--2 { grid-template-columns:repeat(2,minmax(0,1fr)); max-width:calc(50% + 8px); }
   #fc-of-{{ section.id }} .terms { margin:16px 0 0; padding:14px 16px; background:rgba(255,255,255,.06); border:1px solid var(--line); border-radius:12px; color:var(--muted); }
   #fc-of-{{ section.id }} .terms a { color:var(--green); }
 
@@ -205,7 +205,6 @@
     #fc-of-{{ section.id }} .steps { width:100%; }
     #fc-of-{{ section.id }} .st { flex:1; min-width:0; padding:10px 6px; }
     #fc-of-{{ section.id }} .grid, #fc-of-{{ section.id }} .grid--3 { grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
-    #fc-of-{{ section.id }} .grid--2 { max-width:none; }
     #fc-of-{{ section.id }} .prizes { grid-template-columns:1fr; }
     #fc-of-{{ section.id }} .reg-btn { width:100%; }
     #fc-of-{{ section.id }} .cta { flex-direction:column; align-items:stretch; text-align:center; }
@@ -302,10 +301,16 @@
         </div>
         <div class="pct">-10%<small>Divisa y BCV</small></div>
       </div>
-      <div class="grid grid--2">
+      <div class="grid grid--3">
         {%- for h in burn_handles -%}
           {%- assign p = all_products[h] -%}
-          {%- if p != blank -%}{%- render 'fitcore-product-card', product: p, lazy: true -%}{%- endif -%}
+          {%- if p != blank -%}
+            {%- if p.variants.size > 1 -%}
+              {%- for v in p.variants -%}{%- render 'fitcore-product-card', product: p, variant: v, lazy: true -%}{%- endfor -%}
+            {%- else -%}
+              {%- render 'fitcore-product-card', product: p, lazy: true -%}
+            {%- endif -%}
+          {%- endif -%}
         {%- endfor -%}
       </div>
     </div>
@@ -335,7 +340,7 @@
       <div class="promo">
         <div>
           <span class="tag">Oferta de lanzamiento</span>
-          <h2>Lleva 3, paga solo 2</h2>
+          <h2>Lleva 3, paga 2</h2>
           <p>Mezcla las vitaminas Nature's Bounty que quieras. Por cada 3 en tu carrito, una te sale gratis. El descuento se aplica solo al pagar.</p>
         </div>
         <div class="steps" aria-hidden="true">
@@ -610,7 +615,7 @@
     { "type": "header", "content": "Productos" },
     { "type": "product", "id": "creatine_product", "label": "Producto: Nutrex Creatine" },
     { "type": "text", "id": "creatine_promo_bcv", "label": "Nutrex: precio promo en BCV (USD)", "default": "16.09" },
-    { "type": "collection", "id": "nb_collection", "label": "Colección elegible Lleva 3 paga solo 2 (Nature's Bounty)" },
+    { "type": "collection", "id": "nb_collection", "label": "Colección elegible Lleva 3, paga 2 (Nature's Bounty)" },
     { "type": "header", "content": "Premios" },
     { "type": "text", "id": "prize_eyebrow", "label": "Etiqueta", "default": "Sorteo de inauguración" },
     { "type": "text", "id": "prize_heading", "label": "Título (permite HTML)", "default": "Participa y gana <em>premios</em>" },

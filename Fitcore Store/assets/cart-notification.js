@@ -80,7 +80,7 @@ class CartNotification extends HTMLElement {
     }
   }
 
-  // Banner "Lleva 3, paga solo 2" (Nature's Bounty) con cuenta regresiva. Solo existe si la promo esta activa.
+  // Banner "Lleva 3, paga 2" (Nature's Bounty) con cuenta regresiva. Solo existe si la promo esta activa.
   updatePromo3x2(cart) {
     const box = document.getElementById('cart-notification-3x2');
     if (!box) return;
@@ -103,7 +103,7 @@ class CartNotification extends HTMLElement {
       msg.textContent = 'Agrega 2 más y llévate 3 pagando solo 2.';
       btn.textContent = 'Ver elegibles';
     } else {
-      msg.textContent = '¡Te falta 1! Agrégalo y paga solo 2 de los 3.';
+      msg.textContent = '¡Te falta 1! Agrégalo y paga 2 de los 3.';
       btn.textContent = 'Agregar 1 más';
     }
     box.hidden = false;

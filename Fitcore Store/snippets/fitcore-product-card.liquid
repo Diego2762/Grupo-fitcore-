@@ -7,25 +7,36 @@
   - product: {Object} Producto de Shopify (requerido).
   - lazy:    {Boolean} Si true, carga la imagen con loading="lazy". Opcional.
   - badge:   {String} Texto del badge sobre la imagen. Opcional.
+  - variant: {Object} Variante fija (ej. un sabor): usa su foto, su enlace y la agrega al carrito. Opcional.
 {% endcomment %}
 {%- if product != blank and product.id -%}
-  {%- assign fc_var = product.selected_or_first_available_variant -%}
+  {%- assign fc_var = variant | default: product.selected_or_first_available_variant -%}
+  {%- assign fc_url = product.url -%}
+  {%- assign fc_img = product.featured_image -%}
+  {%- assign fc_name = product.title -%}
+  {%- if variant -%}
+    {%- assign fc_url = variant.url -%}
+    {%- if variant.image -%}{%- assign fc_img = variant.image -%}{%- endif -%}
+    {%- assign fc_name = product.title | append: ' ' | append: variant.title -%}
+  {%- endif -%}
   {%- if lazy -%}{%- assign fc_loading = 'lazy' -%}{%- else -%}{%- assign fc_loading = 'eager' -%}{%- endif -%}
   <div class="fc-pc" data-handle="{{ product.handle }}">
-    <a class="fc-pc-media" href="{{ product.url }}">
+    <a class="fc-pc-media" href="{{ fc_url }}">
       {%- if badge != blank -%}
         <span class="fc-pc-rank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/></svg>{{ badge }}</span>
       {%- endif -%}
-      {%- if product.featured_image -%}
-        <img src="{{ product.featured_image | image_url: width: 600 }}" alt="{{ product.title | escape }}" loading="{{ fc_loading }}" width="600" height="600">
+      {%- if fc_img -%}
+        <img src="{{ fc_img | image_url: width: 600 }}" alt="{{ fc_name | escape }}" loading="{{ fc_loading }}" width="600" height="600">
       {%- endif -%}
     </a>
     <div class="fc-pc-body">
       {%- if product.vendor != blank -%}<span class="fc-pc-vendor">{{ product.vendor }}</span>{%- endif -%}
-      <a class="fc-pc-title" href="{{ product.url }}">{{ product.title }}</a>
+      <a class="fc-pc-title" href="{{ fc_url }}">{{ product.title }}</a>
       {%- comment -%} Indicador sutil de variantes: colores (Forfit) o sabores/tamaños, para que se vean sin entrar al listing {%- endcomment -%}
       {%- assign fc_var_label = '' -%}
+      {%- if variant -%}{%- assign fc_var_label = variant.title -%}{%- endif -%}
       {%- for opt in product.options_with_values -%}
+        {%- if variant -%}{%- break -%}{%- endif -%}
         {%- assign fc_ocount = opt.values | size -%}
         {%- if fc_ocount > 1 -%}
           {%- assign fc_oname = opt.name | downcase -%}
@@ -65,12 +76,12 @@
             <input type="hidden" name="form_type" value="product">
             <input type="hidden" name="utf8" value="✓">
             <input type="hidden" name="id" value="{{ fc_var.id }}">
-            <button type="submit" class="fc-pc-cart" aria-label="Agregar {{ product.title | escape }} al carrito">
+            <button type="submit" class="fc-pc-cart" aria-label="Agregar {{ fc_name | escape }} al carrito">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
             </button>
           </form>
         {%- else -%}
-          <a class="fc-pc-cart fc-pc-cart--out" href="{{ product.url }}" aria-label="Ver {{ product.title | escape }}">
+          <a class="fc-pc-cart fc-pc-cart--out" href="{{ fc_url }}" aria-label="Ver {{ fc_name | escape }}">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 5l7 7-7 7"/></svg>
           </a>
         {%- endif -%}
