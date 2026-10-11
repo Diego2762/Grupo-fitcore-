@@ -467,6 +467,9 @@
     </div>
   </section>
 
+  {%- comment -%} ===== ADELANTO OFERTAS DE APERTURA (hero + reloj + envio + boton a /pages/ofertas) ===== {%- endcomment -%}
+  {%- unless section.settings.hide_ofertas_teaser -%}{%- render 'fitcore-ofertas-teaser' -%}{%- endunless -%}
+
   {%- comment -%} ===== MAS VENDIDOS ===== {%- endcomment -%}
   <section class="fc-best">
     <div class="fc-wrap">
@@ -1130,6 +1133,7 @@
     { "type": "url", "id": "hero_cta_url", "label": "Enlace del botón", "default": "/collections/all" },
     { "type": "header", "content": "Marcas (marquee)" },
     { "type": "text", "id": "marq_title", "label": "Título del marquee", "default": "Las marcas que encuentras en Fitcore Store" },
+    { "type": "checkbox", "id": "hide_ofertas_teaser", "label": "Ocultar el adelanto de Ofertas de apertura", "default": false },
     { "type": "header", "content": "Los más vendidos" },
     { "type": "text", "id": "best_title", "label": "Título", "default": "Los más vendidos" },
     { "type": "textarea", "id": "best_sub", "label": "Subtítulo", "default": "Los favoritos que más se mueven: proteínas, creatina, pre-entrenos y más. Todos 100% originales y listos para despacho el mismo día." },

@@ -1,13 +1,5 @@
 {
   "sections": {
-    "fitcore_ofertas_teaser": {
-      "type": "fitcore-ofertas",
-      "name": "Ofertas de apertura (adelanto)",
-      "settings": {
-        "mode": "teaser",
-        "offers_url": "/pages/ofertas"
-      }
-    },
     "fitcore_home_XPGYYb": {
       "type": "fitcore-home",
       "name": "Fitcore Inicio",
@@ -36,7 +28,6 @@
     }
   },
   "order": [
-    "fitcore_ofertas_teaser",
     "fitcore_home_XPGYYb",
     "fitcore_ellas"
   ]
