@@ -1,12 +1,12 @@
 {%- comment -%}
-  Fitcore · Promos de lanzamiento (UN SOLO LUGAR para editar).
+  Fitcore · Promos de apertura (UN SOLO LUGAR para editar).
   Se muestran del 1 al 15 nov 2026 (hora Venezuela). Mientras el tema NO este publicado (borrador/vista previa)
   o dentro del editor, se muestran siempre para poder revisarlas.
   El descuento real lo aplican los descuentos automaticos de Shopify; esto solo lo comunica.
 
   Uso:
     part: 'bcv'   -> precio BCV promo en centavos (vacio si el producto no tiene promo)
-    part: 'chips' -> etiquetas HTML (Oferta de lanzamiento / -10% / 3x2)
+    part: 'chips' -> etiquetas HTML (Oferta de apertura / -10% / 3x2)
     part: 'live'  -> 'yes' si las promos estan activas
     part: 'end'   -> fecha ISO de fin (cuenta regresiva)
 
@@ -52,9 +52,9 @@
         elsif part == 'chips'
           if fc_val < 0
             assign fc_pct = fc_val | times: -1
-            assign fc_out = fc_out | append: '<span style="display:inline-block;background:#19C37D;color:#071631;font:800 11px/1 sans-serif;letter-spacing:.06em;text-transform:uppercase;padding:5px 8px;border-radius:99px;margin:0 6px 6px 0">-' | append: fc_pct | append: '% lanzamiento</span>'
+            assign fc_out = fc_out | append: '<span style="display:inline-block;background:#19C37D;color:#071631;font:800 11px/1 sans-serif;letter-spacing:.06em;text-transform:uppercase;padding:5px 8px;border-radius:99px;margin:0 6px 6px 0">-' | append: fc_pct | append: '% apertura</span>'
           else
-            assign fc_out = fc_out | append: '<span style="display:inline-block;background:#19C37D;color:#071631;font:800 11px/1 sans-serif;letter-spacing:.06em;text-transform:uppercase;padding:5px 8px;border-radius:99px;margin:0 6px 6px 0">Oferta de lanzamiento</span>'
+            assign fc_out = fc_out | append: '<span style="display:inline-block;background:#19C37D;color:#071631;font:800 11px/1 sans-serif;letter-spacing:.06em;text-transform:uppercase;padding:5px 8px;border-radius:99px;margin:0 6px 6px 0">Oferta de apertura</span>'
           endif
         endif
       endif
