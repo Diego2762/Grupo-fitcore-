@@ -49,10 +49,16 @@
         <span class="fc-pc-variants">{{ fc_var_label }}</span>
       {%- endif -%}
       <div class="fc-pc-foot">
-        {%- assign fc_divisa = product.price | times: 100 | divided_by: 115 -%}
+        {%- capture fc_pb -%}{%- render 'fitcore-promo', product: product, part: 'bcv' -%}{%- endcapture -%}
+        {%- assign fc_pbn = fc_pb | strip | plus: 0 -%}
+        {%- assign fc_bcv_now = product.price -%}
+        {%- if fc_pbn > 0 -%}{%- assign fc_bcv_now = fc_pbn -%}{%- endif -%}
+        {%- assign fc_divisa = fc_bcv_now | times: 100 | divided_by: 115 -%}
+        {%- assign fc_old_div = product.price | times: 100 | divided_by: 115 -%}
         <div class="fc-pc-prices">
-          <span class="fc-pc-price fc-pc-price--divisa">{{ fc_divisa | money }}<span class="fc-pc-cur">Divisa</span></span>
-          <span class="fc-pc-price">{{ product.price | money }}<span class="fc-pc-cur">BCV</span></span>
+          {%- render 'fitcore-promo', product: product, part: 'chips' -%}
+          <span class="fc-pc-price fc-pc-price--divisa">{{ fc_divisa | money }}{% if fc_pbn > 0 %}<s style="font-weight:500;font-size:.78em;opacity:.55;color:#0B1840">{{ fc_old_div | money }}</s>{% endif %}<span class="fc-pc-cur">Divisa</span></span>
+          <span class="fc-pc-price">{{ fc_bcv_now | money }}{% if fc_pbn > 0 %}<s style="font-weight:500;font-size:.78em;opacity:.55">{{ product.price | money }}</s>{% endif %}<span class="fc-pc-cur">BCV</span></span>
         </div>
         {%- if fc_var and fc_var.available -%}
           <form method="post" action="{{ routes.cart_add_url }}" class="fc-pc-form" data-fc-add>
