@@ -80,7 +80,7 @@ class CartNotification extends HTMLElement {
     }
   }
 
-  // Banner "Lleva 3, paga 2" (Nature's Bounty) con cuenta regresiva. Solo existe si la promo esta activa.
+  // Aviso discreto "3x2" (Nature's Bounty). Solo existe si la promo esta activa.
   updatePromo3x2(cart) {
     const box = document.getElementById('cart-notification-3x2');
     if (!box) return;
@@ -97,33 +97,16 @@ class CartNotification extends HTMLElement {
     const msg = box.querySelector('[data-3x2-msg]');
     const btn = box.querySelector('[data-3x2-btn]');
     if (r === 0) {
-      msg.textContent = '¡Lo tienes! Cada grupo de 3 te sale por el precio de 2.';
-      btn.textContent = 'Agregar otro grupo';
+      msg.textContent = "Listo: cada 3 Nature's Bounty, 1 te sale gratis.";
+      btn.textContent = 'Ver más';
     } else if (r === 1) {
-      msg.textContent = 'Agrega 2 más y llévate 3 pagando solo 2.';
-      btn.textContent = 'Ver elegibles';
+      msg.textContent = "Agrega 2 Nature's Bounty más y 1 te sale gratis.";
+      btn.textContent = 'Ver';
     } else {
-      msg.textContent = '¡Te falta 1! Agrégalo y paga 2 de los 3.';
-      btn.textContent = 'Agregar 1 más';
+      msg.textContent = "Te falta 1 Nature's Bounty para llevarte 1 gratis.";
+      btn.textContent = 'Agregar';
     }
     box.hidden = false;
-    const end = new Date(box.getAttribute('data-end')).getTime();
-    const clock = box.querySelector('[data-3x2-time]');
-    const pad = (x) => (x < 10 ? '0' : '') + x;
-    const paint = () => {
-      const d = end - Date.now();
-      if (isNaN(end) || d <= 0) {
-        clock.textContent = '';
-        return;
-      }
-      const days = Math.floor(d / 864e5);
-      const h = Math.floor((d % 864e5) / 36e5);
-      const m = Math.floor((d % 36e5) / 6e4);
-      const sec = Math.floor((d % 6e4) / 1e3);
-      clock.textContent = 'Termina en ' + (days ? days + 'd ' : '') + pad(h) + ':' + pad(m) + ':' + pad(sec);
-    };
-    paint();
-    this.promoTimer = setInterval(paint, 1000);
   }
 
   // The notification's outer element is server-rendered once at page load, so

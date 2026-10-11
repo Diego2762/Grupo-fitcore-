@@ -1,44 +1,30 @@
 {%- comment -%}
-  Fitcore · Banner compacto "Lleva 3, paga 2" (Nature's Bounty) para carrito y carrito lateral.
+  Fitcore · Aviso discreto de una linea "3x2" (Nature's Bounty) para carrito y carrito lateral.
   Solo visible con la promo activa y con al menos 1 Nature's Bounty en el carrito.
-  Se actualiza solo al agregar, quitar o cambiar cantidades. Incluye cuenta regresiva.
+  Se actualiza solo al agregar, quitar o cambiar cantidades.
 {%- endcomment -%}
 {%- capture fc_live -%}{%- render 'fitcore-promo', product: cart.items.first.product, part: 'live' -%}{%- endcapture -%}
 {%- capture fc_end -%}{%- render 'fitcore-promo', product: cart.items.first.product, part: 'end' -%}{%- endcapture -%}
 {%- if fc_live contains 'yes' -%}
-<div data-fc-3x2 data-end="{{ fc_end | strip }}" hidden style="margin:10px 16px;padding:11px 14px;border-radius:14px;background:linear-gradient(120deg,#0B1840,#3B1F6B);color:#fff;font-family:sans-serif;box-sizing:border-box">
-  <div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px">
-    <span style="background:#19C37D;color:#071631;font:800 10px/1 sans-serif;letter-spacing:.08em;text-transform:uppercase;padding:5px 8px;border-radius:99px;white-space:nowrap">Oferta de apertura</span>
-    <strong style="font:800 15px/1.2 sans-serif">Lleva 3, paga 2</strong>
-    <span data-fc-3x2-time style="margin-left:auto;background:rgba(255,255,255,.14);font:700 11.5px/1 sans-serif;padding:5px 8px;border-radius:8px;white-space:nowrap;font-variant-numeric:tabular-nums"></span>
+<div data-fc-3x2 hidden style="margin:8px 16px;box-sizing:border-box">
+  <div style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;background:#F4F0FB;border:1px solid #E3D9F5;color:#3B1F6B;font:500 13px/1.35 sans-serif">
+    <span style="flex:none;background:#3B1F6B;color:#fff;font:800 10.5px/1 sans-serif;letter-spacing:.04em;padding:4px 7px;border-radius:6px">3x2</span>
+    <span data-fc-3x2-msg style="flex:1 1 auto;min-width:0"></span>
+    <a href="/collections/natures-bounty" data-fc-3x2-btn style="flex:none;color:#3B1F6B;font-weight:700;text-decoration:underline;white-space:nowrap">Ver</a>
   </div>
-  <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin-top:8px">
-    <span data-fc-3x2-msg style="flex:1 1 200px;font:500 13px/1.4 sans-serif;color:rgba(255,255,255,.9)"></span>
-    <a href="/collections/natures-bounty" data-fc-3x2-btn style="background:#fff;color:#0B1840;font:800 12.5px/1 sans-serif;padding:9px 13px;border-radius:9px;text-decoration:none;white-space:nowrap">Agregar otro grupo</a>
-  </div>
-  <div style="color:rgba(255,255,255,.8)">{%- render 'fitcore-promo-terms' -%}</div>
 </div>
 <script>
 (function(){
   var box = document.currentScript.previousElementSibling; if(!box || !box.hasAttribute('data-fc-3x2')) return;
-  var msg = box.querySelector('[data-fc-3x2-msg]'), btn = box.querySelector('[data-fc-3x2-btn]'), clock = box.querySelector('[data-fc-3x2-time]');
-  var end = new Date(box.getAttribute('data-end')).getTime(), t, tick, shown = false;
-  function pad(n){ return (n<10?'0':'')+n; }
-  function paintClock(){
-    var d = end - Date.now();
-    if (isNaN(end) || d <= 0) { clock.textContent = ''; return; }
-    var days = Math.floor(d/864e5), h = Math.floor(d%864e5/36e5), m = Math.floor(d%36e5/6e4), s = Math.floor(d%6e4/1e3);
-    clock.textContent = 'Termina en ' + (days ? days + 'd ' : '') + pad(h) + ':' + pad(m) + ':' + pad(s);
-  }
+  var msg = box.querySelector('[data-fc-3x2-msg]'), btn = box.querySelector('[data-fc-3x2-btn]'), t;
   function paint(cart){
     var n = 0; (cart.items||[]).forEach(function(i){ if(i.vendor === "Nature's Bounty") n += i.quantity; });
-    if(!n){ box.hidden = true; shown = false; clearInterval(tick); return; }
+    if(!n){ box.hidden = true; return; }
     box.hidden = false;
     var r = n % 3;
-    if(r === 0){ msg.textContent = '¡Lo tienes! Cada grupo de 3 te sale por el precio de 2.'; btn.textContent = 'Agregar otro grupo'; }
-    else if(r === 1){ msg.textContent = 'Agrega 2 más y llévate 3 pagando solo 2.'; btn.textContent = 'Ver elegibles'; }
-    else { msg.textContent = '¡Te falta 1! Agrégalo y paga 2 de los 3.'; btn.textContent = 'Agregar 1 más'; }
-    if(!shown){ shown = true; paintClock(); clearInterval(tick); tick = setInterval(paintClock, 1000); }
+    if(r === 0){ msg.textContent = 'Listo: cada 3 Nature\'s Bounty, 1 te sale gratis.'; btn.textContent = 'Ver más'; }
+    else if(r === 1){ msg.textContent = 'Agrega 2 Nature\'s Bounty más y 1 te sale gratis.'; btn.textContent = 'Ver'; }
+    else { msg.textContent = 'Te falta 1 Nature\'s Bounty para llevarte 1 gratis.'; btn.textContent = 'Agregar'; }
   }
   function refresh(){ fetch('/cart.js', {credentials:'same-origin'}).then(function(r){return r.json();}).then(paint).catch(function(){}); }
   function later(){ clearTimeout(t); t = setTimeout(refresh, 500); }

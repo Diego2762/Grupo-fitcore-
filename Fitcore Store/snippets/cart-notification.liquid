@@ -45,15 +45,9 @@
       ></div>
       {%- if fc_live contains 'yes' -%}
         <div id="cart-notification-3x2" class="cart-notification-3x2" data-end="{{ fc_end | strip }}" hidden>
-          <div class="cart-notification-3x2__top">
-            <span class="cart-notification-3x2__tag">Oferta de apertura</span>
-            <strong>Lleva 3, paga 2</strong>
-            <span class="cart-notification-3x2__time" data-3x2-time></span>
-          </div>
-          <div class="cart-notification-3x2__row">
-            <span data-3x2-msg></span>
-            <a href="/collections/natures-bounty" data-3x2-btn>Ver elegibles</a>
-          </div>
+          <span class="cart-notification-3x2__tag">3x2</span>
+          <span class="cart-notification-3x2__msg" data-3x2-msg></span>
+          <a href="/collections/natures-bounty" data-3x2-btn>Ver</a>
         </div>
       {%- endif -%}
       <div id="cart-notification-product" class="cart-notification-product"></div>
@@ -124,64 +118,40 @@
     flex: 0 0 auto;
   }
   .cart-notification-3x2 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
     margin: 0 0 1.2rem;
-    padding: 1rem 1.2rem;
-    border-radius: 12px;
-    background: linear-gradient(120deg, #0b1840, #3b1f6b);
-    color: #fff;
+    padding: 0.8rem 1.2rem;
+    border-radius: 10px;
+    background: #f4f0fb;
+    border: 1px solid #e3d9f5;
+    color: #3b1f6b;
     font-size: 1.3rem;
     line-height: 1.35;
   }
   .cart-notification-3x2[hidden] {
     display: none;
   }
-  .cart-notification-3x2__top {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 6px 10px;
-  }
-  .cart-notification-3x2__top strong {
-    font-size: 1.5rem;
-    font-weight: 800;
-  }
   .cart-notification-3x2__tag {
-    background: #19c37d;
-    color: #071631;
-    font-size: 1rem;
+    flex: none;
+    background: #3b1f6b;
+    color: #fff;
+    font-size: 1.05rem;
     font-weight: 800;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    padding: 5px 8px;
-    border-radius: 99px;
-    white-space: nowrap;
+    letter-spacing: 0.04em;
+    padding: 4px 7px;
+    border-radius: 6px;
   }
-  .cart-notification-3x2__time {
-    margin-left: auto;
-    background: rgba(255, 255, 255, 0.14);
-    font-size: 1.15rem;
+  .cart-notification-3x2__msg {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+  .cart-notification-3x2 a {
+    flex: none;
+    color: #3b1f6b;
     font-weight: 700;
-    padding: 5px 8px;
-    border-radius: 8px;
-    white-space: nowrap;
-    font-variant-numeric: tabular-nums;
-  }
-  .cart-notification-3x2__row {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px 12px;
-    margin-top: 6px;
-  }
-  .cart-notification-3x2__row a {
-    background: #fff;
-    color: #0b1840;
-    font-weight: 800;
-    font-size: 1.2rem;
-    padding: 8px 12px;
-    border-radius: 9px;
-    text-decoration: none;
+    text-decoration: underline;
     white-space: nowrap;
   }
 {% endstyle %}
