@@ -251,6 +251,25 @@
   #fc-ofh .teaser-btn { width:auto; min-height:0; padding:11px 20px; font:800 14px/1 'Inter',sans-serif; background:transparent; color:#fff; border:1.5px solid rgba(255,255,255,.45); border-radius:999px; box-shadow:none; animation:none; }
   #fc-ofh .teaser-btn:hover { background:rgba(255,255,255,.1); border-color:#fff; transform:none; filter:none; }
   #fc-ofh .teaser-btn svg { width:16px; height:16px; }
+
+  /* Computadora: mas aire entre bloques y fichas del tamano de las del home */
+  @media (min-width:761px){
+    #fc-ofh .hero { padding:64px 0 56px; }
+    #fc-ofh .clock-wrap { margin-top:40px; max-width:980px; margin-left:auto; margin-right:auto; }
+    #fc-ofh .clock b { font-size:clamp(56px,8vw,120px); }
+    #fc-ofh .rib { padding:48px 0 28px; }
+    #fc-ofh .rib-track { gap:22px; padding-right:22px; }
+    #fc-ofh .rib-it { width:280px; border-radius:18px; }
+    #fc-ofh .rib-img img { inset:18px; max-width:calc(100% - 36px); max-height:calc(100% - 36px); }
+    #fc-ofh .rib-off { top:14px; right:14px; font-size:15px; padding:8px 10px; border-radius:12px; }
+    #fc-ofh .rib-b { padding:16px 18px 20px; }
+    #fc-ofh .rib-t { font-size:15px; min-height:40px; margin-bottom:10px; }
+    #fc-ofh .rib-p b { font-size:20px; }
+    #fc-ofh .rib-p s { font-size:14px; }
+    #fc-ofh .rib-p small { font-size:10.5px; }
+    #fc-ofh .teaser-cta { padding:18px 16px 60px; }
+    #fc-ofh .teaser-btn { padding:13px 26px; font-size:15px; }
+  }
 </style>
 <div id="fc-ofh" data-start="{{ start_iso }}" data-end="{{ end_iso }}">
   <section class="hero">
