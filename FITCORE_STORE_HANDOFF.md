@@ -1,7 +1,7 @@
 # Fitcore Store · Handoff / Estado de trabajo
 
 > Documento de traspaso para retomar el trabajo de **Fitcore Store** (tienda B2C/DTC en Shopify) en otra sesión / cowork / con otro equipo o AI.
-> Última actualización: 18 sep 2026. Autor: sesiones de trabajo con Claude.
+> Última actualización: 14 oct 2026 (sección 4 de precios corregida). Autor: sesiones de trabajo con Claude.
 
 ---
 
@@ -67,6 +67,8 @@ Contenido del repo root (carpetas renombradas jul 2026):
 
 ## 3. Productos cargados (6) — estado actual
 
+> **DESACTUALIZADO (corregido 14 oct 2026):** esta tabla es de la primera carga (jul 2026) y sus cifras ya no coinciden con la tienda viva (hoy hay ~56 productos y los precios cambiaron; ej. Platinum Monohydrate sin sabor está en $40.24 BCV / $34.99 divisa). Las columnas "Divisa" y "Precio lista (tachado)" siguen el modelo anterior (lista x 0.75), que ya no aplica: ver sección 4. Usar Shopify como fuente de verdad de precios, no esta tabla.
+
 Los 6 están **ACTIVE**, en su colección, con imágenes en CDN, y **publicados en el canal "Tienda online"** (verificado 2026-07-11: los 6 tienen `onlineStoreUrl`, visibles en el catálogo).
 
 | Producto | GID Shopify | Colección | Divisa (paga el cliente) | Precio lista (tachado) | Fuente precio |
@@ -84,21 +86,24 @@ Fuente del código/imágenes de cada ficha: carpeta `Grupo Fitcore Website/` (p�
 
 ---
 
-## 4. Modelo de precios "divisa" (dual price) — CLAVE
+## 4. Modelo de precios "divisa" (dual price) - CLAVE
 
-- Snippet: `Fitcore Store/snippets/fitcore-divisa-price.liquid`.
-- El **precio guardado en Shopify = precio LISTA** (tachado). La tienda muestra la **divisa = lista × 0.75** (le resta 25%). Matemática entera: `price_cents | times: 75 | divided_by: 100` (división truncada).
-- **Para que el cliente pague un precio X exacto en divisa, se guarda `X ÷ 0.75` como precio lista** (≈ +33%, NO +25%: revertir un −25% exige dividir entre 0.75).
-  - Ej.: quiero divisa $29.99 → guardo $39.99. Quiero divisa $44.50 → guardo $59.34.
-- Regla de negocio acordada: **los precios "detal Caracas" del estudio ES lo que paga el cliente en divisa.** Por eso se guardan multiplicados (÷0.75), no directos.
+> **Corregido el 14 oct 2026.** El modelo anterior ("precio guardado = lista, divisa = lista x 0.75") ya no es el que usa la tienda. Lo que sigue está verificado contra el código del tema y los precios en Shopify.
 
-### Reglas de precio por fuente
-1. Suplementos que estén en el estudio `analisis_mercado_regional.html` → usar **precio detal Caracas** (como divisa).
-2. Lo que no esté en el estudio → sacarlo del Google Sheet `1Dz4Qhto7qytVIJHIVi2DMXkI6-4KzoqDCcx5O7xCXsg` (leer pestañas con endpoint gviz `gviz/tq?tqx=out:csv&sheet=<Tab>`, porque `export?format=csv` solo da la primera pestaña).
-3. Lo que no esté en ninguno → **US retail × 1.30** (ej. cápsulas: MuscleTech.com $22.99 × 1.30 = $29.89).
-4. Pesas Forfit → **$29.99 en divisa** (ambas).
+- Snippets: `Fitcore Store/snippets/fitcore-divisa-price.liquid` (ficha), `snippets/fitcore-product-card.liquid` (tarjetas) y `sections/fitcore-cart-pay.liquid` (carrito y selector de pago).
+- **El precio guardado en Shopify (`variant.price`) ES el precio BCV**: el monto en dólares que se factura pagando en bolívares (Pago Móvil o Transferencia). El total en bolívares se calcula "a la tasa BCV $ del día al confirmar" (el tema no consulta ninguna API de tasa).
+- **Divisa = BCV / 1.15**, con matemática entera y división truncada: `price_cents | times: 100 | divided_by: 115`. En divisa (Zelle, efectivo o tarjeta) el cliente aplica el cupón **MEJORPRECIO** (descuento de ~13%, ajustable en la sección del carrito, "Descuento pagando en divisa") y paga ese "mejor precio".
+  - Ej.: BCV $40.24 -> divisa $34.99. BCV $43.69 -> divisa $37.99. BCV $45.99 -> divisa $39.99.
+  - Un comentario del snippet dice "divisa = BCV * 0.87"; el código que corre usa `/ 115`. El código manda.
+- El comentario del carrito indica que la divisa equivale al **precio PV con "gancho .99"** (precio de venta objetivo terminado en .99). Es decir, el precio guardado se calcula a partir del PV deseado multiplicando por 1.15.
+- Formas de pago en el checkout actual: **Divisa** = Zelle, efectivo o tarjeta; **Bolívares (BCV $)** = Pago Móvil o Transferencia. USDT no aparece en el checkout actual [PENDIENTE confirmar con Diego si se acepta].
+- **[PENDIENTE confirmar con Diego]** cómo se cargan hoy los precios nuevos (fórmula exacta de redondeo desde el PV) y si las "Reglas de precio por fuente" de abajo siguen vigentes. Las cifras de esas reglas se definieron como **precio de divisa**; con el modelo actual el precio guardado en Shopify sería ese valor x 1.15.
 
-**Pendiente de confirmar con Diego:** si el "+30%" de las cápsulas debía ser sobre el detal u otra base, y si prefiere el factor exacto +33% (divisa = detal clavado) o +25% literal (divisa ~6% bajo el detal). En esta sesión se dejó cuadrando EXACTO al detal (÷0.75).
+### Reglas de precio por fuente (histórico, vigentes como definición del precio de divisa)
+1. Suplementos que estén en el estudio `analisis_mercado_regional.html` -> usar **precio detal Caracas** como precio de divisa.
+2. Lo que no esté en el estudio -> sacarlo del Google Sheet `1Dz4Qhto7qytVIJHIVi2DMXkI6-4KzoqDCcx5O7xCXsg` (leer pestañas con endpoint gviz `gviz/tq?tqx=out:csv&sheet=<Tab>`, porque `export?format=csv` solo da la primera pestaña).
+3. Lo que no esté en ninguno -> **US retail x 1.30** como precio de divisa (ej. cápsulas: MuscleTech.com $22.99 x 1.30 = $29.89).
+4. Pesas Forfit -> **$29.99 en divisa** (ambas) [confirmar: en Shopify hoy figuran con BCV $45.99, o sea divisa $39.99].
 
 ---
 
@@ -185,7 +190,7 @@ Archivos que llevan este texto: `sections/fitcore-home.liquid`, `sections/fitcor
 - **Temas (revisar en admin por si cambian los roles):** la línea de temas va `artistic-look` → v1.7 → v1.8 (SEO local NAP+geo) → **v1.9 "OG image branded"** (staged con la imagen de link compartido). Diego publica el más nuevo cuando aprueba. Los IDs concretos cambian cada vez que se duplica; leerlos con una query de temas antes de asumir.
 
 ### Catálogo
-- **~56 productos cargados** (ON, Dymatize, MuscleTech, C4/Cellucor/XTEND, Nutrex, Ghost, Forfit) ACTIVE + publicados en "Tienda online". Proceso estándar de carga obligatorio en §11 / project note (vendor=marca, tag categoría Title-Case, precio divisa base=ceil(PV/0.75), metafields fitcore, inventario `tracked:false`+`CONTINUE`).
+- **~56 productos cargados** (ON, Dymatize, MuscleTech, C4/Cellucor/XTEND, Nutrex, Ghost, Forfit) ACTIVE + publicados en "Tienda online". Proceso estándar de carga obligatorio en §11 / project note (vendor=marca, tag categoría Title-Case, precio guardado = BCV (divisa = BCV / 1.15; ver sección 4, [PENDIENTE confirmar fórmula de carga]), metafields fitcore, inventario `tracked:false`+`CONTINUE`).
 - **AVISO:** el filtro marca/objetivo del catálogo es client-side y `products_per_page`=50. Con 56 productos ya se pasó el umbral → pendiente migrar a **facets nativos** o carga incremental antes de seguir cargando.
 
 ### SEO / compartir link (OG)
