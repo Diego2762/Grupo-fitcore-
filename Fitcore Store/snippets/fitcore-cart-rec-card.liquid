@@ -1,0 +1,51 @@
+{%- comment -%}
+  Fitcore Store · Ficha compacta de recomendación del carrito (fitcore-cart-recs).
+  - product: {Object} producto (requerido)
+  - score:   {Number} 3 complemento, 2 oferta, 1 respaldo (ordena el JS)
+  data-price = precio BCV completo (el mismo que usa la barra de envío gratis).
+  Productos con varias variantes (sabor, color, tamaño) llevan a la ficha para elegir.
+{%- endcomment -%}
+{%- liquid
+  assign fc_v = product.selected_or_first_available_variant
+  capture fc_pb
+    render 'fitcore-promo', product: product, part: 'bcv'
+  endcapture
+  assign fc_pbn = fc_pb | strip | plus: 0
+  assign fc_now = product.price
+  if fc_pbn > 0
+    assign fc_now = fc_pbn
+  endif
+  assign fc_div = fc_now | times: 100 | divided_by: 115
+  assign fc_old = product.price | times: 100 | divided_by: 115
+  assign fc_off = 0
+  if fc_pbn > 0 and product.price > fc_pbn
+    assign fc_off = product.price | minus: fc_pbn | times: 100.0 | divided_by: product.price | round
+  endif
+  assign fc_pick = 'Ver opciones'
+  assign fc_opt = product.options.first | downcase
+  if fc_opt contains 'sabor' or fc_opt contains 'flavor'
+    assign fc_pick = 'Elegir sabor'
+  elsif fc_opt contains 'color'
+    assign fc_pick = 'Elegir color'
+  elsif fc_opt contains 'tama' or fc_opt contains 'size'
+    assign fc_pick = 'Elegir tamaño'
+  endif
+-%}
+<div class="fc-rec" data-pid="{{ product.id }}" data-price="{{ product.price }}" data-score="{{ score }}">
+  <a class="fc-rec-img" href="{{ product.url }}" tabindex="-1" aria-hidden="true">
+    {%- if product.featured_image -%}
+      <img src="{{ product.featured_image | image_url: width: 240 }}" alt="{{ product.title | escape }}" loading="lazy" width="240" height="240">
+    {%- endif -%}
+  </a>
+  {%- if fc_off > 0 -%}<span class="fc-rec-off">-{{ fc_off }}%</span>{%- endif -%}
+  <div class="fc-rec-body">
+    <span class="fc-rec-tag" data-fc-rec-gap hidden>Te da envío gratis</span>
+    <a class="fc-rec-name" href="{{ product.url }}">{{ product.title }}</a>
+    <span class="fc-rec-price">{{ fc_div | money }}{% if fc_pbn > 0 %}<s>{{ fc_old | money }}</s>{% endif %}<small>divisa</small></span>
+    {%- if product.has_only_default_variant or product.variants.size == 1 -%}
+      <button type="button" class="fc-rec-add" data-fc-rec-add data-variant="{{ fc_v.id }}" aria-label="Agregar {{ product.title | escape }} al carrito">+ Agregar</button>
+    {%- else -%}
+      <a class="fc-rec-add fc-rec-add--alt" href="{{ product.url }}">{{ fc_pick }}</a>
+    {%- endif -%}
+  </div>
+</div>

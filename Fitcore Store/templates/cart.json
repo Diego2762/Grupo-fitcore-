@@ -40,8 +40,8 @@
     "fitcore_cart_pay": {
       "type": "fitcore-cart-pay",
       "settings": {
-        "bs_surcharge_pct": 15,
-        "free_ship_threshold": 30
+        "free_ship_threshold": 45,
+        "recs_enabled": true
       }
     },
     "fitcore_cart_help": {

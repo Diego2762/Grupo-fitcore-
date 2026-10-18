@@ -1,0 +1,314 @@
+{%- comment -%}
+  Fitcore Store · Recomendaciones en el carrito ("Te puede interesar").
+  Se muestra debajo de la caja de puntos (sections/fitcore-cart-pay.liquid).
+
+  Criterio, en este orden (lo ordena el JS en vivo con cada cambio del carrito):
+    1. Lo que completa el envío gratis: si faltan $X para el umbral, primero los
+       productos de ese precio o un poco más (los más baratos que lo logran).
+    2. Lo que complementa lo que lleva: según el tipo de producto del carrito
+       (creatina -> proteína / pre-entreno, proteína -> creatina, etc.).
+    3. Ofertas de apertura (snippet fitcore-promo).
+    4. Respaldo: lista de handles fija (los más vendidos).
+  Nunca muestra productos que ya están en el carrito ni agotados.
+  El cliente puede ocultarlo ("Ocultar"); queda oculto 7 días en ese navegador.
+
+  Parámetros:
+    - threshold_cents: {Number} monto para envío gratis en centavos (BCV).
+    - title:           {String} título del bloque.
+    - fallback:        {String} handles de respaldo separados por coma.
+{%- endcomment -%}
+{%- if cart.item_count > 0 -%}
+{%- liquid
+  assign fc_in_cart = ','
+  assign fc_types = ','
+  for fc_item in cart.items
+    assign fc_in_cart = fc_in_cart | append: fc_item.product_id | append: ','
+    assign fc_types = fc_types | append: fc_item.product.type | append: ','
+  endfor
+
+  # Mapa de complementos: tipo de producto en el carrito -> colecciones a sugerir.
+  assign fc_cols = ''
+  if fc_types contains ',Creatina,'
+    assign fc_cols = fc_cols | append: 'proteinas,pre-post-entreno,'
+  endif
+  if fc_types contains ',Proteínas,' or fc_types contains ',Ganadores de Masa,'
+    assign fc_cols = fc_cols | append: 'creatina,aminoacidos,'
+  endif
+  if fc_types contains ',Pre-entreno,'
+    assign fc_cols = fc_cols | append: 'creatina,aminoacidos,'
+  endif
+  if fc_types contains ',Aminoácidos,'
+    assign fc_cols = fc_cols | append: 'proteinas,creatina,'
+  endif
+  if fc_types contains ',Quemadores de Grasa,' or fc_types contains ',Hidratación,'
+    assign fc_cols = fc_cols | append: 'aminoacidos,quemadores-de-grasa,'
+  endif
+  if fc_types contains ',Vitaminas,' or fc_types contains ',Salud y Bienestar,'
+    assign fc_cols = fc_cols | append: 'natures-bounty,vitaminas,'
+  endif
+  if fc_types contains ',Accesorios,'
+    assign fc_cols = fc_cols | append: 'proteinas,creatina,'
+  endif
+  assign fc_col_list = fc_cols | split: ',' | uniq
+
+  capture fc_promo_str
+    render 'fitcore-promo', part: 'handles'
+  endcapture
+  assign fc_promo_list = fc_promo_str | split: ','
+  assign fc_fb_list = fallback | default: 'optimum-nutrition-gold-standard-100-whey,nutrex-creatine-monohydrate-300-g,optimum-nutrition-micronized-creatine-powder,c4-original-pre-entreno' | split: ','
+
+  assign fc_seen = fc_in_cart
+  assign fc_count = 0
+  assign fc_max = 16
+-%}
+
+<style>
+  .fc-recs, .fc-recs * { box-sizing:border-box; }
+  .fc-recs { background:#fff; border:1.5px solid #e7eaf2; border-radius:16px; padding:14px 0 14px 18px; margin-bottom:16px; }
+  .fc-recs-head { display:flex; align-items:center; justify-content:space-between; gap:10px; padding-right:14px; margin-bottom:10px; }
+  .fc-recs-title { color:#0B1840; font:700 14.5px/1.3 var(--font-body-family,sans-serif); margin:0; }
+  .fc-recs-title small { display:block; color:#56607a; font-weight:400; font-size:12px; margin-top:1px; }
+  .fc-recs-x { flex:0 0 auto; display:inline-flex; align-items:center; gap:5px; background:none; border:0; color:#56607a; font-size:12.5px; font-weight:600; padding:6px 4px; cursor:pointer; }
+  .fc-recs-x:hover { color:#0B1840; }
+  .fc-recs-x svg { width:13px; height:13px; }
+  .fc-recs-row { display:flex; gap:10px; overflow-x:auto; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch; scrollbar-width:none; padding:2px 18px 2px 0; }
+  .fc-recs-row::-webkit-scrollbar { display:none; }
+  .fc-rec { position:relative; flex:0 0 128px; scroll-snap-align:start; display:flex; flex-direction:column; border:1px solid #eef0f6; border-radius:12px; padding:8px; background:#fff; transition:opacity .35s, transform .35s; }
+  .fc-rec:nth-child(n+9) { display:none; }
+  .fc-rec.is-gone { opacity:0; transform:scale(.94); }
+  .fc-rec-img { display:block; height:88px; border-radius:8px; overflow:hidden; background:#f6f7fb; }
+  .fc-rec-img img { width:100%; height:100%; object-fit:contain; display:block; }
+  .fc-rec-off { position:absolute; top:12px; left:12px; background:#19C37D; color:#071631; font:800 10.5px/1 sans-serif; padding:4px 6px; border-radius:6px; }
+  .fc-rec-body { display:flex; flex-direction:column; flex:1 1 auto; min-width:0; margin-top:7px; }
+  .fc-rec-tag { align-self:flex-start; white-space:nowrap; background:#e7f9f0; color:#0a7d3f; font:700 10.5px/1.2 sans-serif; padding:3px 6px; border-radius:6px; margin-bottom:4px; }
+  .fc-rec-tag[hidden] { display:none; }
+  .fc-rec-name { color:#0B1840; font-size:12.5px; line-height:1.25; font-weight:600; text-decoration:none; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; min-height:2.5em; }
+  .fc-rec-price { color:#0B1840; font-weight:800; font-size:14px; margin:4px 0 7px; white-space:nowrap; }
+  .fc-rec-price s { font-weight:500; font-size:.78em; opacity:.55; margin-left:4px; }
+  .fc-rec-price small { color:#56607a; font-weight:600; font-size:10.5px; margin-left:3px; }
+  .fc-rec-add { margin-top:auto; width:100%; border:0; border-radius:9px; background:#0B1840; color:#fff; font:700 12.5px/1 var(--font-body-family,sans-serif); padding:9px 6px; cursor:pointer; text-align:center; text-decoration:none; display:block; transition:background .15s; }
+  .fc-rec-add:hover { background:#3B1F6B; }
+  .fc-rec-add--alt { background:#fff; color:#0B1840; border:1.5px solid #0B1840; padding:7.5px 6px; }
+  .fc-rec-add--alt:hover { background:#f2f4fa; }
+  .fc-rec-add.is-ok { background:#19C37D; color:#062b1a; }
+  .fc-rec-add[disabled] { opacity:.7; cursor:default; }
+  .fc-recs-mini { display:none; align-items:center; justify-content:space-between; gap:10px; color:#56607a; font-size:12.5px; padding-right:14px; }
+  .fc-recs-mini button { background:none; border:0; color:#3B1F6B; font-weight:700; font-size:12.5px; cursor:pointer; padding:4px; text-decoration:underline; }
+  .fc-recs.is-hidden { padding-top:10px; padding-bottom:10px; }
+  .fc-recs.is-hidden .fc-recs-head, .fc-recs.is-hidden .fc-recs-row { display:none; }
+  .fc-recs.is-hidden .fc-recs-mini { display:flex; }
+  @media (min-width:750px) {
+    .fc-recs { padding:16px 18px; }
+    .fc-recs-head { padding-right:0; }
+    .fc-recs-row { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; overflow:visible; padding:0; }
+    .fc-rec { flex-direction:row; align-items:center; gap:12px; padding:10px; }
+    .fc-rec:nth-child(n+5) { display:none; }
+    .fc-rec-img { flex:0 0 76px; width:76px; height:76px; }
+    .fc-rec-body { margin-top:0; }
+    .fc-rec-off { top:8px; left:8px; }
+    .fc-rec-name { font-size:13px; }
+    .fc-recs-mini { padding-right:0; }
+  }
+  @media (prefers-reduced-motion:reduce) { .fc-rec { transition:none; } }
+</style>
+
+<div class="fc-recs" data-fc-recs data-threshold-cents="{{ threshold_cents }}" hidden>
+  <div class="fc-recs-head">
+    <p class="fc-recs-title">{{ title | default: 'Te puede interesar' | escape }}<small data-fc-recs-sub>Seleccionados según lo que llevas.</small></p>
+    <button type="button" class="fc-recs-x" data-fc-recs-hide aria-label="Ocultar recomendaciones">Ocultar <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+  </div>
+  <div class="fc-recs-row" data-fc-recs-row>
+    {%- comment -%} 1) Complementos según lo que hay en el carrito {%- endcomment -%}
+    {%- for fc_col in fc_col_list -%}
+      {%- if fc_count >= fc_max -%}{%- break -%}{%- endif -%}
+      {%- for fc_p in collections[fc_col].products limit: 8 -%}
+        {%- assign fc_key = ',' | append: fc_p.id | append: ',' -%}
+        {%- unless fc_seen contains fc_key or fc_p.available == false -%}
+          {%- assign fc_seen = fc_seen | append: fc_p.id | append: ',' -%}
+          {%- assign fc_count = fc_count | plus: 1 -%}
+          {%- render 'fitcore-cart-rec-card', product: fc_p, score: 3 -%}
+          {%- if fc_count >= fc_max -%}{%- break -%}{%- endif -%}
+        {%- endunless -%}
+      {%- endfor -%}
+    {%- endfor -%}
+    {%- comment -%} 2) Ofertas de apertura, 3) Respaldo (más vendidos) {%- endcomment -%}
+    {%- for fc_h in fc_promo_list -%}
+      {%- if fc_count >= fc_max -%}{%- break -%}{%- endif -%}
+      {%- assign fc_p = all_products[fc_h] -%}
+      {%- if fc_p.id -%}
+        {%- assign fc_key = ',' | append: fc_p.id | append: ',' -%}
+        {%- unless fc_seen contains fc_key or fc_p.available == false -%}
+          {%- assign fc_seen = fc_seen | append: fc_p.id | append: ',' -%}
+          {%- assign fc_count = fc_count | plus: 1 -%}
+          {%- render 'fitcore-cart-rec-card', product: fc_p, score: 2 -%}
+        {%- endunless -%}
+      {%- endif -%}
+    {%- endfor -%}
+    {%- for fc_h in fc_fb_list -%}
+      {%- if fc_count >= fc_max -%}{%- break -%}{%- endif -%}
+      {%- assign fc_p = all_products[fc_h] -%}
+      {%- if fc_p.id -%}
+        {%- assign fc_key = ',' | append: fc_p.id | append: ',' -%}
+        {%- unless fc_seen contains fc_key or fc_p.available == false -%}
+          {%- assign fc_seen = fc_seen | append: fc_p.id | append: ',' -%}
+          {%- assign fc_count = fc_count | plus: 1 -%}
+          {%- render 'fitcore-cart-rec-card', product: fc_p, score: 1 -%}
+        {%- endunless -%}
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+  <div class="fc-recs-mini">
+    <span>Recomendaciones ocultas.</span>
+    <button type="button" data-fc-recs-show>Ver recomendaciones</button>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var box = document.querySelector('[data-fc-recs]');
+    if (!box) return;
+    var row = box.querySelector('[data-fc-recs-row]');
+    var sub = box.querySelector('[data-fc-recs-sub]');
+    var thc = parseInt(box.getAttribute('data-threshold-cents'), 10) || 4500;
+    var KEY = 'fcRecsHidden';
+    var DAYS7 = 7 * 24 * 60 * 60 * 1000;
+    var cards = Array.prototype.slice.call(row.querySelectorAll('.fc-rec'));
+    cards.forEach(function (c, i) { c.setAttribute('data-i', i); });
+    if (!cards.length) return;
+    box.hidden = false;
+
+    // Ocultar / mostrar (se recuerda 7 días en este navegador).
+    function isHiddenSaved() {
+      try { var t = parseInt(localStorage.getItem(KEY), 10); return t && (Date.now() - t) < DAYS7; } catch (e) { return false; }
+    }
+    function setHidden(on) {
+      box.classList.toggle('is-hidden', on);
+      try { if (on) localStorage.setItem(KEY, String(Date.now())); else localStorage.removeItem(KEY); } catch (e) {}
+    }
+    if (isHiddenSaved()) box.classList.add('is-hidden');
+    box.querySelector('[data-fc-recs-hide]').addEventListener('click', function () { setHidden(true); });
+    box.querySelector('[data-fc-recs-show]').addEventListener('click', function () { setHidden(false); });
+
+    function money(cents) {
+      return '$' + (cents / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    // Orden: primero lo que completa el envío gratis (el más barato que lo
+    // logra), luego complementos, ofertas y respaldo, en el orden original.
+    var inCart = {};
+    function arrange(base) {
+      var remaining = thc - base;
+      var live = cards.filter(function (c) { return !inCart[c.getAttribute('data-pid')] && c.parentNode; });
+      var closers = 0;
+      live.forEach(function (c) {
+        var closes = remaining > 0 && parseInt(c.getAttribute('data-price'), 10) >= remaining;
+        if (closes) closers++;
+        c.setAttribute('data-closes', closes ? '1' : '0');
+      });
+      // Si todos completan el envío gratis, la etiqueta no aporta: se dice una
+      // sola vez arriba y se ordena por relevancia.
+      var allClose = closers > 0 && closers === live.length;
+      live.forEach(function (c) {
+        c.querySelector('[data-fc-rec-gap]').hidden = allClose || c.getAttribute('data-closes') !== '1';
+        if (allClose) c.setAttribute('data-closes', '0');
+      });
+      live.sort(function (a, b) {
+        var ca = +a.getAttribute('data-closes'), cb = +b.getAttribute('data-closes');
+        if (ca !== cb) return cb - ca;
+        if (ca && cb) {
+          var d = +a.getAttribute('data-price') - +b.getAttribute('data-price');
+          if (d) return d;
+        }
+        var s = +b.getAttribute('data-score') - +a.getAttribute('data-score');
+        return s || (+a.getAttribute('data-i') - +b.getAttribute('data-i'));
+      });
+      live.forEach(function (c) { row.appendChild(c); });
+      if (sub) sub.textContent = remaining <= 0
+        ? 'Seleccionados según lo que llevas.'
+        : allClose
+          ? 'Te faltan ' + money(remaining) + ': cualquiera de estos te da envío gratis en Valera.'
+          : 'Te faltan ' + money(remaining) + ' para el envío gratis en Valera.';
+      box.hidden = live.length === 0;
+    }
+
+    function applyCart(cart) {
+      if (!cart || !cart.items) return;
+      inCart = {};
+      cart.items.forEach(function (it) { inCart[String(it.product_id)] = true; });
+      cards.forEach(function (c) {
+        if (inCart[c.getAttribute('data-pid')] && c.parentNode && !c.classList.contains('is-gone')) c.parentNode.removeChild(c);
+      });
+      if (!cart.item_count) { box.hidden = true; return; }
+      arrange(cart.original_total_price);
+    }
+
+    arrange({{ cart.original_total_price | json }});
+
+    // + Agregar: agrega sin salir de la página y refresca carrito, totales,
+    // barra de envío gratis y puntos (todos escuchan el evento cart-update).
+    function footerId() {
+      var f = document.getElementById('main-cart-footer');
+      return f ? f.getAttribute('data-id') : null;
+    }
+    function swap(id, html, selector) {
+      var target = document.getElementById(id);
+      if (!target || !html) return;
+      var doc = new DOMParser().parseFromString(html, 'text/html');
+      var src = doc.querySelector(selector);
+      var dst = id === 'main-cart-footer' ? target.querySelector(selector) : target;
+      if (src && dst) dst.innerHTML = src.innerHTML;
+    }
+    row.addEventListener('click', function (e) {
+      var btn = e.target.closest && e.target.closest('[data-fc-rec-add]');
+      if (!btn || btn.disabled) return;
+      e.preventDefault();
+      var card = btn.closest('.fc-rec');
+      var label = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = 'Agregando...';
+      var fid = footerId();
+      var sections = ['cart-icon-bubble'];
+      if (fid) sections.push(fid);
+      fetch((window.routes && routes.cart_add_url ? routes.cart_add_url : '/cart/add') + '.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({ items: [{ id: +btn.getAttribute('data-variant'), quantity: 1 }], sections: sections, sections_url: window.location.pathname })
+      })
+        .then(function (r) { return r.json(); })
+        .then(function (res) {
+          if (res.status) throw new Error(res.description || res.message);
+          if (res.sections) {
+            swap('cart-icon-bubble', res.sections['cart-icon-bubble'], '.shopify-section');
+            if (fid) swap('main-cart-footer', res.sections[fid], '.js-contents');
+          }
+          btn.textContent = 'Agregado ✓';
+          btn.classList.add('is-ok');
+          return fetch('/cart.js').then(function (r) { return r.json(); });
+        })
+        .then(function (cart) {
+          setTimeout(function () {
+            card.classList.add('is-gone');
+            setTimeout(function () { applyCart(cart); }, 350);
+          }, 700);
+          if (typeof publish === 'function' && typeof PUB_SUB_EVENTS !== 'undefined') {
+            publish(PUB_SUB_EVENTS.cartUpdate, { source: 'fc-cart-recs', cartData: cart });
+          }
+        })
+        .catch(function () {
+          btn.disabled = false;
+          btn.textContent = 'No se pudo agregar';
+          setTimeout(function () { btn.textContent = label; }, 2200);
+        });
+    });
+
+    // Si el cliente cambia cantidades o quita productos en el carrito.
+    document.addEventListener('DOMContentLoaded', function () {
+      if (typeof subscribe !== 'function' || typeof PUB_SUB_EVENTS === 'undefined') return;
+      subscribe(PUB_SUB_EVENTS.cartUpdate, function (event) {
+        if (event && event.source === 'fc-cart-recs') return;
+        fetch('/cart.js').then(function (r) { return r.json(); }).then(applyCart).catch(function () {});
+      });
+    });
+  })();
+</script>
+{%- endif -%}
