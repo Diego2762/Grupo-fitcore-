@@ -31,7 +31,7 @@
     assign fc_pick = 'Elegir tamaño'
   endif
 -%}
-<div class="fc-rec" data-pid="{{ product.id }}" data-price="{{ product.price }}" data-score="{{ score }}">
+<div class="fc-rec" data-pid="{{ product.id }}" data-price="{{ product.price }}" data-score="{{ score }}" data-type="{{ product.type | escape }}">
   <a class="fc-rec-img" href="{{ product.url }}" tabindex="-1" aria-hidden="true">
     {%- if product.featured_image -%}
       <img src="{{ product.featured_image | image_url: width: 240 }}" alt="{{ product.title | escape }}" loading="lazy" width="240" height="240">

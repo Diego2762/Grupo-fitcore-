@@ -9,6 +9,7 @@
        (creatina -> proteína / pre-entreno, proteína -> creatina, etc.).
     3. Ofertas de apertura (snippet fitcore-promo).
     4. Respaldo: lista de handles fija (los más vendidos).
+  Variedad: de cada 4 fichas, máximo 2 de la misma categoría (tipo de producto).
   Nunca muestra productos que ya están en el carrito ni agotados.
   El cliente puede ocultarlo ("Ocultar"); queda oculto 7 días en ese navegador.
 
@@ -121,7 +122,7 @@
     {%- comment -%} 1) Complementos según lo que hay en el carrito {%- endcomment -%}
     {%- for fc_col in fc_col_list -%}
       {%- if fc_count >= fc_max -%}{%- break -%}{%- endif -%}
-      {%- for fc_p in collections[fc_col].products limit: 8 -%}
+      {%- for fc_p in collections[fc_col].products limit: 5 -%}
         {%- assign fc_key = ',' | append: fc_p.id | append: ',' -%}
         {%- unless fc_seen contains fc_key or fc_p.available == false -%}
           {%- assign fc_seen = fc_seen | append: fc_p.id | append: ',' -%}
@@ -222,6 +223,21 @@
         var s = +b.getAttribute('data-score') - +a.getAttribute('data-score');
         return s || (+a.getAttribute('data-i') - +b.getAttribute('data-i'));
       });
+      // Variedad: en cada grupo de 4 fichas, máximo 2 de la misma categoría
+      // (4 primeras: máx. 2 por categoría; 8 primeras: máx. 4). Si no queda
+      // otra categoría disponible, se rellena con lo que haya.
+      var picked = [], perType = {};
+      while (live.length) {
+        var cap = 2 * (Math.floor(picked.length / 4) + 1);
+        var k = 0;
+        while (k < live.length && (perType[live[k].getAttribute('data-type')] || 0) >= cap) k++;
+        if (k === live.length) k = 0;
+        var c = live.splice(k, 1)[0];
+        var t = c.getAttribute('data-type');
+        perType[t] = (perType[t] || 0) + 1;
+        picked.push(c);
+      }
+      live = picked;
       live.forEach(function (c) { row.appendChild(c); });
       if (sub) sub.textContent = remaining <= 0
         ? 'Seleccionados según lo que llevas.'
