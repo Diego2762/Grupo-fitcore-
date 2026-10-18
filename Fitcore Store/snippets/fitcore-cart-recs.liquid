@@ -89,6 +89,8 @@
   .fc-rec-price small { color:#56607a; font-weight:600; font-size:10.5px; margin-left:3px; }
   .fc-rec-add { margin-top:auto; width:100%; border:0; border-radius:9px; background:#0B1840; color:#fff; font:700 12.5px/1 var(--font-body-family,sans-serif); padding:9px 6px; cursor:pointer; text-align:center; text-decoration:none; display:block; transition:background .15s; }
   .fc-rec-add:hover { background:#3B1F6B; }
+  .fc-rec-var { width:100%; margin:0 0 6px; border:1.5px solid #e7eaf2; border-radius:8px; background:#fff; color:#0B1840; font:600 12px/1.2 var(--font-body-family,sans-serif); padding:6px 22px 6px 7px; -webkit-appearance:none; appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230B1840' stroke-width='2.6' stroke-linecap='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 6px center; background-size:12px; text-overflow:ellipsis; cursor:pointer; }
+  .fc-rec-var:focus { outline:none; border-color:#3B1F6B; }
   .fc-rec-add--alt { background:#fff; color:#0B1840; border:1.5px solid #0B1840; padding:7.5px 6px; }
   .fc-rec-add--alt:hover { background:#f2f4fa; }
   .fc-rec-add.is-ok { background:#19C37D; color:#062b1a; }
@@ -197,8 +199,10 @@
     // Orden: primero lo que completa el envío gratis (el más barato que lo
     // logra), luego complementos, ofertas y respaldo, en el orden original.
     var inCart = {};
+    var lastRemaining = 0, allCloseNow = false;
     function arrange(base) {
       var remaining = thc - base;
+      lastRemaining = remaining;
       var live = cards.filter(function (c) { return !inCart[c.getAttribute('data-pid')] && c.parentNode; });
       var closers = 0;
       live.forEach(function (c) {
@@ -209,6 +213,7 @@
       // Si todos completan el envío gratis, la etiqueta no aporta: se dice una
       // sola vez arriba y se ordena por relevancia.
       var allClose = closers > 0 && closers === live.length;
+      allCloseNow = allClose;
       live.forEach(function (c) {
         c.querySelector('[data-fc-rec-gap]').hidden = allClose || c.getAttribute('data-closes') !== '1';
         if (allClose) c.setAttribute('data-closes', '0');
@@ -274,6 +279,24 @@
       var dst = id === 'main-cart-footer' ? target.querySelector(selector) : target;
       if (src && dst) dst.innerHTML = src.innerHTML;
     }
+    // Selector de sabor/color/tamaño: cambia la variante que agrega el botón,
+    // el precio, la foto y la etiqueta de envío gratis de esa ficha.
+    row.addEventListener('change', function (e) {
+      var sel = e.target;
+      if (!sel.matches || !sel.matches('[data-fc-rec-var]')) return;
+      var card = sel.closest('.fc-rec');
+      var opt = sel.options[sel.selectedIndex];
+      card.querySelector('[data-fc-rec-add]').setAttribute('data-variant', opt.value);
+      card.setAttribute('data-price', opt.getAttribute('data-price'));
+      var price = card.querySelector('[data-fc-rec-price]');
+      var old = opt.getAttribute('data-old');
+      price.innerHTML = opt.getAttribute('data-div') + (old ? '<s>' + old + '</s>' : '') + '<small>divisa</small>';
+      var img = card.querySelector('.fc-rec-img img');
+      if (img && opt.getAttribute('data-img')) img.src = opt.getAttribute('data-img');
+      var tag = card.querySelector('[data-fc-rec-gap]');
+      if (tag && !allCloseNow) tag.hidden = !(lastRemaining > 0 && +opt.getAttribute('data-price') >= lastRemaining);
+    });
+
     row.addEventListener('click', function (e) {
       var btn = e.target.closest && e.target.closest('[data-fc-rec-add]');
       if (!btn || btn.disabled) return;

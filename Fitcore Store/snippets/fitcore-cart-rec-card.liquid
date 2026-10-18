@@ -3,7 +3,7 @@
   - product: {Object} producto (requerido)
   - score:   {Number} 3 complemento, 2 oferta, 1 respaldo (ordena el JS)
   data-price = precio BCV completo (el mismo que usa la barra de envío gratis).
-  Productos con varias variantes (sabor, color, tamaño) llevan a la ficha para elegir.
+  Productos con varias variantes (sabor, color, tamaño) traen un selector y se agregan desde aquí.
 {%- endcomment -%}
 {%- liquid
   assign fc_v = product.selected_or_first_available_variant
@@ -31,7 +31,7 @@
     assign fc_pick = 'Elegir tamaño'
   endif
 -%}
-<div class="fc-rec" data-pid="{{ product.id }}" data-price="{{ product.price }}" data-score="{{ score }}" data-type="{{ product.type | escape }}">
+<div class="fc-rec" data-pid="{{ product.id }}" data-price="{{ fc_v.price }}" data-score="{{ score }}" data-type="{{ product.type | escape }}">
   <a class="fc-rec-img" href="{{ product.url }}" tabindex="-1" aria-hidden="true">
     {%- if product.featured_image -%}
       <img src="{{ product.featured_image | image_url: width: 240 }}" alt="{{ product.title | escape }}" loading="lazy" width="240" height="240">
@@ -41,11 +41,28 @@
   <div class="fc-rec-body">
     <span class="fc-rec-tag" data-fc-rec-gap hidden>Te da envío gratis</span>
     <a class="fc-rec-name" href="{{ product.url }}">{{ product.title }}</a>
-    <span class="fc-rec-price">{{ fc_div | money }}{% if fc_pbn > 0 %}<s>{{ fc_old | money }}</s>{% endif %}<small>divisa</small></span>
-    {%- if product.has_only_default_variant or product.variants.size == 1 -%}
-      <button type="button" class="fc-rec-add" data-fc-rec-add data-variant="{{ fc_v.id }}" aria-label="Agregar {{ product.title | escape }} al carrito">+ Agregar</button>
-    {%- else -%}
-      <a class="fc-rec-add fc-rec-add--alt" href="{{ product.url }}">{{ fc_pick }}</a>
-    {%- endif -%}
+    <span class="fc-rec-price" data-fc-rec-price>{{ fc_div | money }}{% if fc_pbn > 0 %}<s>{{ fc_old | money }}</s>{% endif %}<small>divisa</small></span>
+    {%- unless product.has_only_default_variant or product.variants.size == 1 -%}
+      {%- comment -%} Selector de sabor/color/tamaño: precio e imagen de cada opción en data-* (el JS los pinta al cambiar) {%- endcomment -%}
+      <select class="fc-rec-var" data-fc-rec-var aria-label="{{ fc_pick }} de {{ product.title | escape }}">
+        {%- for fc_var in product.variants -%}
+          {%- if fc_var.available -%}
+            {%- liquid
+              assign fc_vnow = fc_var.price
+              if fc_pbn > 0
+                assign fc_vnow = fc_var.price | times: fc_pbn | divided_by: product.price
+              endif
+            -%}
+            <option value="{{ fc_var.id }}"
+              data-price="{{ fc_var.price }}"
+              data-div="{{ fc_vnow | times: 100 | divided_by: 115 | money }}"
+              {% if fc_pbn > 0 %}data-old="{{ fc_var.price | times: 100 | divided_by: 115 | money }}"{% endif %}
+              {% if fc_var.featured_image %}data-img="{{ fc_var.featured_image | image_url: width: 240 }}"{% endif %}
+              {% if fc_var.id == fc_v.id %}selected{% endif %}>{{ fc_var.title | escape }}</option>
+          {%- endif -%}
+        {%- endfor -%}
+      </select>
+    {%- endunless -%}
+    <button type="button" class="fc-rec-add" data-fc-rec-add data-variant="{{ fc_v.id }}" aria-label="Agregar {{ product.title | escape }} al carrito">+ Agregar</button>
   </div>
 </div>
