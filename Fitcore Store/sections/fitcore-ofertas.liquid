@@ -17,11 +17,11 @@
   assign wa_msg_enc = section.settings.whatsapp_msg | default: 'Hola Fitcore Store, quiero aprovechar las ofertas de apertura' | url_encode
   assign nb_col = section.settings.nb_collection | default: collections['natures-bounty']
   assign nb_hide = section.settings.nb_hide | default: 'natures-bounty-melatonina-10-mg-45-tabletas-de-disolucion-rapida' | split: ','
-  assign start_iso = section.settings.start_iso | default: '2026-10-11T00:00:00-04:00'
-  assign end_iso = section.settings.end_iso | default: '2026-11-15T23:59:59-04:00'
+  assign start_iso = section.settings.start_iso | default: '2026-11-14T00:00:00-04:00'
+  assign end_iso = section.settings.end_iso | default: '2026-11-21T23:59:59-04:00'
   # El envio gratis tiene su propia ventana (igual que el descuento automatico de envio)
-  assign ship_start_iso = section.settings.ship_start_iso | default: '2026-11-01T00:00:00-04:00'
-  assign ship_end_iso = section.settings.ship_end_iso | default: '2026-11-15T23:59:59-04:00'
+  assign ship_start_iso = section.settings.ship_start_iso | default: '2026-11-14T00:00:00-04:00'
+  assign ship_end_iso = section.settings.ship_end_iso | default: '2026-12-13T23:59:59-04:00'
   assign ship_t0 = ship_start_iso | date: '%s' | plus: 0
   assign ship_t1 = ship_end_iso | date: '%s' | plus: 0
   assign ship_secs = ship_t1 | minus: ship_t0
@@ -244,7 +244,7 @@
 
   <section class="hero">
     <div class="w">
-      <span class="eyebrow">{{ section.settings.eyebrow | default: 'Semana de inauguración' }}</span>
+      <span class="eyebrow">{{ section.settings.eyebrow | default: 'Semana de inauguración · 14 al 21 de nov' }}</span>
       {%- if teaser -%}<h2 class="h1">{{ section.settings.title | default: 'Ofertas de apertura' }}</h2>{%- else -%}<h1>{{ section.settings.title | default: 'Ofertas de apertura' }}</h1>{%- endif -%}
       <p class="sub">{{ section.settings.subtitle | default: 'Marcas originales importadas de EE.UU. a precio de inauguración. El descuento se aplica solo en tu carrito, sin cupones.' }}</p>
       <a class="hero-gift" href="{% if teaser %}{{ offers_url }}{% endif %}#premios"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="9" width="18" height="4" rx="1"/><path d="M5 13v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7"/><path d="M12 9v12"/><path d="M12 9C11 6 9.2 5.2 7.8 5.9 6.6 6.5 7.2 8.4 9 9"/><path d="M12 9c1-3 2.8-3.8 4.2-3.1C17.4 6.5 16.8 8.4 15 9"/></svg>{{ section.settings.hero_gift_label | default: 'Participa por combos de regalo' }}</a>
@@ -321,7 +321,7 @@
       <div class="fcard" id="fc-form-card-{{ section.id }}" hidden>
         <div class="fview">
           <h3>{{ section.settings.form_title | default: 'Participa por los premios' }}</h3>
-          <p class="fsub">{{ section.settings.form_subtitle | default: 'Déjanos tus datos y sigue a @fitcore.ve. El ganador se anuncia el día después de la inauguración.' }}</p>
+          <p class="fsub">{{ section.settings.form_subtitle | default: 'Déjanos tus datos y sigue a @fitcore.ve. El ganador se anuncia el sábado 21 de noviembre.' }}</p>
 
           <form id="fc-lead-form-{{ section.id }}" novalidate>
             <div class="fld-row">
@@ -621,13 +621,13 @@
     { "type": "text", "id": "teaser_cta", "label": "Adelanto: texto del botón", "default": "Ver todas las ofertas de apertura" },
     { "type": "text", "id": "offers_url", "label": "Adelanto: enlace del botón", "default": "/pages/ofertas" },
     { "type": "header", "content": "Hero y fechas" },
-    { "type": "text", "id": "eyebrow", "label": "Etiqueta superior", "default": "Semana de inauguración" },
+    { "type": "text", "id": "eyebrow", "label": "Etiqueta superior", "default": "Semana de inauguración · 14 al 21 de nov" },
     { "type": "text", "id": "title", "label": "Título (hero)", "default": "Ofertas de apertura" },
     { "type": "textarea", "id": "subtitle", "label": "Subtítulo (hero)", "default": "Marcas originales importadas de EE.UU. a precio de inauguración. El descuento se aplica solo en tu carrito, sin cupones." },
-    { "type": "text", "id": "start_iso", "label": "Inicio (ISO, hora Venezuela)", "default": "2026-10-11T00:00:00-04:00" },
-    { "type": "text", "id": "end_iso", "label": "Fin (ISO, hora Venezuela)", "info": "Define el reloj y los días del banner de envío gratis. Cambiar también en snippets/fitcore-promo.liquid.", "default": "2026-11-15T23:59:59-04:00" },
-    { "type": "text", "id": "ship_start_iso", "label": "Envío gratis: inicio (ISO)", "info": "Define los días del banner. Debe coincidir con el descuento automático de envío.", "default": "2026-11-01T00:00:00-04:00" },
-    { "type": "text", "id": "ship_end_iso", "label": "Envío gratis: fin (ISO)", "default": "2026-11-15T23:59:59-04:00" },
+    { "type": "text", "id": "start_iso", "label": "Inicio (ISO, hora Venezuela)", "default": "2026-11-14T00:00:00-04:00" },
+    { "type": "text", "id": "end_iso", "label": "Fin (ISO, hora Venezuela)", "info": "Define el reloj y los días del banner de envío gratis. Cambiar también en snippets/fitcore-promo.liquid.", "default": "2026-11-21T23:59:59-04:00" },
+    { "type": "text", "id": "ship_start_iso", "label": "Envío gratis: inicio (ISO)", "info": "Define los días del banner. Debe coincidir con el descuento automático de envío.", "default": "2026-11-14T00:00:00-04:00" },
+    { "type": "text", "id": "ship_end_iso", "label": "Envío gratis: fin (ISO)", "default": "2026-12-13T23:59:59-04:00" },
     { "type": "header", "content": "Productos" },
     { "type": "text", "id": "nb_hide", "label": "Nature's Bounty: handles a ocultar en esta página (separados por coma)", "info": "Solo se ocultan aquí; siguen participando en el 3x2.", "default": "natures-bounty-melatonina-10-mg-45-tabletas-de-disolucion-rapida" },
     { "type": "collection", "id": "nb_collection", "label": "Colección elegible Lleva 3, paga 2 (Nature's Bounty)" },
@@ -647,12 +647,12 @@
     { "type": "header", "content": "Formulario del sorteo" },
     { "type": "text", "id": "register_label", "label": "Texto del botón de registro", "default": "Regístrate y participa" },
     { "type": "text", "id": "form_title", "label": "Título del formulario", "default": "Participa por los premios" },
-    { "type": "text", "id": "form_subtitle", "label": "Subtítulo del formulario", "default": "Déjanos tus datos y sigue a @fitcore.ve. El ganador se anuncia el día después de la inauguración." },
+    { "type": "text", "id": "form_subtitle", "label": "Subtítulo del formulario", "default": "Déjanos tus datos y sigue a @fitcore.ve. El ganador se anuncia el sábado 21 de noviembre." },
     { "type": "text", "id": "button_label", "label": "Texto del botón enviar", "default": "Quiero participar" },
     { "type": "text", "id": "success_title", "label": "Título de éxito", "default": "¡Listo, ya estás participando!" },
     { "type": "textarea", "id": "success_text", "label": "Texto de éxito", "default": "Te avisaremos por WhatsApp y correo. No olvides seguirnos en Instagram para no perderte la fecha de apertura." },
-    { "type": "textarea", "id": "mechanics_text", "label": "Mecánica (texto corto)", "default": "Participan quienes dejen sus datos y sigan a @fitcore.ve. El ganador se anuncia el día después de la inauguración y los premios se entregan durante la semana de apertura. En la inauguración también podrás inscribirte y participar." },
-    { "type": "textarea", "id": "bases_text", "label": "Bases y condiciones", "default": "Para participar debes registrar tu nombre, apellido, un correo y un WhatsApp válidos y seguir a @fitcore.ve en Instagram. El ganador se seleccionará de forma aleatoria y se anunciará el día siguiente a la inauguración por nuestras redes. Los premios se entregan durante la semana de la inauguración. Verificaremos que el ganador siga la cuenta antes de entregar el premio. Premios no canjeables por efectivo." },
+    { "type": "textarea", "id": "mechanics_text", "label": "Mecánica (texto corto)", "default": "Participan quienes dejen sus datos y sigan a @fitcore.ve. El ganador se anuncia el sábado 21 de noviembre y los premios se entregan durante la semana de apertura. En la inauguración también podrás inscribirte y participar." },
+    { "type": "textarea", "id": "bases_text", "label": "Bases y condiciones", "default": "Para participar debes registrar tu nombre, apellido, un correo y un WhatsApp válidos y seguir a @fitcore.ve en Instagram. El ganador se seleccionará de forma aleatoria y se anunciará el sábado 21 de noviembre por nuestras redes. Los premios se entregan durante la semana de la inauguración. Verificaremos que el ganador siga la cuenta antes de entregar el premio. Premios no canjeables por efectivo." },
     { "type": "text", "id": "instagram_handle", "label": "Usuario de Instagram (sin @)", "default": "fitcore.ve" },
     { "type": "url", "id": "instagram_url", "label": "URL de Instagram" },
     { "type": "text", "id": "campaign", "label": "Campaña (tag)", "default": "fitness_party_2026" },

@@ -78,14 +78,12 @@
   /* MARQUEE MARCAS */
   #fc-home-{{ section.id }} .fc-marq { background:#fff; padding: 30px 0 34px; border-bottom: 1px solid #e7eaf2; overflow: hidden; }
   #fc-home-{{ section.id }} .fc-marq-title { text-align:center; color:#8a93b5; font: 800 12px/1 var(--font-body-family, sans-serif); letter-spacing:.16em; text-transform:uppercase; margin:0 0 22px; }
-  #fc-home-{{ section.id }} .fc-marq-mask { position:relative; width:100%;
-    overflow-x:auto; overflow-y:hidden; cursor:grab; -webkit-overflow-scrolling:touch;
-    scrollbar-width:none; -ms-overflow-style:none;
+  #fc-home-{{ section.id }} .fc-marq-mask { position:relative; width:100%; overflow:hidden;
     -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 8%, #000 92%, transparent 100%);
             mask-image: linear-gradient(90deg, transparent 0, #000 8%, #000 92%, transparent 100%); }
-  #fc-home-{{ section.id }} .fc-marq-mask::-webkit-scrollbar { display:none; height:0; width:0; }
-  #fc-home-{{ section.id }} .fc-marq-mask.is-grabbing { cursor:grabbing; }
-  #fc-home-{{ section.id }} .fc-marq-track { display:flex; width:max-content; align-items:center; }
+  /* Avanza solo, sin pausa ni arrastre (el JS ajusta la duracion al ancho real) */
+  #fc-home-{{ section.id }} .fc-marq-track { display:flex; width:max-content; align-items:center; animation:fc-marq-run 40s linear infinite; will-change:transform; }
+  @keyframes fc-marq-run { from { transform:translateX(0); } to { transform:translateX(-50%); } }
   #fc-home-{{ section.id }} .fc-marq-track img { height:40px; width:auto; max-width:150px; object-fit:contain; margin:0 38px; filter:grayscale(100%); opacity:.55; transition: filter .2s ease, opacity .2s ease; pointer-events:none; -webkit-user-drag:none; user-select:none; }
   #fc-home-{{ section.id }} .fc-marq-track img.fc-emblem { height:56px; }
   #fc-home-{{ section.id }} .fc-marq-link { display:inline-flex; align-items:center; text-decoration:none; cursor:inherit; }
@@ -1056,79 +1054,15 @@
     }
   })();
 
+  // Marquee de marcas: animacion CSS continua (sin pausa al pasar el mouse ni
+  // arrastre). Aqui solo se ajusta la duracion al ancho real (~54 px/s).
   (function () {
     var root = document.getElementById('fc-home-{{ section.id }}');
     if (!root) return;
-    var mask = root.querySelector('.fc-marq-mask');
-    var track = mask && mask.querySelector('.fc-marq-track');
-    if (!mask || !track) return;
-
-    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var speed = 0.9;            // px por frame (auto-scroll)
-    var paused = false;         // pausado por hover/toque
-    var dragging = false;       // arrastre activo con mouse
-    var moved = false;          // se movió lo suficiente para bloquear el click
-    var startX = 0, startScroll = 0;
-    var pos = 0;                // acumulador decimal (scrollLeft redondea a entero)
-
-    // El track está duplicado 2x: media anchura = un ciclo completo
-    function half() { return track.scrollWidth / 2; }
-
-    function normalize() {
-      var h = half();
-      if (h <= 0) return;
-      if (pos >= h) { pos -= h; }
-      else if (pos < 0) { pos += h; }
-    }
-
-    function frame() {
-      if (!paused && !dragging) {
-        pos += speed;
-        normalize();
-        mask.scrollLeft = pos;
-      }
-      requestAnimationFrame(frame);
-    }
-
-    // Pausa al pasar el mouse / tocar
-    mask.addEventListener('mouseenter', function () { paused = true; });
-    mask.addEventListener('mouseleave', function () { paused = false; });
-    mask.addEventListener('touchstart', function () { paused = true; }, { passive: true });
-    mask.addEventListener('touchend', function () { paused = false; pos = mask.scrollLeft; }, { passive: true });
-
-    // Arrastre con mouse (desktop)
-    mask.addEventListener('pointerdown', function (e) {
-      if (e.pointerType === 'touch') return; // el touch usa scroll nativo
-      dragging = true; moved = false;
-      startX = e.clientX; startScroll = mask.scrollLeft;
-      mask.classList.add('is-grabbing');
-      // NO usar setPointerCapture: redirige el click al contenedor y rompe el enlace del logo
-    });
-    window.addEventListener('pointermove', function (e) {
-      if (!dragging) return;
-      var dx = e.clientX - startX;
-      if (Math.abs(dx) > 4) moved = true;
-      pos = startScroll - dx;
-      normalize();
-      mask.scrollLeft = pos;
-    });
-    function endDrag(e) {
-      if (!dragging) return;
-      dragging = false;
-      pos = mask.scrollLeft;
-      mask.classList.remove('is-grabbing');
-    }
-    window.addEventListener('pointerup', endDrag);
-    window.addEventListener('pointercancel', endDrag);
-    // Evita que un arrastre dispare el enlace del logo
-    mask.addEventListener('click', function (e) {
-      if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; }
-    }, true);
-
-    // Arranque: esperar a que las imágenes midan el ancho
-    function start() { if (!reduce) requestAnimationFrame(frame); }
-    if (document.readyState === 'complete') { start(); }
-    else { window.addEventListener('load', start); }
+    var track = root.querySelector('.fc-marq-track');
+    if (!track) return;
+    function fit() { var h = track.scrollWidth / 2; if (h > 0) track.style.animationDuration = (h / 54) + 's'; }
+    if (document.readyState === 'complete') { fit(); } else { window.addEventListener('load', fit); }
   })();
 </script>
 
