@@ -19,9 +19,18 @@
       {%- if sub != blank -%}<p>{{ sub }}</p>{%- endif -%}
     </div>
     <div class="fc-best-grid">
+      {%- comment -%}
+        No usa all_products: Shopify solo permite 20 handles distintos por página y el home
+        ya pasa ese límite (al pasarlo repetía el último producto encontrado). Se buscan
+        los productos recorriendo el catálogo completo (paginate de hasta 250).
+      {%- endcomment -%}
+      {%- paginate collections.all.products by 250 -%}
       {%- for gr_h in gr_handles -%}
         {%- assign gr_handle = gr_h | strip -%}
-        {%- assign fc_prod = all_products[gr_handle] -%}
+        {%- assign fc_prod = nil -%}
+        {%- for gr_p in collections.all.products -%}
+          {%- if gr_p.handle == gr_handle -%}{%- assign fc_prod = gr_p -%}{%- break -%}{%- endif -%}
+        {%- endfor -%}
         {%- if fc_prod != blank and fc_prod.id -%}
           {%- assign fc_delay = forloop.index0 | times: 60 -%}
           {%- assign fc_var = fc_prod.selected_or_first_available_variant -%}
@@ -62,6 +71,7 @@
           </div>
         {%- endif -%}
       {%- endfor -%}
+      {%- endpaginate -%}
     </div>
   </div>
 </section>
