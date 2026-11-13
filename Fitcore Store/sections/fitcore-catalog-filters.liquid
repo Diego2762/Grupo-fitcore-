@@ -78,7 +78,7 @@
 
   var OBJ_LABELS = {
     keto:'Keto', volumen:'Volumen', definicion:'Definición',
-    fuerza:'Fuerza', recuperacion:'Recuperación', salud:'Salud', energia:'Energía',
+    fuerza:'Fuerza', resistencia:'Resistencia', recuperacion:'Recuperación', salud:'Salud', energia:'Energía',
     glp1:'Apoyo GLP-1'
   };
 
@@ -106,7 +106,7 @@
       });
     });
     marcas.sort();
-    var objOrder = ['volumen','definicion','fuerza','recuperacion','glp1','energia','salud','keto'];
+    var objOrder = ['volumen','definicion','fuerza','resistencia','recuperacion','energia','salud','keto','glp1'];
     objs.sort(function(a,b){ return objOrder.indexOf(a)-objOrder.indexOf(b); });
 
     var selMarca = new Set(), selObj = new Set();
