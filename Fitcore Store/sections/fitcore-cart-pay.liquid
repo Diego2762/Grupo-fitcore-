@@ -152,6 +152,10 @@
   #fc-pay-{{ section.id }} .fc-ship-field.has-error select { border-color:#d4380d; background:#fff5f2; }
   #fc-pay-{{ section.id }} .fc-ship-error { margin:14px 0 0; padding:11px 14px; border-radius:10px; background:#fff1ed; border:1px solid #ffc4b3; color:#a8280a; font-size:13.5px; font-weight:700; }
   #fc-pay-{{ section.id }} .fc-ship-error[hidden] { display:none; }
+  #fc-pay-{{ section.id }} .fc-map-box.is-locked .fc-map { cursor:default; border-color:#8fe3b8; }
+  #fc-pay-{{ section.id }} .fc-map-box.is-locked .leaflet-control-zoom { display:none; }
+  #fc-pay-{{ section.id }} .fc-map-confirm.is-change { background:#fff; color:var(--fc-navy); border:1.5px solid var(--fc-navy); }
+  #fc-pay-{{ section.id }} .fc-map-confirm.is-change:hover { background:#f2f4fa; }
 </style>
 
 <div id="fc-pay-{{ section.id }}"
@@ -252,10 +256,6 @@
       <div class="fc-ship-field">
         <label for="fc-cedula-{{ section.id }}">Cédula <b class="fc-req">*</b></label>
         <input type="text" id="fc-cedula-{{ section.id }}" data-attr="Cédula" placeholder="Ej. V-12345678" value="{{ current_cedula | escape }}">
-      </div>
-      <div class="fc-ship-field">
-        <label for="fc-phone-{{ section.id }}">Teléfono / WhatsApp <b class="fc-req">*</b></label>
-        <input type="tel" id="fc-phone-{{ section.id }}" data-attr="Teléfono / WhatsApp" placeholder="Ej. 0412 1234567" value="{{ current_phone | escape }}">
       </div>
 
       <div class="fc-nat-wrap{% unless is_nac %} is-off{% endunless %}" data-nat-wrap>
@@ -403,7 +403,6 @@
         first = root.querySelector('.fc-recv-opts');
       }
       need('Cédula', 'cédula', function (v) { return v.replace(/[^0-9a-z]/gi, '').length >= 5; });
-      need('Teléfono / WhatsApp', 'teléfono / WhatsApp', function (v) { return v.replace(/\D/g, '').length >= 10; });
       if (d === 'nacional') {
         need('Empresa de envío', 'empresa de envío');
         need('Agencia de envío', 'ciudad y agencia de destino');
@@ -536,15 +535,28 @@
     var hadSaved = (!isNaN(startLat) && !isNaN(startLng));
     if (hadSaved) hasLocation = true; // ya venia confirmada de una sesion previa
 
+    // Al confirmar, el mapa se bloquea (ya no se mueve por accidente). Para
+    // cambiarla, el cliente toca "Cambiar ubicación" y se desbloquea.
+    function lockMap(on) {
+      if (mapBox) mapBox.classList.toggle('is-locked', on);
+      if (!map) return;
+      ['dragging', 'touchZoom', 'doubleClickZoom', 'boxZoom', 'keyboard', 'tap'].forEach(function (k) {
+        if (!map[k]) return;
+        if (on) map[k].disable(); else map[k].enable();
+      });
+    }
+
     function setConfirmed(on) {
       hasLocation = on;
+      lockMap(on);
       if (confirmBtn) {
-        confirmBtn.classList.toggle('is-done', on);
-        confirmBtn.textContent = on ? 'Dirección confirmada ✓' : 'Confirmar dirección';
+        confirmBtn.classList.toggle('is-change', on);
+        confirmBtn.classList.remove('is-done');
+        confirmBtn.textContent = on ? 'Cambiar ubicación' : 'Confirmar dirección';
       }
       if (mapHint) {
         if (on) {
-          mapHint.textContent = 'Dirección confirmada ✓ Si te equivocaste, mueve el mapa y confirma de nuevo.';
+          mapHint.textContent = 'Dirección confirmada ✓ El mapa quedó fijo. Si necesitas otra ubicación, toca “Cambiar ubicación”.';
           mapHint.classList.add('is-ok'); mapHint.classList.remove('is-warn');
         } else {
           mapHint.textContent = 'Mueve el mapa hasta que el pin quede sobre tu casa y toca “Confirmar dirección”.';
@@ -588,7 +600,6 @@
       // programaticos como invalidateSize.
       map.on('dragstart zoomstart', function () {
         if (mapBox) mapBox.classList.add('is-moving');
-        if (hasLocation) setConfirmed(false);
       });
       map.on('moveend zoomend', function () {
         if (mapBox) mapBox.classList.remove('is-moving');
@@ -613,7 +624,10 @@
       document.head.appendChild(js);
     }
 
-    if (confirmBtn) confirmBtn.addEventListener('click', confirmLocation);
+    if (confirmBtn) confirmBtn.addEventListener('click', function () {
+      if (hasLocation) { setConfirmed(false); return; }
+      confirmLocation();
+    });
 
     if (geoBtn) {
       geoBtn.addEventListener('click', function () {
