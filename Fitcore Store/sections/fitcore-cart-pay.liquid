@@ -5,6 +5,7 @@
   - En divisa el cliente aplica el cupón MEJORPRECIO en el checkout: divisa = BCV / 1.15 (= precio PV, gancho .99).
   - Desglose de puntos del programa de recompensas (Smile): N puntos por cada $1
     del total con la forma de pago elegida (divisa = total con descuento).
+  - Recomendaciones "Te puede interesar" debajo de los puntos (snippets/fitcore-cart-recs.liquid).
   - Selector "¿Cómo quieres recibir tu pedido?" (nacional / local / retiro).
     Los campos cambian según la opción. Se guardan como atributos del carrito.
 {%- endcomment -%}
@@ -146,6 +147,11 @@
   #fc-pay-{{ section.id }} .fc-pts-btn:hover { background:var(--fc-navy); }
   #fc-pay-{{ section.id }} .fc-pts-btn[hidden] { display:none; }
   @media (max-width:780px){ #fc-pay-{{ section.id }} { padding:4px 16px 8px; } #fc-pay-{{ section.id }} .fc-pts { flex-wrap:wrap; } }
+  #fc-pay-{{ section.id }} .fc-ship-field label .fc-req { color:#d4380d; font-weight:800; }
+  #fc-pay-{{ section.id }} .fc-ship-field.has-error input,
+  #fc-pay-{{ section.id }} .fc-ship-field.has-error select { border-color:#d4380d; background:#fff5f2; }
+  #fc-pay-{{ section.id }} .fc-ship-error { margin:14px 0 0; padding:11px 14px; border-radius:10px; background:#fff1ed; border:1px solid #ffc4b3; color:#a8280a; font-size:13.5px; font-weight:700; }
+  #fc-pay-{{ section.id }} .fc-ship-error[hidden] { display:none; }
 </style>
 
 <div id="fc-pay-{{ section.id }}"
@@ -172,6 +178,10 @@
     </span>
     <button type="button" class="fc-pts-btn" data-pts-open hidden>Recompensas</button>
   </div>
+
+  {%- if section.settings.recs_enabled -%}
+    {%- render 'fitcore-cart-recs', threshold_cents: threshold_cents, title: section.settings.recs_title, fallback: section.settings.recs_fallback -%}
+  {%- endif -%}
 
   <div class="fc-pay-box">
     <p class="fc-pay-title">¿Con qué vas a pagar?</p>
@@ -240,17 +250,17 @@
 
     <div class="fc-ship-grid">
       <div class="fc-ship-field">
-        <label for="fc-cedula-{{ section.id }}">Cédula</label>
+        <label for="fc-cedula-{{ section.id }}">Cédula <b class="fc-req">*</b></label>
         <input type="text" id="fc-cedula-{{ section.id }}" data-attr="Cédula" placeholder="Ej. V-12345678" value="{{ current_cedula | escape }}">
       </div>
       <div class="fc-ship-field">
-        <label for="fc-phone-{{ section.id }}">Teléfono / WhatsApp</label>
+        <label for="fc-phone-{{ section.id }}">Teléfono / WhatsApp <b class="fc-req">*</b></label>
         <input type="tel" id="fc-phone-{{ section.id }}" data-attr="Teléfono / WhatsApp" placeholder="Ej. 0412 1234567" value="{{ current_phone | escape }}">
       </div>
 
       <div class="fc-nat-wrap{% unless is_nac %} is-off{% endunless %}" data-nat-wrap>
         <div class="fc-ship-field">
-          <label for="fc-company-{{ section.id }}">Empresa de envío</label>
+          <label for="fc-company-{{ section.id }}">Empresa de envío <b class="fc-req">*</b></label>
           <select id="fc-company-{{ section.id }}" data-attr="Empresa de envío">
             <option value=""{% if current_company == blank %} selected{% endif %}>Selecciona una</option>
             <option value="Tealca"{% if current_company == 'Tealca' %} selected{% endif %}>Tealca</option>
@@ -259,7 +269,7 @@
           </select>
         </div>
         <div class="fc-ship-field fc-span2">
-          <label for="fc-agency-{{ section.id }}">Ciudad y agencia de destino</label>
+          <label for="fc-agency-{{ section.id }}">Ciudad y agencia de destino <b class="fc-req">*</b></label>
           <input type="text" id="fc-agency-{{ section.id }}" data-attr="Agencia de envío" placeholder="Ej. Zoom Barquisimeto centro" value="{{ current_agency | escape }}">
         </div>
       </div>
@@ -283,11 +293,11 @@
       <button type="button" class="fc-map-confirm" data-map-confirm>Confirmar dirección</button>
       <div class="fc-ship-grid fc-local-grid">
         <div class="fc-ship-field">
-          <label for="fc-apt-{{ section.id }}">Casa o Apartamento N°</label>
+          <label for="fc-apt-{{ section.id }}">Casa o Apartamento N° <b class="fc-req">*</b></label>
           <input type="text" id="fc-apt-{{ section.id }}" data-attr="Casa/Apto N°" placeholder="Ej. Apto 4-B / Casa 12" value="{{ current_apt | escape }}">
         </div>
         <div class="fc-ship-field">
-          <label for="fc-urb-{{ section.id }}">Urbanización / Sector</label>
+          <label for="fc-urb-{{ section.id }}">Urbanización / Sector <b class="fc-req">*</b></label>
           <input type="text" id="fc-urb-{{ section.id }}" data-attr="Urbanización / Sector" placeholder="Ej. Urb. La Beatriz" value="{{ current_urb | escape }}">
         </div>
         <div class="fc-ship-field fc-span2">
@@ -297,6 +307,7 @@
       </div>
     </div>
 
+    <p class="fc-ship-error" data-ship-error role="alert" hidden></p>
     <p class="fc-ship-saved" data-ship-saved>Datos guardados ✓</p>
   </div>
 </div>
@@ -367,16 +378,75 @@
       var checked = root.querySelector('.fc-recv-opts input[type="radio"]:checked');
       return checked ? checked.value : '';
     }
+    // Datos obligatorios segun el tipo de entrega (cedula y telefono siempre;
+    // nacional: empresa y agencia; local: ubicacion en mapa, casa/apto y sector).
+    function validateShip() {
+      var box = root.querySelector('[data-ship-error]');
+      var d = selectedDelivery();
+      var missing = [];
+      var first = null;
+      root.querySelectorAll('.fc-ship-field.has-error').forEach(function (f) { f.classList.remove('has-error'); });
+      function need(attr, label, test) {
+        var el = root.querySelector('[data-attr="' + attr + '"]');
+        if (!el) return;
+        var v = (el.value || '').trim();
+        var ok = test ? test(v) : v !== '';
+        if (!ok) {
+          missing.push(label);
+          var f = el.closest('.fc-ship-field');
+          if (f) f.classList.add('has-error');
+          if (!first) first = el;
+        }
+      }
+      if (!d) {
+        missing.push('cómo recibir tu pedido');
+        first = root.querySelector('.fc-recv-opts');
+      }
+      need('Cédula', 'cédula', function (v) { return v.replace(/[^0-9a-z]/gi, '').length >= 5; });
+      need('Teléfono / WhatsApp', 'teléfono / WhatsApp', function (v) { return v.replace(/\D/g, '').length >= 10; });
+      if (d === 'nacional') {
+        need('Empresa de envío', 'empresa de envío');
+        need('Agencia de envío', 'ciudad y agencia de destino');
+      }
+      if (d === 'local') {
+        need('Casa/Apto N°', 'casa o apartamento');
+        need('Urbanización / Sector', 'urbanización / sector');
+        if (!hasLocation) { missing.push('ubicación en el mapa'); }
+      }
+      if (!missing.length) {
+        if (box) box.hidden = true;
+        return true;
+      }
+      if (box) {
+        box.textContent = 'Completa para continuar: ' + missing.join(', ') + '.';
+        box.hidden = false;
+      }
+      if (d === 'local' && !hasLocation && !first) {
+        requireLocation();
+      } else if (first && first.scrollIntoView) {
+        first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        if (first.focus && first.tagName !== 'DIV') { try { first.focus({ preventScroll: true }); } catch (err) { first.focus(); } }
+      }
+      return false;
+    }
+    root.addEventListener('input', function (ev) {
+      var f = ev.target && ev.target.closest ? ev.target.closest('.fc-ship-field') : null;
+      if (f) f.classList.remove('has-error');
+    });
+    root.addEventListener('change', function (ev) {
+      var f = ev.target && ev.target.closest ? ev.target.closest('.fc-ship-field') : null;
+      if (f) f.classList.remove('has-error');
+    });
+
     document.addEventListener('click', function (e) {
       var trigger = e.target && e.target.closest
         ? e.target.closest('button[name="checkout"], #checkout, .cart__checkout-button')
         : null;
       if (!trigger || goingToCheckout) return;
-      // Entrega local exige ubicacion en el mapa antes de pagar.
-      if (selectedDelivery() === 'local' && !hasLocation) {
+      // Datos de entrega obligatorios antes de pagar.
+      if (!validateShip()) {
         e.preventDefault();
         e.stopPropagation();
-        requireLocation();
         return;
       }
       goingToCheckout = true;
@@ -390,7 +460,13 @@
       // cliente no haya tocado el selector, queda la opcion marcada).
       // Dos llamadas: combinar discount + attributes en una sola no aplicaba
       // el cupon. Primero la forma de pago, luego el descuento (como antes).
-      post({ attributes: methodAttrs(m) })
+      // Guarda tambien los datos de entrega visibles (el campo activo aun no dispara blur).
+      var attrsNow = methodAttrs(m);
+      root.querySelectorAll('[data-attr]').forEach(function (el) {
+        if (el.closest('.is-off')) return;
+        attrsNow[el.getAttribute('data-attr')] = (el.value || '').trim();
+      });
+      post({ attributes: attrsNow })
         .then(function () { return post({ discount: code }); })
         .then(go).catch(go);
     }, true);
@@ -666,7 +742,11 @@
     { "type": "range", "id": "divisa_discount_pct", "min": 0, "max": 50, "step": 1, "unit": "%", "label": "Descuento pagando en divisa (cupón MEJORPRECIO)", "default": 13, "info": "Debe coincidir con el porcentaje del cupón MEJORPRECIO en Shopify. El BCV es el precio base facturado." },
     { "type": "number", "id": "free_ship_threshold", "label": "Monto para entrega local gratis (USD)", "default": 45 },
     { "type": "number", "id": "points_per_usd", "label": "Puntos por cada $1 gastado", "default": 5, "info": "Debe coincidir con la regla de ganancia del programa de puntos (Smile)." },
-    { "type": "text", "id": "points_name", "label": "Nombre de los puntos", "default": "puntos", "info": "Ej. FitCore Points. Igual al nombre configurado en Smile." }
+    { "type": "text", "id": "points_name", "label": "Nombre de los puntos", "default": "puntos", "info": "Ej. FitCore Points. Igual al nombre configurado en Smile." },
+    { "type": "header", "content": "Recomendaciones" },
+    { "type": "checkbox", "id": "recs_enabled", "label": "Mostrar recomendaciones", "default": true },
+    { "type": "text", "id": "recs_title", "label": "Título", "default": "Te puede interesar" },
+    { "type": "text", "id": "recs_fallback", "label": "Handles de respaldo (separados por coma)", "default": "optimum-nutrition-gold-standard-100-whey,nutrex-creatine-monohydrate-300-g,optimum-nutrition-micronized-creatine-powder,c4-original-pre-entreno", "info": "Se usan si no hay complementos u ofertas para mostrar." }
   ],
   "presets": [
     { "name": "Fitcore Pago carrito" }
