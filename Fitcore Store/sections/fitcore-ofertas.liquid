@@ -27,7 +27,7 @@
   assign ship_secs = ship_t1 | minus: ship_t0
   assign ship_days = ship_secs | divided_by: 86400.0 | ceil
 
-  # Quemadores: una ficha por sabor de Liquid Carnitine + Lipo-6 (3 fichas, igual que el bloque de aminos)
+  # Nutrex Liquid Carnitine + Lipo-6: una ficha por sabor (3 fichas, igual que el bloque de aminos)
   assign creatine_handles = 'nutrex-creatine-monohydrate-300-g,optimum-nutrition-micronized-creatine-powder,cellucor-cor-performance-creatine' | split: ','
   assign burn_handles = 'nutrex-liquid-carnitine-3000,nutrex-lipo-6-black-ultra-concentrate-60-capsulas' | split: ','
   # Aminos en esta pagina: XTEND Original BCAA sigue con su 5% en la tienda, pero aqui se reemplaza por Nutrex BCAA 6000 (10%)
@@ -403,8 +403,8 @@
       <div class="promo">
         <div>
           <span class="tag">Oferta de apertura</span>
-          <h2>Quema grasa y energía: 10% menos</h2>
-          <p>Nutrex Liquid Carnitine y Lipo-6 con 10% de descuento, tanto en divisa como en bolívares BCV. El descuento se aplica solo al pagar.</p>
+          <h2>Nutrex Liquid Carnitine y Lipo-6: 10% menos</h2>
+          <p>Con 10% de descuento, tanto en divisa como en bolívares BCV. El descuento se aplica solo al pagar.</p>
         </div>
         <div class="pct">-10%<small>Divisa y BCV</small></div>
       </div>
@@ -643,7 +643,7 @@
     { "type": "text", "id": "prize1_image_url", "label": "Premio 1: URL imagen" },
     { "type": "text", "id": "prize2_tag", "label": "Premio 2: etiqueta", "default": "Premio 2" },
     { "type": "text", "id": "prize2_title", "label": "Premio 2: título", "default": "Creatina Nutrex + extra" },
-    { "type": "textarea", "id": "prize2_text", "label": "Premio 2: descripción", "default": "Creatina Nutrex + quemagrasa o vitamina Nature's Bounty." },
+    { "type": "textarea", "id": "prize2_text", "label": "Premio 2: descripción", "default": "Creatina Nutrex + Lipo-6 o vitamina Nature's Bounty." },
     { "type": "text", "id": "prize2_image_url", "label": "Premio 2: URL imagen" },
     { "type": "header", "content": "Formulario del sorteo" },
     { "type": "text", "id": "register_label", "label": "Texto del botón de registro", "default": "Regístrate y participa" },
